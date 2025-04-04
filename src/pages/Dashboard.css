@@ -1,0 +1,168 @@
+.dashboard .subject {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard .slick-slider button {
+    z-index: 3;
+}
+
+.dashboard .course-button {
+    border: none;
+    border-radius: 9px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 0.36px;
+    display: block;
+    text-align: center;
+    width: 100%;
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease';
+}
+
+.dashboard .tabs {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    line-height: normal;
+    border: 1px solid #5D5FE3;
+    border-radius: 5px 0px 0px 5px;
+}
+
+.dashboard .nav-box {
+    position: fixed;
+    z-index: 4;
+    width: calc(100% - 94px);
+}
+
+.dashboard .profile-details {
+    width: 75%;
+}
+
+.dashboard .text-overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.dashboard .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0); 
+    backdrop-filter: blur(0px); 
+    opacity: 0;
+    visibility: hidden; 
+    transform: scale(0.2); 
+    transition: opacity 0.3s ease, transform 0.3s ease, backdrop-filter 0.3s ease; 
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    pointer-events: none;
+  }
+
+  .view_pdf:hover .overlay {
+    opacity: 1;
+    visibility: visible;
+    background: rgba(0, 0, 0, 0.1);
+    transform: scale(1);
+    cursor: pointer;
+  }
+
+  .dashboard .view_btn{
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .dashboard .notes{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    min-width: fit-content;
+    border: 1px solid orange;
+    padding: 2px 10px;
+    border-radius: 40px;
+    background-color: #fef5e7;
+    font-size: 10px;
+    color: orange;
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+  .dashboard .chapter{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    min-width: fit-content;
+    border: 1px solid rgb(98, 0, 238);
+    padding: 2px 10px;
+    border-radius: 40px;
+    background-color: rgb(237, 231, 246);
+    font-size: 10px;
+    color: rgb(98, 0, 238);
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+  .dashboard .exam_paper{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    min-width: fit-content;
+    border: 1px solid rgb(231, 82, 82);
+    padding: 2px 10px;
+    border-radius: 40px;
+    background-color: #efcdcb;
+    font-size: 10px;
+    color: rgb(231, 82, 82);
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+@media screen and (max-width:420px) {
+    .dashboard .tabs {
+        padding: 10px 10px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .dashboard .tabs {
+        width: 100% ;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width:993px) {
+    .dashboard .subject {
+        margin-top: 10px;
+        justify-content: start;
+    }
+
+    .dashboard .tabs {
+        padding: 10px 10px;
+        margin-bottom: 10px;
+    }
+
+    .dashboard .comment-section {
+        order: 2;
+    }
+
+    .dashboard .comment-post-section {
+        order: 1;
+    }
+
+    .dashboard .profile-details {
+        width: 25%;
+    }
+}

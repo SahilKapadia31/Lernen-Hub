@@ -1,0 +1,144 @@
+.superadmin-login .page6-month {
+    background: linear-gradient(126deg, #576FF0 6.14%, #856EEB 40.47%, #D674DE 83.01%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "DM Serif Text";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 75px;
+}
+
+.superadmin-login .assistance {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.superadmin-login .assistance .link {
+    background: linear-gradient(126deg, #576FF0 6.14%, #856EEB 40.47%, #D674DE 83.01%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "DM Serif Text";
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 75px;
+}
+
+.required {
+    color: red;
+    font-size: 14px;
+}
+
+.superadmin-login .already-have-account {
+    color: '#2A3941';
+    font-size: 28px;
+}
+
+.superadmin-login .list-unstyled li {
+    font-size: 20px;
+}
+
+.Login-btn{
+    color: #ffffff;
+    font-size: 14px;
+    border: 1px solid #8587EA;
+    font-weight: 450;
+    letter-spacing: 0.32px;
+    line-height:22px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    background-color: #8587EA;
+    text-decoration: none;
+    overflow:hidden;
+}
+
+.superadmin-login .forgot-btn{
+    background: transparent;
+    border: 0;
+    color: #FF845D;
+    text-decoration: none;
+}
+
+.Login-btn:hover{
+    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+    color:#ffffff;
+    border: none;
+}
+
+.superadmin-login .loginform-div{
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    height: calc(100vh - 120px);
+}
+
+@media screen and (max-width: 1023px) {
+
+    .superadmin-login .forms-div {
+        padding: 0px 20px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .superadmin-login .already-have-account {
+        font-size: 20px !important;
+    }
+
+    .superadmin-login .assistance .hint {
+        font-size: 14px !important;
+    }
+
+    .superadmin-login .assistance .signup-link{
+        font-size: 13px !important;
+    }
+
+    .superadmin-login .assistance .signup-link a{
+        font-size: 13px !important;
+    }
+
+    .superadmin-login .Login-btn {
+        width: 100%;
+    }
+
+    .superadmin-login .main-login {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .superadmin-login .login-img1 {
+        left: auto;
+        right: 0px;
+    }
+}
+@media screen and (max-width:991px) {
+    .superadmin-login .loginpageform1{
+        min-height: 500px;
+    }
+}
+
+@media screen and (min-width: 992px) and (max-width:1200px) {
+
+    .superadmin-login .login-header {
+        font-size: 58px;
+    }
+
+    .superadmin-login .login-img1 {
+        left: auto;
+        right: 50px;
+        top: 100px;
+    }
+
+    .superadmin-login .main-login {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width:1400px) {
+    .superadmin-login .list-unstyled li {
+        font-size: 14px;
+    }
+}

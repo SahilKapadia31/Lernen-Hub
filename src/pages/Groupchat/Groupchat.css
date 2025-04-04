@@ -1,0 +1,12 @@
+.profile_view_more{
+    font-size: 12px;
+    color: #8587EA;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.profile_img:hover .profile_view_more{
+    font-size: 24px !important;
+}
+

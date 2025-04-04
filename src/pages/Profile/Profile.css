@@ -1,0 +1,44 @@
+.profiledoctype {
+    font-size: 14px !important;
+    font-weight: 450 !important;
+    line-height: normal !important;
+    letter-spacing: 3.5px !important;
+}
+.profile-details{
+    width: 75%;
+}
+/* For devices below 992px (tablets) */
+@media (max-width: 992px) {
+    .profile1 {
+        height: auto;
+        /* Adjust height */
+    }
+
+    .col-lg-3 {
+        flex: 1 0 48%;
+        max-width: 48%;
+        /* Make profile sections take up less space on tablets */
+    }
+    .profile-details{
+        width: 25%;
+    }
+}
+
+/* For devices below 768px (mobile) */
+@media (max-width: 768px) {
+    .profile1 {
+        height: auto;
+        /* Adjust height */
+    }
+
+    .col-lg-3 {
+        flex: 1 0 100%;
+        max-width: 100%;
+        /* Stack profile sections */
+    }
+
+    .m-2 {
+        font-size: 12px;
+        /* Adjust font size */
+    }
+}

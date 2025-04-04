@@ -1,0 +1,96 @@
+.public-tab {
+    width: 144px;
+}
+
+.flashcard-tab {
+    width: 144px;
+}
+
+.subject .nav-box {
+    position: fixed;
+    z-index: 4;
+    width: calc(100% - 94px);
+}
+
+.report-dropdown1 {
+    right: 25px;
+}
+
+@media screen and (max-width:667px) {
+    .find-more-upload-btn-div {
+        justify-content: center;
+    }
+
+    .btn-upload {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-find-more {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .message {
+        width: 100%;
+    }
+
+    .pinned {
+        width: 100%;
+    }
+
+    .account {
+        width: 100%;
+    }
+
+    .message button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .pinned button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .account button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width:576px) {
+    .tabs {
+        margin-bottom: 10px;
+    }
+
+    .flash-tabs-box {
+        flex-direction: column;
+    }
+
+    .public-tab {
+        width: 100%;
+    }
+
+    .flashcard-tab {
+        width: 100%;
+    }
+
+    .filter-list {
+        margin-top: 15px;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:992px) {
+    .comments-div {
+        order: 2;
+    }
+
+    .create-post-div {
+        order: 1;
+    }
+
+}

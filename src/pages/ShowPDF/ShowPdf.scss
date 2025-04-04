@@ -1,0 +1,85 @@
+.doc-modal-blockshow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); // Optional: Dimmed background
+    z-index: 9998;
+    pointer-events: all; // Allow overlay to block events
+}
+
+.doc-modal-delete-mes {
+    position: fixed;
+    width: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    text-align: center;
+    background: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); // Soft shadow
+    border-radius: 10px;
+    padding: 20px;
+}
+
+@media (max-width: 1024px) {
+
+    /* Adjust max-width as needed */
+    .react-pdf__Document {
+        width: fit-content;
+    }
+}
+
+.go_back_btn {
+    background: #5D5FE3;
+    border: none
+}
+
+.postcomment {
+    background-color: rgb(102 112 238);
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    line-height: normal;
+    padding: 0
+}
+@media (max-width: 992px) {
+    .pdf-rounded-arrow-icon {
+        visibility: hidden !important;
+    }
+}
+
+.custom-container {
+    height: 40vh;
+    width: 1200px !important;
+  }
+
+  .reactour__helper.helper.reactour__helper--is-open:has(.pdf-tooltip) {
+    display: flex; /* Enable Flexbox for alignment */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    text-align: center; /* Center text */
+    width: auto; /* Let the width adjust to the content */
+    height: auto; /* Let the height adjust to the content */
+    border: 1px solid #ddd; /* Optional: for better visualization */
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: visible; /* Ensure no content is hidden */
+  }
+  
+  .reactour__helper.helper.reactour__helper--is-open:has(.pdf-tooltip img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .reactour__helper.helper.reactour__helper--is-open:has(.pdf-tooltip i) {
+    margin-bottom: 10px; /* Space between icon and image */
+    font-size: 12px; /* Adjust icon size as needed */
+  }
+  
+//   .button-for-document{
+//     margin-left: -15px;
+//   }
