@@ -112,6 +112,8 @@ import './pdf.css'
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import ManageStudent from './admin_v2/organizationadmin/pages/managestudent/lists/student-lists.jsx';
+import { LeandingPage } from './v2/pages/LeandingPage.jsx';
+
 
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 const tagManagerArgs = { gtmId: 'GTM-NDD6WWG7' }
@@ -202,6 +204,7 @@ const App = () => {
                 {/* -------------------------------Use For Web Public Access Route------------------------------- */}
                 <Route element={<PublicLayouts />}>
                   <Route path="/" element={<Landing_page />} />
+                  <Route path="/v2/home" element={<LeandingPage />} />
                   <Route path="/loginpage" element={<Loginpage />} />
                   <Route path="/contact_us" element={<Contact_us />} />
                   <Route path="/stories" element={<Stories />} />

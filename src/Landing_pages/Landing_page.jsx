@@ -60,6 +60,7 @@ const Landing_page = () => {
                             </div>
                             <ul className="d-flex justify-content-end w-75 align-items-center gap-5" style={{ listStyleType: 'none', cursor: 'pointer' }}>
                                 <li className={`list ${state === 'home' ? 'text-decoration-underline' : 'text-decoration-none'}`} onClick={() => setState('home')} style={{ color: state === 'home' ? '#5D5FE3' : '#fff' }}>Home</li>
+                                <li className={`list ${state === 'new_home' ? 'text-decoration-underline' : 'text-decoration-none'}`} onClick={() => { navigate('/v2/home'); setState('new_home'); }} style={{ color: state === 'home' ? '#5D5FE3' : '#fff' }}>New Home</li>
                                 <li className={`list ${state === 'about_us' ? 'text-decoration-underline' : 'text-decoration-none'}`} onClick={() => { navigate('/our_team'); setState('about_us'); }} style={{ color: state === 'about_us' ? '#5D5FE3' : '#fff' }}>About us</li>
                                 <li className={`list ${state === 'stories' ? 'text-decoration-underline' : 'text-decoration-none'}`} onClick={() => { navigate('/stories'); setState('stories'); }} style={{ color: state === 'stories' ? '#5D5FE3' : '#fff' }}>Stories</li>
                                 <li className={`list ${state === "faq" ? 'text-decoration-underline' : 'text-decoration-none'}`} onClick={() => { navigate('/Getting_started'); setState("Getting_started") }} style={{ color: state === "stories" ? '#5D5FE3' : '#fff' }}>FAQs</li>
