@@ -1,0 +1,5 @@
+export { Navbar } from './Navbar/Navbar'
+export { HeroSection } from './Hero/HeroSection'
+export { Features } from './Features/Features'
+export { Testimonials } from './Testimonials/Testimonials'
+export { Footer } from './Footer/Footer'
