@@ -1,0 +1,67 @@
+.btn-active-filter {
+    color: #4547C9;
+    border: 1px solid #4547C9;
+    background: #F3F0FF;
+}
+
+.btn-active-filter:hover {
+    color: #4547C9;
+    background: #F3F0FF;
+    border: 1px solid #4547C9;
+}
+
+.slider-card {
+    height: 350px !important;
+    width: 295px !important;
+}
+
+// Remove the default content (if any) from the pseudo-elements
+.slick-next:before {
+    content: '\F135';
+}
+
+.slick-prev:before {
+    content: '\F12C';
+}
+
+.slick-prev:before,
+.slick-next:before {
+    font-family: "bootstrap-icons";
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #4547C9;
+    font-weight: bold;
+}
+
+// Customize the previous and next arrow buttons
+.slick-prev,
+.slick-next {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #4547C9;
+    background-color: #F3F0FF;
+    /* Added border */
+    border-radius: 50%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+    z-index: 1;
+}
+
+// Adjust position (if needed)
+.slick-prev {
+    left: -60px;
+}
+
+.slick-next {
+    right: -60px;
+}
+
+// Change appearance on hover
+.slick-prev:hover,
+.slick-next:hover {
+    background-color: #A29BEB;
+    transition: background-color 0.3s;
+
+}

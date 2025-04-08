@@ -1,10 +1,10 @@
 import React from 'react'
-import { Navbar } from '../components'
+import { HeroSection } from '../components'
 
 export const LeandingPage = () => {
     return (
         <>
-            <Navbar />
+            <HeroSection />
 
         </>
     )
