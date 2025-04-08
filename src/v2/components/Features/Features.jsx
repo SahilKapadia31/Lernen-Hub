@@ -117,7 +117,7 @@ export const Features = () => {
     ]
 
     let settings = {
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 4,
@@ -128,8 +128,7 @@ export const Features = () => {
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 3,
-                    infinite: true,
-                    dots: true
+                    infinite: false,
                 }
             },
             {
@@ -185,7 +184,7 @@ export const Features = () => {
                         <Slider {...settings}>
                             {filteredUniversities.map((university) => (
                                 <Card key={university.id} className="h-100 slider-card border shadow-sm hover-shadow transition">
-                                    <Card.Body className="d-flex flex-column">
+                                    <Card.Body className="d-flex flex-column position-relative">
                                         <div className="text-center mb-3">
                                             <div
                                                 className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
@@ -197,10 +196,15 @@ export const Features = () => {
                                             >
                                                 <span className="h3 mb-0 fw-bold" style={{ color: `${university.textColor}` }}>{university.logo}</span>
                                             </div>
-                                            <h2 className="h5 card-title">{university.name}</h2>
                                         </div>
 
                                         <div className="small text-muted mb-3">
+                                            <div className="d-flex align-items-center mb-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M4.79164 14.1666V7.91664H6.04164V14.1666H4.79164ZM9.37497 14.1666V7.91664H10.625V14.1666H9.37497ZM2.30768 17.0833V15.8333H17.6923V17.0833H2.30768ZM13.9583 14.1666V7.91664H15.2083V14.1666H13.9583ZM2.30768 6.24997V5.06414L9.99997 1.2981L17.6923 5.06414V6.24997H2.30768ZM5.26268 4.99997H14.7373L9.99997 2.7083L5.26268 4.99997Z" fill="#1C262C" />
+                                                </svg>
+                                                <span className="ms-2 text-truncate fw-semibold text-black">{university.name}</span>
+                                            </div>
                                             <div className="d-flex align-items-center mb-2">
                                                 <i className="bi bi-geo-alt me-2" style={{ fontSize: "1rem" }}></i>
                                                 <span>{university.location}</span>
@@ -219,9 +223,9 @@ export const Features = () => {
                                             </div>
                                         </div>
 
-                                        <div className="d-flex align-items-center mb-3">
-                                            <i className="bi bi-star-fill me-2 text-warning" style={{ fontSize: "1rem" }}></i>
-                                            <span>{university.rating}</span>
+                                        <div className="d-flex align-items-center px-2 gap-1 fs-12px mt-3 me-3 border border-1 bg-body-secondary rounded-pill position-absolute top-0 end-0">
+                                            <i className="bi bi-star-fill text-warning" style={{ fontSize: "13px" }}></i>
+                                            <span className='fw-bold'>{university.rating}</span>
                                         </div>
 
                                         <Button variant="outline-primary" className="mt-auto w-100">
