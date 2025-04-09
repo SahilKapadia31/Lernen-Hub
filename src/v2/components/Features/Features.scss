@@ -1,21 +1,95 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+// Variable definitions
+$primary-color: #4547C9;
+$secondary-color: #F3F0FF;
+$hover-color: #A29BEB;
+$text-dark: #1C262C;
+$text-muted: #6c757d;
+$border-radius-pill: 50rem;
+
+// Button styles
 .btn-active-filter {
-    color: #4547C9;
-    border: 1px solid #4547C9;
-    background: #F3F0FF;
+    color: $primary-color;
+    border: 1px solid $primary-color;
+    background: $secondary-color;
+
+    &:hover {
+        color: $primary-color;
+        background: $secondary-color;
+        border: 1px solid $primary-color;
+    }
 }
 
-.btn-active-filter:hover {
-    color: #4547C9;
-    background: #F3F0FF;
-    border: 1px solid #4547C9;
-}
-
+// Slider card styles
 .slider-card {
     height: 350px !important;
     width: 295px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    @media (max-width: 992px) {
+        height: 380px;
+    }
+
+    @media (max-width: 576px) {
+        height: 320px;
+    }
 }
 
-// Remove the default content (if any) from the pseudo-elements
+// University logo styles
+.university-logo {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 576px) {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+.university-logo-text {
+    font-size: 1.75rem;
+
+    @media (max-width: 576px) {
+        font-size: 1.5rem;
+    }
+}
+
+// University icon styles
+.university-icon {
+    font-size: 1rem;
+}
+
+// Rating styles
+.university-rating {
+    display: flex;
+    align-items: center;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    border-radius: $border-radius-pill;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.rating-star {
+    font-size: 13px;
+}
+
+// Font size utility
+.fs-12px {
+    font-size: 12px;
+}
+
+// Slider navigation styles
 .slick-next:before {
     content: '\F135';
 }
@@ -29,7 +103,7 @@
     font-family: "bootstrap-icons";
     font-size: 1.5rem;
     line-height: 1;
-    color: #4547C9;
+    color: $primary-color;
     font-weight: bold;
 }
 
@@ -38,34 +112,176 @@
 .slick-next {
     width: 40px;
     height: 40px;
-    border: 2px solid #4547C9;
-    background-color: #F3F0FF;
-    /* Added border */
+    border: 2px solid $primary-color;
+    background-color: $secondary-color;
     border-radius: 50%;
     display: flex !important;
     align-items: center;
     justify-content: center;
     transition: color 0.3s;
     z-index: 1;
+
+    @media (max-width: 992px) {
+        width: 30px;
+        height: 30px;
+    }
+
+    @media (max-width: 576px) {
+        display: none !important;
+    }
 }
 
-// Adjust position (if needed)
+// Adjust position
 .slick-prev {
     left: -60px;
+
+    @media (max-width: 1200px) {
+        left: -40px;
+    }
+
+    @media (max-width: 992px) {
+        left: -30px;
+    }
 }
 
 .slick-next {
     right: -60px;
+
+    @media (max-width: 1200px) {
+        right: -40px;
+    }
+
+    @media (max-width: 992px) {
+        right: -30px;
+    }
 }
 
 // Change appearance on hover
 .slick-prev:hover,
 .slick-next:hover {
-    background-color: #A29BEB;
+    background-color: $hover-color;
     transition: background-color 0.3s;
-
 }
 
-.fs-12px {
-    font-size: 12px !important;
+// Button styles
+.view-details {
+    background-color: $secondary-color;
+    color: $primary-color;
+    border: 1px solid transparent;
+    font-weight: 500;
+
+    &:hover {
+        background-color: $primary-color;
+        color: white;
+    }
+}
+
+.explore {
+    background-color: $primary-color;
+    color: white;
+    font-weight: 500;
+    border: none;
+
+    &:hover {
+        background-color: darken($primary-color, 10%);
+        color: white;
+    }
+}
+
+// Main section styles
+.university-listing {
+    padding-top: 70px;
+    padding-bottom: 70px;
+
+    @media (max-width: 768px) {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    .university-title {
+        letter-spacing: -2px;
+
+        @media (max-width: 768px) {
+            font-size: 2rem;
+            letter-spacing: -1px;
+        }
+    }
+
+    .filter-container {
+        max-width: 100%;
+        overflow-x: auto;
+        padding-bottom: 10px;
+
+        &::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+    }
+
+    .slick-slide>div {
+        margin: 0 !important;
+    }
+
+    .slick-list {
+        // background-color: white !important;
+        padding: 10px 0;
+    }
+
+    // Add responsive margins for slider container
+    .slider-container {
+        margin: 0 auto;
+
+        @media (max-width: 992px) {
+            max-width: 90%;
+        }
+
+        @media (max-width: 576px) {
+            max-width: 95%;
+        }
+    }
+}
+
+// Transition utility
+.transition {
+    transition: all 0.3s ease;
+}
+
+// Hover utility
+.hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.school-listing {
+    background-color: #F9F9FB;
+}
+
+
+// background: url(image.png);
+
+.slider-section {
+    .slick-slider {
+        margin-top: 0px !important;
+    }
+
+    .slider-image {
+        height: 25rem;
+        position: relative;
+
+        .slider-shadow {
+            position: absolute;
+            inset: 0;
+        }
+    }
+
+    .slick-slide>div {
+        margin: 0 !important;
+    }
+
+    .slick-slide {
+        padding: 0 !important;
+    }
 }
