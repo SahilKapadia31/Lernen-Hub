@@ -122,7 +122,7 @@ export const Features = () => {
     ]
 
     let settings = {
-        infinite: false,
+        infinite: true,
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 4,
@@ -133,7 +133,7 @@ export const Features = () => {
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 3,
-                    infinite: false,
+                    infinite: true,
                 }
             },
             {
@@ -198,7 +198,6 @@ export const Features = () => {
                     <div className="slider-container mt-4">
                         <Slider {...settings}>
                             {filteredUniversities.map((university) => (
-                                <div className="px-1" key={university.id}>
                                 <div className="px-2" key={university.id}>
                                     <Card className="slider-card border shadow-sm hover-shadow transition">
                                         <Card.Body className="d-flex flex-column position-relative">
@@ -285,7 +284,6 @@ export const Features = () => {
                     <div className="slider-container mt-4">
                         <Slider {...settings}>
                             {filteredUniversities.map((university) => (
-                                <div className="px-1" key={university.id}>
                                 <div className="px-2" key={university.id}>
                                     <Card className="slider-card border shadow-sm hover-shadow transition">
                                         <Card.Body className="d-flex flex-column position-relative">
@@ -355,7 +353,7 @@ export const Features = () => {
                     <Slider {...autoPlaySettings}>
                         {sliderImages?.map((image, index) => (
                             <div key={index} className='slider-image'>
-                                <img src={image} alt={image} className='w-100 h-100' />
+                                <img src={image} alt={image} className='' />
                                 <img src={shadowImg} alt={shadowImg} className='slider-shadow' />
                             </div>
                         ))}
