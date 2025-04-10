@@ -7,6 +7,7 @@ $hover-color: #A29BEB;
 $text-dark: #1C262C;
 $text-muted: #6c757d;
 $border-radius-pill: 50rem;
+$pathway-dark: #1b2331;
 
 // Button styles
 .btn-active-filter {
@@ -23,8 +24,8 @@ $border-radius-pill: 50rem;
 
 // Slider card styles
 .slider-card {
-    height: 350px !important;
-    width: 295px !important;
+    height: 350px;
+    width: 295px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
@@ -118,7 +119,7 @@ $border-radius-pill: 50rem;
     display: flex !important;
     align-items: center;
     justify-content: center;
-    transition: color 0.3s;
+    transition: all 0.3s ease;
     z-index: 1;
 
     @media (max-width: 992px) {
@@ -160,7 +161,6 @@ $border-radius-pill: 50rem;
 .slick-prev:hover,
 .slick-next:hover {
     background-color: $hover-color;
-    transition: background-color 0.3s;
 }
 
 // Button styles
@@ -223,11 +223,10 @@ $border-radius-pill: 50rem;
     }
 
     .slick-slide>div {
-        margin: 0 !important;
+        margin: 0;
     }
 
     .slick-list {
-        // background-color: white !important;
         padding: 10px 0;
     }
 
@@ -255,30 +254,26 @@ $border-radius-pill: 50rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
-.school-listing {
-    background-color: #F9F9FB;
-}
-
+// Slider section
 .slider-section {
     .slick-slider {
-        margin-top: 0px !important;
+        margin-top: 0;
+    }
+
+    .slick-slide>div {
+        margin: 0px;
     }
 
     .slider-image {
         height: 25rem;
         position: relative;
         width: 100%;
-        /* Add this to ensure full width */
         overflow: hidden;
-        /* Add this to contain images */
 
         img {
             width: 100%;
-            /* Make all images full width */
             height: 100%;
-            /* Make all images full height */
             object-fit: cover;
-            /* Maintain aspect ratio while covering */
         }
 
         .slider-shadow {
@@ -287,17 +282,194 @@ $border-radius-pill: 50rem;
             width: 100%;
             height: 100%;
             z-index: 1;
-            /* Ensure shadow appears above the image */
         }
-    }
-
-    .slick-slide>div {
-        margin: 0 !important;
-
     }
 
     .slick-slide {
         padding: 0 !important;
         width: 330px !important;
+
+    }
+}
+
+.university-logos {
+    height: 200px;
+    aspect-ratio: 1/1;
+}
+
+// University partners section
+.university-partners-section {
+    background-color: $primary-color;
+    padding: 3rem 0;
+
+    .pathway-cards-container {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .pathway-card {
+        background-color: $pathway-dark;
+        height: 573px;
+        border: none;
+        border-radius: 10px;
+        position: relative;
+        color: $text-muted;
+        transition: all 0.3s ease;
+
+        &.expanded {
+            flex: 3;
+        }
+
+        &.collapsed {
+            flex: 1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .pathway-header {
+            padding-bottom: 0.5rem;
+        }
+
+        .pathway-category {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pathway-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .pathway-content {
+            transition: opacity 0.3s ease;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .pathway-features {
+            list-style-type: none;
+            padding-left: 1.5rem;
+            margin-top: 1.5rem;
+
+            li {
+                position: relative;
+                line-height: 1.5;
+                margin-bottom: 0.75rem;
+
+                &::before {
+                    content: "•";
+                    position: absolute;
+                    left: -1.5rem;
+                    font-size: 1.5rem;
+                }
+            }
+        }
+
+        .pathway-footer {
+            margin-top: 2rem;
+        }
+
+        .pathway-prompt {
+            color: $text-muted;
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .pathway-cta {
+            border: none;
+            padding: 0.5rem 2rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+
+            &:hover {
+                filter: brightness(1.1);
+                transform: translateY(-2px);
+            }
+
+            &:active {
+                transform: translateY(0);
+            }
+        }
+
+        .pathway-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: absolute;
+            bottom: 1rem;
+            right: 1.5rem;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    // Responsive styles
+    @media (max-width: 991px) {
+        .pathway-cards-container {
+            flex-direction: column;
+        }
+
+        .pathway-card {
+            margin-bottom: 1rem;
+
+            &.expanded,
+            &.collapsed {
+                flex: 1;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 2rem 0;
+
+        .pathway-card {
+            .pathway-category {
+                font-size: 1.25rem;
+            }
+
+            .pathway-title {
+                font-size: 1.1rem;
+            }
+
+            .pathway-features li {
+                font-size: 0.9rem;
+            }
+
+            .pathway-prompt {
+                font-size: 1.1rem;
+            }
+
+            .pathway-number {
+                font-size: 2rem;
+            }
+        }
+    }
+
+    @media (max-width: 576px) {
+        padding: 1.5rem 0;
+
+        .pathway-card {
+            .pathway-category {
+                font-size: 1.1rem;
+            }
+
+            .pathway-number {
+                font-size: 1.5rem;
+                bottom: 0.5rem;
+                right: 1rem;
+            }
+        }
     }
 }
