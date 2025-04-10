@@ -26,6 +26,10 @@ $border-radius-pill: 50rem;
     height: 350px !important;
     width: 295px !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 350px;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 0.5rem;
 
     &:hover {
         transform: translateY(-5px);
@@ -61,6 +65,13 @@ $border-radius-pill: 50rem;
     @media (max-width: 576px) {
         font-size: 1.5rem;
     }
+}
+
+// University icon styles
+.university-icon {
+    font-size: 1rem;
+}
+
 }
 
 // University icon styles

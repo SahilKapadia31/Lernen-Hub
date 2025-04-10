@@ -9,7 +9,6 @@ import slideFour from '../../../img/v2/autoslide4.png'
 import slideFive from '../../../img/v2/autoslide5.png'
 import shadowImg from '../../../img/v2/image.png'
 
-
 export const Features = () => {
     // Filter state
     const [activeFilter, setActiveFilter] = useState("All")
@@ -130,7 +129,7 @@ export const Features = () => {
         initialSlide: 0,
         responsive: [
             {
-                breakpoint: 1024,
+                breakpoint: 1200,
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 3,
@@ -138,15 +137,14 @@ export const Features = () => {
                 }
             },
             {
-                breakpoint: 600,
+                breakpoint: 992,
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 2,
-                    initialSlide: 2
                 }
             },
             {
-                breakpoint: 480,
+                breakpoint: 576,
                 settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1
@@ -201,6 +199,7 @@ export const Features = () => {
                         <Slider {...settings}>
                             {filteredUniversities.map((university) => (
                                 <div className="px-1" key={university.id}>
+                                <div className="px-2" key={university.id}>
                                     <Card className="slider-card border shadow-sm hover-shadow transition">
                                         <Card.Body className="d-flex flex-column position-relative">
                                             <div className="text-center mb-2">
@@ -287,6 +286,7 @@ export const Features = () => {
                         <Slider {...settings}>
                             {filteredUniversities.map((university) => (
                                 <div className="px-1" key={university.id}>
+                                <div className="px-2" key={university.id}>
                                     <Card className="slider-card border shadow-sm hover-shadow transition">
                                         <Card.Body className="d-flex flex-column position-relative">
                                             <div className="text-center mb-2">
@@ -365,3 +365,4 @@ export const Features = () => {
         </main>
     )
 }
+
