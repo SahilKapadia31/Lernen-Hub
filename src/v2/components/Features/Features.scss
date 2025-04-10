@@ -23,6 +23,9 @@ $border-radius-pill: 50rem;
 
 // Slider card styles
 .slider-card {
+    height: 350px !important;
+    width: 295px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     height: 350px;
     width: 100%;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -62,6 +65,13 @@ $border-radius-pill: 50rem;
     @media (max-width: 576px) {
         font-size: 1.5rem;
     }
+}
+
+// University icon styles
+.university-icon {
+    font-size: 1rem;
+}
+
 }
 
 // University icon styles
@@ -258,4 +268,31 @@ $border-radius-pill: 50rem;
 
 .school-listing {
     background-color: #F9F9FB;
+}
+
+
+// background: url(image.png);
+
+.slider-section {
+    .slick-slider {
+        margin-top: 0px !important;
+    }
+
+    .slider-image {
+        height: 25rem;
+        position: relative;
+
+        .slider-shadow {
+            position: absolute;
+            inset: 0;
+        }
+    }
+
+    .slick-slide>div {
+        margin: 0 !important;
+    }
+
+    .slick-slide {
+        padding: 0 !important;
+    }
 }

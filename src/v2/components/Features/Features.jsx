@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { Container, Card, Button } from "react-bootstrap";
 import './Features.scss';
 import Slider from 'react-slick';
+import slideOne from '../../../img/v2/autoslide1.png'
+import slideTwo from '../../../img/v2/autoslide2.png'
+import slideThree from '../../../img/v2/autoslide3.png'
+import slideFour from '../../../img/v2/autoslide4.png'
+import slideFive from '../../../img/v2/autoslide5.png'
+import shadowImg from '../../../img/v2/image.png'
 
 export const Features = () => {
     // Filter state
@@ -147,9 +153,22 @@ export const Features = () => {
         ]
     };
 
+    const autoPlaySettings = {
+        dots: false,
+        infinite: true,
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        autoplay: false,
+        speed: 5000,
+        autoplaySpeed: 1000,
+        cssEase: "linear",
+        arrows: false,
+    };
+
     // Filter categories
     const filters = ["All", "Engineering", "Medical", "Designing", "Music", "Travel & Tourism", "Engineering", "Medical", "Designing", "Music", "Travel & Tourism", "Engineering", "Medical", "Designing", "Music", "Travel & Tourism"]
     const SchoolFilters = ["All", "Elementary", "Secondary", "Religious", "Boarding", "Special Education Schools", "International", "Preschools"]
+    const sliderImages = [slideOne, slideTwo, slideThree, slideFour, slideFive]
 
     // Filter universities based on selected category
     const filteredUniversities =
@@ -179,6 +198,7 @@ export const Features = () => {
                     <div className="slider-container mt-4">
                         <Slider {...settings}>
                             {filteredUniversities.map((university) => (
+                                <div className="px-1" key={university.id}>
                                 <div className="px-2" key={university.id}>
                                     <Card className="slider-card border shadow-sm hover-shadow transition">
                                         <Card.Body className="d-flex flex-column position-relative">
@@ -265,6 +285,7 @@ export const Features = () => {
                     <div className="slider-container mt-4">
                         <Slider {...settings}>
                             {filteredUniversities.map((university) => (
+                                <div className="px-1" key={university.id}>
                                 <div className="px-2" key={university.id}>
                                     <Card className="slider-card border shadow-sm hover-shadow transition">
                                         <Card.Body className="d-flex flex-column position-relative">
@@ -327,6 +348,19 @@ export const Features = () => {
                         </Button>
                     </div>
                 </Container>
+            </section>
+
+            <section className='slider-section'>
+                <div className="slider-container m-0">
+                    <Slider {...autoPlaySettings}>
+                        {sliderImages?.map((image, index) => (
+                            <div key={index} className='slider-image'>
+                                <img src={image} alt={image} className='w-100 h-100' />
+                                <img src={shadowImg} alt={shadowImg} className='slider-shadow' />
+                            </div>
+                        ))}
+                    </Slider>
+                </div>
             </section>
         </main>
     )
