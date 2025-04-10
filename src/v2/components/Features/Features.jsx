@@ -10,11 +10,11 @@ import music from '../../../img/v2/autoslide5.png'
 import shadowImg from '../../../img/v2/image.png'
 
 
-import pennLogo from '../../../img/uni5.png';
-import glasgowLogo from '../../../img/uni4.png';
-import brownLogo from '../../../img/uni3.png';
-import liverpoolLogo from '../../../img/uni2.png';
-import dokuzLogo from '../../../img/uni1.png';
+import pennLogo from '../../../img/v2/uni5.png';
+import glasgowLogo from '../../../img/v2/uni4.png';
+import brownLogo from '../../../img/v2/uni3.png';
+import liverpoolLogo from '../../../img/v2/uni2.png';
+import dokuzLogo from '../../../img/v2/uni1.png';
 
 export const Features = () => {
     // Filter state
@@ -237,7 +237,7 @@ export const Features = () => {
         infinite: true,
         slidesToShow: 5,
         slidesToScroll: 1,
-        autoplay: false,
+        autoplay: true,
         speed: 5000,
         autoplaySpeed: 1000,
         cssEase: "linear",
