@@ -283,6 +283,9 @@ $pathway-dark: #1b2331;
             height: 100%;
             z-index: 1;
         }
+      @media screen and (max-width: 576px) {
+        height: 10rem;        
+      }
     }
 
     .slick-slide {
@@ -295,6 +298,9 @@ $pathway-dark: #1b2331;
 .university-logos {
     height: 200px;
     aspect-ratio: 1/1;
+    @media screen and (max-width: 576px) {
+        height: 150px;
+    }
 }
 
 // University partners section
