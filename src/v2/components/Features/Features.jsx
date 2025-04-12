@@ -371,7 +371,7 @@ export const Features = () => {
                     <div className="filter-container d-flex flex-wrap gap-2 justify-content-center mb-4">
                         {SchoolFilters.map((filter) => (
                             <Button
-                                key={filter}
+                                key={filter + "1"}
                                 variant={activeFilter === filter ? "active-filter" : "outline-secondary"}
                                 className="rounded-pill px-4 py-2 mb-2"
                                 onClick={() => setActiveFilter(filter)}
@@ -384,7 +384,7 @@ export const Features = () => {
                     <div className="slider-container mt-4">
                         <Slider {...settings}>
                             {filteredUniversities.map((university) => (
-                                <div className="px-1" key={university.id}>
+                                <div className="px-1" key={university.id + "1"}>
                                     <Card className="slider-card border shadow-sm hover-shadow transition">
                                         <Card.Body className="d-flex flex-column position-relative">
                                             <div className="text-center mb-2">
@@ -474,7 +474,7 @@ export const Features = () => {
                     <div className="filter-container d-flex flex-wrap gap-2 justify-content-center mb-4">
                         {filters.map((filter) => (
                             <Button
-                                key={filter}
+                                key={filter + "2"}
                                 variant={activeFilter === filter ? "active-filter" : "outline-secondary"}
                                 className="rounded-pill px-4 py-2 mb-2"
                                 onClick={() => setActiveFilter(filter)}
@@ -487,7 +487,7 @@ export const Features = () => {
                     <div className="slider-container mt-4">
                         <Slider {...settings}>
                             {filteredUniversities.map((university) => (
-                                <div className="px-1" key={university.id}>
+                                <div className="px-1" key={university.id + "2"}>
                                     <Card className="slider-card border shadow-sm hover-shadow transition">
                                         <Card.Body className="d-flex flex-column position-relative">
                                             <div className="text-center mb-2">

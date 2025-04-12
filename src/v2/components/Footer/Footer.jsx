@@ -12,8 +12,7 @@ export const Footer = () => {
                     <Row className="mb-4">
                         <Col xs={12} md={4} className="mb-4 mb-md-0">
                             <div className="d-flex align-items-center" onClick={() => navigate('/')}>
-                                <img className="img-fluid" src={require('../../../img/landing_page/OBJECTS (1).png')} style={{ height: '40px' }} alt="Logo" />
-                                <img className="ms-3 img-fluid" src={require('../../../img/landing_page/lernen hub.png')} style={{ height: '25px' }} alt="Logo" />
+                                <img className="img-fluid" src={require('../../../img/landing_page/Group 377.png')} alt="Logo" />
                             </div>
                             <div className='mt-5'>
                                 <h5 className="text-white mb-3">Location</h5>

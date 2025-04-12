@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom/dist';
-
+import { Link } from 'react-router-dom';
 
 export const Navbar = () => {
     const [active, setActive] = useState('home');
+    const [scrolled, setScrolled] = useState(false);
 
     const navigate = useNavigate();
+
+    // Add scroll event listener
+    useEffect(() => {
+        const handleScroll = () => {
+            // Change navbar style after scrolling 100px
+            if (window.scrollY > 300) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        // Cleanup function
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     const handleNavigation = (path, key) => {
         setActive(key);
@@ -20,15 +39,60 @@ export const Navbar = () => {
         { label: 'Tutors', key: 'tutors', path: '/v2/home/tutors' },
     ];
 
+    // Navbar style based on scroll position
+    const navbarStyle = {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        transition: 'all 0.3s ease',
+        backgroundColor: scrolled ? '#fff' : '', // Change background color based on scroll
+        boxShadow: scrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none',
+    };
+
+    // Text and button styles based on scroll position
+    const textStyle = {
+        color: scrolled ? '#5D5FE3' : '#fff',
+        transition: 'color 0.3s ease',
+    };
+
+    const buttonStyle = {
+        backgroundColor: scrolled ? '#5D5FE3' : 'transparent',
+        borderColor: scrolled ? '#5D5FE3' : '#fff',
+        color: scrolled ? '#fff' : '#fff',
+        transition: 'all 0.3s ease',
+    };
+
     return (
         <>
             {/* Desktop Navbar */}
-            <div className="d-none d-lg-block">
-                <div className="container ">
+            <div className="d-none d-lg-block" style={navbarStyle}>
+                <div className="container">
                     <div className="py-3 d-flex justify-content-between align-items-center" style={{ height: '5rem' }}>
                         <div className="d-flex align-items-center" onClick={() => navigate('/')}>
-                            <img className="img-fluid" src={require('../../../img/landing_page/OBJECTS (1).png')} style={{ height: '30px' }} alt="Logo" />
-                            <img className="ms-3 img-fluid" src={require('../../../img/landing_page/lernen hub.png')} style={{ height: '20px' }} alt="Logo" />
+                            {/* Logo changes based on scroll */}
+
+
+                            {scrolled ? <img
+                                className="img-fluid"
+                                src={require('../../../img/landing_page/Group 385.png')}
+                                style={{ height: '30px' }}
+                                alt="Logo"
+                            /> :
+                                <img
+                                    className="img-fluid"
+                                    src={require('../../../img/landing_page/Group 377.png')}
+                                    style={{ height: '30px' }}
+                                    alt="Logo"
+                                />}
+                            {/* <img
+                                className="img-fluid"
+                                src={require(scrolled ? '../../../img/landing_page/Group 385.png' : '../../../img/landing_page/Group 377.png')}
+                                style={{ height: '30px' }}
+                                alt="Logo"
+                            /> */}
+
                         </div>
                         <ul className="d-flex justify-content-end align-items-center gap-5"
                             style={{ listStyleType: 'none', cursor: 'pointer', margin: 0, padding: 0 }}
@@ -38,17 +102,22 @@ export const Navbar = () => {
                                     key={item.key}
                                     className={`list ${active === item.key ? 'text-decoration-underline' : 'text-decoration-none'}`}
                                     onClick={() => handleNavigation(item.path, item.key)}
-                                    style={{ color: active === item.key ? '#5D5FE3' : '#fff' }}
+                                    style={{
+                                        ...textStyle,
+                                        color: active === item.key ? '#5D5FE3' : (scrolled ? '#333' : '#fff')
+                                    }}
                                 >
                                     {item.label}
                                 </li>
                             ))}
-                            <li>
-                            </li>
                         </ul>
-                        <div className="d d-flex gap-4 align-items-center">
-                            <i className="bi bi-search text-white fs-4"></i>
-                            <button onClick={() => navigate('/loginpage')} className="btn py-2 px-4 text-white bg-transparent border border-white">
+                        <div className="d-flex gap-4 align-items-center">
+                            <i className={`bi bi-search fs-4`} style={textStyle}></i>
+                            <button
+                                onClick={() => navigate('/loginpage')}
+                                className="btn py-2 px-4"
+                                style={buttonStyle}
+                            >
                                 Log In
                             </button>
                         </div>
@@ -57,7 +126,10 @@ export const Navbar = () => {
             </div>
 
             {/* Mobile Navbar */}
-            <nav className="navbar bg-transparent d-block d-lg-none">
+            <nav className="navbar d-block d-lg-none" style={{
+                ...navbarStyle,
+                backgroundColor: scrolled ? '#fff' : '#2e1a91',
+            }}>
                 <div className="container d-flex justify-content-between align-items-center">
                     <Link className="navbar-brand">
                         <img src={require('../../../img/landing_page/Group 377.png')} width={120} alt="Brand Logo" />
@@ -69,7 +141,7 @@ export const Navbar = () => {
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
                         height="20"
-                        fill="#fff"
+                        fill={scrolled ? '#333' : '#fff'}
                         className="bi bi-justify-right"
                         viewBox="0 0 16 16"
                     >
@@ -81,7 +153,50 @@ export const Navbar = () => {
                 </div>
             </nav>
 
+            {/* Offcanvas Menu (No changes needed here) */}
+            <div id="landingpage_offcanvas" className="offcanvas offcanvas-end d-sm-block d-lg-none d-xl-none overflow-hidden" tabIndex="-1" aria-labelledby="offcanvasExampleLabel" data-bs-scroll="false" data-bs-backdrop="false">
+                <div className="offcanvas-header d-flex align-items-center">
+                    <img src={require('../../../img/landing_page/Group 385.png')} width={120} alt="spage" />
+                    <svg data-bs-dismiss="offcanvas" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+                    </svg>
+                </div>
+                <div className="offcanvas-body">
+                    <div className="pb-5">
+                        <ul className="nav flex-column gap-3 text-start ps-0 mt-4">
+                            <li className="nav-item">
+                                <Link to='/' className="nav-link d-flex align-items-center">
+                                    <span className="fw-medium" style={{ color: '#5d5fe3' }}><i className="fa-solid fa-house me-3" style={{ color: '#5d5fe3' }}></i>Home</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <a onClick={() => { navigate('/our_team') }} className="nav-link" type="button">
+                                    <span className="fw-medium" style={{ color: '#5d5fe3' }}><i className="fa-solid fa-user me-3" style={{ color: '#5d5fe3' }}></i>About Us</span>
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <Link to='/stories' className="nav-link">
+                                    <span className="fw-medium" style={{ color: '#5d5fe3' }}><i className="fa-solid fa-heart me-3" style={{ color: '#5d5fe3' }}></i>Stories</span></Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to='/Getting_started' className="nav-link">
+                                    <span className="fw-medium" style={{ color: '#5d5fe3' }}><i className="fa-solid fa fa-file me-3" style={{ color: '#5d5fe3' }}></i>FAQs</span></Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to='/contact_us' className="nav-link">
+                                    <span className="fw-medium" style={{ color: '#5d5fe3' }}><i className="fa-solid fa-phone me-3" style={{ color: '#5d5fe3' }}></i>Contact Us</span></Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to='/loginpage' className="nav-link">
+                                    <span className="fw-medium" style={{ color: '#5d5fe3' }}><i className="fa-solid fa-arrow-right me-3" style={{ color: '#5d5fe3' }}></i>Login / Sign-up</span></Link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
+            {/* Add padding to body content to prevent navbar overlap */}
+            <div style={{ paddingTop: '5rem' }}></div>
         </>
     );
 };
