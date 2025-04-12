@@ -9,12 +9,27 @@
     height: 100vh;
     position: relative;
 
+    @media (max-width: 576px) {
+        height: 80vh;
+    }
+
     .main-land-div {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         height: 90vh;
+
+        @media (max-width: 992px) {
+            // height: 30vh;
+            // overflow: scroll;
+        }
+
+        @media screen and (max-width: 576px) {
+            height:  70vh;
+            // justify-content: start;
+        }
+
     }
 
     .hero-title {
@@ -37,7 +52,7 @@
         max-width: 50rem;
 
         @media (max-width: 992px) {
-
+            flex-direction: column;
             max-width: 30rem;
         }
 
@@ -82,10 +97,10 @@
             border-bottom-right-radius: 0.3rem;
 
             @media (max-width: 992px) {
-                width: 100%;
+                // width: 100%;
                 background-color: transparent;
                 display: flex;
-                justify-content: center;
+                // justify-content: center;
             }
         }
 
@@ -98,9 +113,21 @@
             border-radius: 0.3rem;
 
             @media (max-width: 992px) {
-                width: 100%;
+                // width: 100%;
+                margin: 0px 5px;
             }
         }
+    }
+
+    .search-input {
+        @media (max-width: 992px) {
+            margin-bottom: 0% !important;
+            width: 100%;
+        }
+    }
+
+    .search-bar-Sf {
+        width: 100%;
     }
 
     .card-container {
@@ -111,14 +138,20 @@
         margin: 3rem 0;
         width: 100%;
 
-        @media (max-width: 992px) {
+        @media (min-width: 577px) and (max-width: 992px) {
             flex-wrap: wrap;
             gap: 1.5rem;
         }
 
         @media (max-width: 576px) {
-            flex-direction: column;
+            margin: 0px;
+            overflow: scroll;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
         }
+
     }
 
     // Modified card styling with animated border
@@ -126,16 +159,18 @@
         position: relative;
         border-radius: 5px;
         background: #372F9A;
-        overflow: hidden;
+        // overflow: hidden;
         z-index: 1;
         width: 23%;
+        min-width: 200px;
 
         @media (max-width: 992px) {
             width: 45%;
         }
 
         @media (max-width: 576px) {
-            width: 100%;
+            flex-direction: row;
+            width: 200px;
         }
 
         // Remove the original border

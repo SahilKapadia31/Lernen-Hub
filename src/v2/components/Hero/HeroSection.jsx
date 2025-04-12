@@ -53,7 +53,7 @@ export const HeroSection = () => {
                     <div className='hero-search'>
                         {/* City Selector Dropdown */}
                         <ButtonDropdown className='city-dropdown' isOpen={dropdownOpen} toggle={toggleDropdown}>
-                            <DropdownToggle caret color="light" className='border-0 rounded-end-0 d-flex align-items-center'>
+                            <DropdownToggle caret color="light" className='border-0 rounded-end-0 d-flex align-items-center justify-content-between'>
                                 <i className="bi bi-geo-alt fs-5 me-1 text-orange"></i>
                                 Select City
                             </DropdownToggle>
@@ -68,17 +68,30 @@ export const HeroSection = () => {
                         </ButtonDropdown>
 
                         {/* Search Input */}
-                        <Input
+                        {window.innerWidth >= 992 ? <> <Input
                             placeholder="Search Universities, Schools, Study Centres, Tutors Or Discipline"
                             className='search-input'
                         />
 
-                        {/* Search Button */}
-                        <div className="search-button-container">
-                            <Button className='search-button'>
-                                <i className="bi bi-search text-white fs-5"></i>
-                            </Button>
-                        </div>
+                            {/* Search Button */}
+                            <div className="search-button-container">
+                                <Button className='search-button'>
+                                    <i className="bi bi-search text-white fs-5"></i>
+                                </Button>
+                            </div></> : <div className='d-flex search-bar-Sf '>
+                            <Input
+                                placeholder="Search Universities, Schools, Study Centres, Tutors Or Discipline"
+                                className='search-input'
+                            />
+
+                            {/* Search Button */}
+                            <div className="search-button-container">
+                                <Button className='search-button'>
+                                    <i className="bi bi-search text-white fs-5"></i>
+                                </Button>
+                            </div>
+                        </div>}
+
                     </div>
 
                     <div className="card-container">
