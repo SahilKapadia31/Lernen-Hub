@@ -473,3 +473,93 @@ $pathway-dark: #1b2331;
         }
     }
 }
+
+
+// OnboardingPage.scss
+
+.onboarding-page {
+    .section-title {
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: #2c2c2c;
+        margin-bottom: 2rem;
+
+        @media (max-width: 768px) {
+            font-size: 1.8rem;
+        }
+    }
+
+    .onboarding-card {
+        .icon-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-number {
+            color: $primary-color;
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-description {
+            color: #6c757d;
+            font-size: 1rem;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+    }
+
+    .get-started-btn {
+        background-color: $primary-color;
+        color: white;
+        font-weight: 500;
+        border: none;
+        padding: 0.8rem 4.7rem;
+
+        @media (max-width: 576px) {
+            width: 100%;
+            padding: 0.8rem 2rem;
+        }
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+            color: white;
+        }
+    }
+}
+
+// Footer
+
+/* Custom CSS overrides for Bootstrap */
+.bg-footer {
+    background: radial-gradient(50.46% 50.46% at 50% 63.35%, #6D5FC0 0%, #4135AE 50.38%, #282088 100%) !important;
+    /* Dark blue/purple color from the footer */
+}
+
+.text-warning {
+    color: #FF845D !important;
+    font-weight: 600 !important;
+    font-size: 18px !important;
+    /* Orange color for section headers */
+}
+
+/* Responsive spacing */
+@media (max-width: 768px) {
+    .gap-4>* {
+        margin-right: 1rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Hover effects */
+.text-white-50:hover {
+    color: #fff !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.min-vh-100 {
+    min-height: 100vh;
+}

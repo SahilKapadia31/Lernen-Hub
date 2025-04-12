@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Card, Button } from "react-bootstrap";
+import { Container, Button, Card } from "react-bootstrap";
 import './Features.scss';
 import Slider from 'react-slick';
 import dancing from '../../../img/v2/autoslide1.png'
@@ -15,6 +15,14 @@ import glasgowLogo from '../../../img/v2/uni4.png';
 import brownLogo from '../../../img/v2/uni3.png';
 import liverpoolLogo from '../../../img/v2/uni2.png';
 import dokuzLogo from '../../../img/v2/uni1.png';
+
+import form from '../../../img/v2/form.png';
+import bank from '../../../img/v2/bank.png';
+import doc from '../../../img/v2/doc.png';
+
+
+import { Col, Row } from 'reactstrap';
+import { Footer } from '../Footer/Footer';
 
 export const Features = () => {
     // Filter state
@@ -238,7 +246,7 @@ export const Features = () => {
         slidesToShow: 5,
         slidesToScroll: 1,
         autoplay: true,
-        speed: 5000,
+        speed: 8000,
         autoplaySpeed: 1000,
         cssEase: "linear",
         arrows: false,
@@ -562,7 +570,7 @@ export const Features = () => {
 
             <section className="university-partners-section">
                 <Container>
-                    <div className="pathway-cards-container">
+                    <div className="pathway-cards-container py-5">
                         {userPathways.map((pathway) => (
                             <Card
                                 key={pathway.id}
@@ -619,6 +627,65 @@ export const Features = () => {
                     </div>
                 </Container>
             </section>
+
+            <section className="onboarding-page">
+                <Container>
+                    <div className="my-5 py-5">
+                        <Row className="justify-content-center mb-5">
+                            <Col xs={12} className="text-center">
+                                <h1 className="section-title">Simple Steps to Begin</h1>
+                            </Col>
+                        </Row>
+
+                        <Row className="justify-content-center">
+                            <Col xs={12} sm={6} md={4} className="mb-4">
+                                <Card className="onboarding-card text-center h-100 bg-transparent shadow-none">
+                                    <div className="icon-wrapper">
+                                        <img src={form} alt="Sign up form" style={{ width: '60px', height: '60px' }} />
+                                    </div>
+                                    <div className="step-number">1. Sign Up</div>
+                                    <p className="step-description">
+                                        Choose your role: Student, Teacher, Institution, or Parent.
+                                    </p>
+                                </Card>
+                            </Col>
+
+                            <Col xs={12} sm={6} md={4} className="mb-4">
+                                <Card className="onboarding-card text-center h-100 bg-transparent shadow-none">
+                                    <div className="icon-wrapper">
+                                        <img src={bank} alt="Institution building" style={{ width: '60px', height: '60px' }} />
+                                    </div>
+                                    <div className="step-number">2. Create Your Space</div>
+                                    <p className="step-description">
+                                        Connect with your institution or set up your own.
+                                    </p>
+                                </Card>
+                            </Col>
+
+                            <Col xs={12} sm={6} md={4} className="mb-4">
+                                <Card className="onboarding-card text-center h-100 bg-transparent shadow-none">
+                                    <div className="icon-wrapper">
+                                        <img src={doc} alt="Document" style={{ width: '60px', height: '60px' }} />
+                                    </div>
+                                    <div className="step-number">3. Start Engaging</div>
+                                    <p className="step-description">
+                                        Upload notes, join discussions, create flashcards, or share resources.
+                                    </p>
+                                </Card>
+                            </Col>
+                        </Row>
+
+                        <Row className="justify-content-center mt-4">
+                            <Col xs={12} sm={8} md={6} lg={4} className="text-center">
+                                <Button className="get-started-btn">
+                                    Get Started
+                                </Button>
+                            </Col>
+                        </Row>
+                    </div>
+                </Container>
+            </section>
+            <Footer />
         </main>
     )
 }
