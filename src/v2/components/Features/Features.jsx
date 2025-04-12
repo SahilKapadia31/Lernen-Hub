@@ -638,7 +638,7 @@ export const Features = () => {
                         </Row>
 
                         <Row className="justify-content-center">
-                            <Col xs={12} sm={6} md={4} className="mb-4">
+                            <Col xs={12} sm={6} md={3} className="mb-4">
                                 <Card className="onboarding-card text-center h-100 bg-transparent shadow-none">
                                     <div className="icon-wrapper">
                                         <img src={form} alt="Sign up form" style={{ width: '60px', height: '60px' }} />
@@ -650,7 +650,7 @@ export const Features = () => {
                                 </Card>
                             </Col>
 
-                            <Col xs={12} sm={6} md={4} className="mb-4">
+                            <Col xs={12} sm={6} md={3} className="mb-4">
                                 <Card className="onboarding-card text-center h-100 bg-transparent shadow-none">
                                     <div className="icon-wrapper">
                                         <img src={bank} alt="Institution building" style={{ width: '60px', height: '60px' }} />
@@ -662,7 +662,7 @@ export const Features = () => {
                                 </Card>
                             </Col>
 
-                            <Col xs={12} sm={6} md={4} className="mb-4">
+                            <Col xs={12} sm={6} md={3} className="mb-4">
                                 <Card className="onboarding-card text-center h-100 bg-transparent shadow-none">
                                     <div className="icon-wrapper">
                                         <img src={doc} alt="Document" style={{ width: '60px', height: '60px' }} />
@@ -676,7 +676,7 @@ export const Features = () => {
                         </Row>
 
                         <Row className="justify-content-center mt-4">
-                            <Col xs={12} sm={8} md={6} lg={4} className="text-center">
+                            <Col xs={12} sm={8} md={3} lg={4} className="text-center">
                                 <Button className="get-started-btn">
                                     Get Started
                                 </Button>
