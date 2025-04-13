@@ -58,7 +58,7 @@ export const Navbar = () => {
     };
 
     const buttonStyle = {
-        backgroundColor: scrolled ? '#5D5FE3' : 'transparent',
+        backgroundColor: scrolled ? '#4547C9' : 'transparent',
         borderColor: scrolled ? '#5D5FE3' : '#fff',
         color: scrolled ? '#fff' : '#fff',
         transition: 'all 0.3s ease',
@@ -73,25 +73,12 @@ export const Navbar = () => {
                         <div className="d-flex align-items-center" onClick={() => navigate('/')}>
                             {/* Logo changes based on scroll */}
 
-
-                            {scrolled ? <img
-                                className="img-fluid"
-                                src={require('../../../img/landing_page/Group 385.png')}
-                                style={{ height: '30px' }}
-                                alt="Logo"
-                            /> :
-                                <img
-                                    className="img-fluid"
-                                    src={require('../../../img/landing_page/Group 377.png')}
-                                    style={{ height: '30px' }}
-                                    alt="Logo"
-                                />}
-                            {/* <img
+                            <img
                                 className="img-fluid"
                                 src={require(scrolled ? '../../../img/landing_page/Group 385.png' : '../../../img/landing_page/Group 377.png')}
                                 style={{ height: '30px' }}
                                 alt="Logo"
-                            /> */}
+                            />
 
                         </div>
                         <ul className="d-flex justify-content-end align-items-center gap-5"

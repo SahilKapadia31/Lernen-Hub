@@ -60,7 +60,7 @@ $pathway-dark: #1b2331;
     font-size: 1.75rem;
 
     @media (max-width: 576px) {
-        font-size: 1.5rem;
+        font-size: 1rem;
     }
 }
 
@@ -211,6 +211,8 @@ $pathway-dark: #1b2331;
         max-width: 100%;
         overflow-x: auto;
         padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch; // For smoother scrolling on iOS
+        scrollbar-width: thin; // For Firefox
 
         &::-webkit-scrollbar {
             height: 5px;
@@ -222,24 +224,110 @@ $pathway-dark: #1b2331;
         }
     }
 
-    .slick-slide>div {
-        margin: 0;
+    .slick-slide {
+        height: auto; // Ensures slides have equal height
+
+        >div {
+            margin: 0;
+            height: 100%;
+        }
     }
 
     .slick-list {
         padding: 10px 0;
     }
 
+    .slider-card {
+        transition: transform 0.2s ease;
+        max-width: 100%;
+
+        @media (max-width: 576px) {
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        &:hover {
+            transform: translateY(-5px);
+        }
+    }
+
+    // University logo styling
+    .university-logo {
+        width: 90px;
+        height: 90px;
+
+        @media (max-width: 576px) {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
     // Add responsive margins for slider container
     .slider-container {
         margin: 0 auto;
+
+        @media (min-width: 1200px) {
+            max-width: 95%;
+        }
 
         @media (max-width: 992px) {
             max-width: 90%;
         }
 
         @media (max-width: 576px) {
-            max-width: 95%;
+            max-width: 100%;
+
+            // Target slick-track to center the active card
+            .slick-track {
+                display: flex;
+                justify-content: center;
+            }
+
+            // Ensure cards are centered
+            .slick-slide {
+                display: flex;
+                justify-content: center;
+            }
+        }
+    }
+
+    // For mobile, fix width of card wrapper to ensure centering
+    .card-wrapper {
+        @media (max-width: 576px) {
+            width: 100% !important;
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+    // Style for rating
+    .university-rating {
+        display: flex;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        padding: 2px 8px;
+    }
+
+    .fs-12px {
+        font-size: 12px;
+    }
+
+    // Make view details button consistent
+    .view-details {
+        transition: background-color 0.2s ease;
+    }
+
+    // Ensure explore button is responsive
+    .explore {
+        white-space: nowrap;
+
+        .bi {
+            transition: transform 0.2s ease;
+        }
+
+        &:hover .bi {
+            transform: translateY(-2px);
         }
     }
 }
@@ -256,18 +344,39 @@ $pathway-dark: #1b2331;
 
 // Slider section
 .slider-section {
-    .slick-slider {
-        margin-top: 0;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+
+    .slider-container {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        margin: 0;
     }
 
-    .slick-slide>div {
-        margin: 0px;
+    .slider-track {
+        display: flex;
+        width: fit-content;
+
+        /* The animation will be applied via JavaScript */
+        animation-duration: 50s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+
+        &:hover {
+            animation-play-state: paused;
+        }
     }
 
     .slider-image {
+        flex: 0 0 auto;
+        width: 330px;
         height: 25rem;
+        cursor: pointer;
         position: relative;
-        width: 100%;
         overflow: hidden;
 
         img {
@@ -283,21 +392,34 @@ $pathway-dark: #1b2331;
             height: 100%;
             z-index: 1;
         }
-      @media screen and (max-width: 576px) {
-        height: 10rem;        
-      }
-    }
 
-    .slick-slide {
-        padding: 0 !important;
-        width: 330px !important;
-
+        p {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding-bottom: 1rem;
+            font-weight: 600;
+            font-size: 1.25rem;
+            z-index: 2;
+        }
     }
 }
+
+@media screen and (max-width: 576px) {
+    .slider-section .slider-image {
+        width: 260px;
+        height: 10rem;
+    }
+}
+
 
 .university-logos {
     height: 200px;
     aspect-ratio: 1/1;
+
     @media screen and (max-width: 576px) {
         height: 150px;
     }

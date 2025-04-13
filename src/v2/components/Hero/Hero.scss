@@ -59,7 +59,7 @@
         width: 100%;
         max-width: 50rem;
         height: 60px;
-        overflow: hidden;
+        overflow: visible;
 
         @media (max-width: 1200px) {
             max-width: 45rem;
@@ -312,5 +312,21 @@
 
     100% {
         background-position: 0% 50%;
+    }
+}
+
+.contact-btn {
+    position: fixed;
+    bottom: 4%;
+    right: 3%;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(209.51deg, #FF784E 12.76%, #FF924E 90.45%);
+    z-index: 1;
+    box-shadow: 0 0 25px #FF784E;
+
+    i {
+        font-size: 2rem;
+        color: #fff;
     }
 }
