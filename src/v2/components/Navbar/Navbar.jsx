@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-export const Navbar = () => {
+export const Navbar = ({ activeHeader }) => {
     const [active, setActive] = useState('home');
     const [scrolled, setScrolled] = useState(false);
 
@@ -47,20 +47,20 @@ export const Navbar = () => {
         right: 0,
         zIndex: 1000,
         transition: 'all 0.3s ease',
-        backgroundColor: scrolled ? '#fff' : '', // Change background color based on scroll
-        boxShadow: scrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none',
+        backgroundColor: scrolled || activeHeader ? '#fff' : '', // Change background color based on scroll
+        boxShadow: scrolled || activeHeader ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none',
     };
 
     // Text and button styles based on scroll position
     const textStyle = {
-        color: scrolled ? '#5D5FE3' : '#fff',
+        color: scrolled || activeHeader ? '#5D5FE3' : '#fff',
         transition: 'color 0.3s ease',
     };
 
     const buttonStyle = {
-        backgroundColor: scrolled ? '#4547C9' : 'transparent',
-        borderColor: scrolled ? '#5D5FE3' : '#fff',
-        color: scrolled ? '#fff' : '#fff',
+        backgroundColor: scrolled || activeHeader ? '#4547C9' : 'transparent',
+        borderColor: scrolled || activeHeader ? '#5D5FE3' : '#fff',
+        color: scrolled || activeHeader ? '#fff' : '#fff',
         transition: 'all 0.3s ease',
     };
 
@@ -75,7 +75,7 @@ export const Navbar = () => {
 
                             <img
                                 className="img-fluid"
-                                src={require(scrolled ? '../../../img/landing_page/Group 385.png' : '../../../img/landing_page/Group 377.png')}
+                                src={require(scrolled || activeHeader ? '../../../img/landing_page/Group 385.png' : '../../../img/landing_page/Group 377.png')}
                                 style={{ height: '30px' }}
                                 alt="Logo"
                             />
@@ -91,7 +91,7 @@ export const Navbar = () => {
                                     onClick={() => handleNavigation(item.path, item.key)}
                                     style={{
                                         ...textStyle,
-                                        color: active === item.key ? '#5D5FE3' : (scrolled ? '#333' : '#fff')
+                                        color: active === item.key ? '#5D5FE3' : (scrolled || activeHeader ? '#333' : '#fff')
                                     }}
                                 >
                                     {item.label}
@@ -115,7 +115,7 @@ export const Navbar = () => {
             {/* Mobile Navbar */}
             <nav className="navbar d-block d-lg-none" style={{
                 ...navbarStyle,
-                backgroundColor: scrolled ? '#fff' : '#2e1a91',
+                backgroundColor: scrolled || activeHeader ? '#fff' : '#2e1a91',
             }}>
                 <div className="container d-flex justify-content-between align-items-center">
                     <Link className="navbar-brand">
@@ -128,7 +128,7 @@ export const Navbar = () => {
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
                         height="20"
-                        fill={scrolled ? '#333' : '#fff'}
+                        fill={scrolled || activeHeader ? '#333' : '#fff'}
                         className="bi bi-justify-right"
                         viewBox="0 0 16 16"
                     >

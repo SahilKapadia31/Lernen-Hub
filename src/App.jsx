@@ -113,6 +113,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import ManageStudent from './admin_v2/organizationadmin/pages/managestudent/lists/student-lists.jsx';
 import { LeandingPage } from './v2/pages/LeandingPage.jsx';
+import { UniversitySearch } from './v2/components/index.js';
 
 
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
@@ -205,6 +206,7 @@ const App = () => {
                 <Route element={<PublicLayouts />}>
                   <Route path="/" element={<Landing_page />} />
                   <Route path="/v2/home" element={<LeandingPage />} />
+                  <Route path="/v2/home/university" element={<UniversitySearch />} />
                   <Route path="/loginpage" element={<Loginpage />} />
                   <Route path="/contact_us" element={<Contact_us />} />
                   <Route path="/stories" element={<Stories />} />

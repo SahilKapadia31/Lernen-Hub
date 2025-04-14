@@ -437,6 +437,7 @@ $pathway-dark: #1b2331;
 
     .pathway-card {
         background-color: $pathway-dark;
+        padding: 30px;
         height: 573px;
         border: none;
         border-radius: 10px;
@@ -446,6 +447,12 @@ $pathway-dark: #1b2331;
 
         &.expanded {
             flex: 3;
+
+            .pathway-content {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
         }
 
         &.collapsed {
@@ -463,13 +470,11 @@ $pathway-dark: #1b2331;
         .pathway-category {
             font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
         }
 
         .pathway-title {
-            font-size: 1.25rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
             transition: opacity 0.3s ease;
         }
 
@@ -485,6 +490,7 @@ $pathway-dark: #1b2331;
 
             li {
                 position: relative;
+                font-size: 1rem;
                 line-height: 1.5;
                 margin-bottom: 0.75rem;
 
@@ -492,24 +498,21 @@ $pathway-dark: #1b2331;
                     content: "•";
                     position: absolute;
                     left: -1.5rem;
+                    top: -0.5rem;
                     font-size: 1.5rem;
                 }
             }
         }
 
-        .pathway-footer {
-            margin-top: 2rem;
-        }
-
         .pathway-prompt {
-            color: $text-muted;
-            font-size: 1.25rem;
-            font-weight: 500;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 600;
         }
 
         .pathway-cta {
             border: none;
-            padding: 0.5rem 2rem;
+            padding: 0.8rem 5.2rem;
             font-weight: 500;
             transition: all 0.3s ease;
             margin-top: 1rem;
@@ -543,28 +546,152 @@ $pathway-dark: #1b2331;
         }
     }
 
-    // Responsive styles
+    // Extra large screens (above 1200px)
+    @media (min-width: 1201px) {
+        .pathway-card {
+            .pathway-category {
+                font-size: 1.5rem;
+            }
+
+            .pathway-title {
+                font-size: 1.5rem;
+            }
+
+            .pathway-features li {
+                font-size: 1rem;
+            }
+
+            .pathway-prompt {
+                font-size: 1.5rem;
+            }
+
+            .pathway-cta {
+                padding: 0.8rem 5.2rem;
+                font-size: 1rem;
+            }
+
+            .pathway-number {
+                font-size: 2.5rem;
+            }
+        }
+    }
+
+    // Large screens (between 991px and 1200px)
+    @media (min-width: 991px) and (max-width: 1200px) {
+        .pathway-cards-container {
+            flex-direction: column;
+        }
+
+        .pathway-card {
+            padding: 25px;
+            height: 573px;
+
+            &.expanded {
+                flex: 2.5; // Adjusted ratio for better display
+            }
+
+            &.collapsed {
+                flex: 0.8; // Adjusted ratio for better display
+            }
+
+            .pathway-category {
+                font-size: 1.3rem;
+            }
+
+            .pathway-title {
+                font-size: 1.3rem;
+            }
+
+            .pathway-features {
+                margin-top: 1.2rem;
+
+                li {
+                    font-size: 0.95rem;
+                    margin-bottom: 0.6rem;
+                }
+            }
+
+            .pathway-prompt {
+                font-size: 1.3rem;
+                width: 85%; // Adjusted width for better text wrapping
+            }
+
+            .pathway-cta {
+                padding: 0.7rem 3rem; // Reduced padding for better button display
+                font-size: 0.95rem;
+            }
+
+            .pathway-number {
+                font-size: 2.25rem;
+            }
+        }
+    }
+
+    // Medium screens (tablets)
     @media (max-width: 991px) {
         .pathway-cards-container {
             flex-direction: column;
         }
 
         .pathway-card {
+            height: auto;
+            min-height: 300px;
             margin-bottom: 1rem;
 
             &.expanded,
             &.collapsed {
                 flex: 1;
             }
+
+            // Always show content on tablet/mobile
+            .pathway-title,
+            .pathway-content {
+                &.hidden {
+                    display: block;
+                }
+            }
+
+            .pathway-category {
+                font-size: 1.25rem;
+            }
+
+            .pathway-title {
+                font-size: 1.25rem;
+            }
+
+            .pathway-features {
+                margin-top: 1.2rem;
+
+                li {
+                    font-size: 0.95rem;
+                }
+            }
+
+            .pathway-prompt {
+                font-size: 1.25rem;
+                width: 100%; // Full width on smaller screens
+            }
+
+            .pathway-cta {
+                padding: 0.7rem 2.5rem;
+                margin-top: 0.8rem;
+            }
+
+            .pathway-number {
+                font-size: 2.25rem;
+            }
         }
     }
 
+    // Small tablets
     @media (max-width: 768px) {
         padding: 2rem 0;
 
         .pathway-card {
+            padding: 20px;
+
             .pathway-category {
-                font-size: 1.25rem;
+                font-size: 1.2rem;
             }
 
             .pathway-title {
@@ -579,24 +706,113 @@ $pathway-dark: #1b2331;
                 font-size: 1.1rem;
             }
 
+            .pathway-cta {
+                padding: 0.7rem 2rem;
+                font-size: 0.9rem;
+            }
+
             .pathway-number {
                 font-size: 2rem;
             }
         }
     }
 
+    // Mobile devices
     @media (max-width: 576px) {
         padding: 1.5rem 0;
 
+        .pathway-cards-container {
+            gap: 0.75rem;
+        }
+
         .pathway-card {
+            padding: 15px;
+            min-height: 280px;
+
             .pathway-category {
                 font-size: 1.1rem;
+            }
+
+            .pathway-title {
+                font-size: 1rem;
+            }
+
+            .pathway-features {
+                padding-left: 1.25rem;
+                margin-top: 1rem;
+
+                li {
+                    font-size: 0.85rem;
+                    margin-bottom: 0.5rem;
+
+                    &::before {
+                        left: -1.25rem;
+                        top: -0.4rem;
+                        font-size: 1.3rem;
+                    }
+                }
+            }
+
+            .pathway-prompt {
+                font-size: 1rem;
+            }
+
+            .pathway-cta {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.85rem;
+                margin-top: 0.7rem;
             }
 
             .pathway-number {
                 font-size: 1.5rem;
                 bottom: 0.5rem;
                 right: 1rem;
+            }
+        }
+    }
+
+    // Extra small devices
+    @media (max-width: 480px) {
+        padding: 1rem 0;
+
+        .pathway-card {
+            padding: 12px;
+            min-height: 250px;
+
+            .pathway-header {
+                padding-bottom: 0.3rem;
+            }
+
+            .pathway-category {
+                font-size: 1rem;
+            }
+
+            .pathway-title {
+                font-size: 0.9rem;
+            }
+
+            .pathway-features {
+                margin-top: 0.8rem;
+
+                li {
+                    font-size: 0.8rem;
+                    line-height: 1.3;
+                    margin-bottom: 0.4rem;
+                }
+            }
+
+            .pathway-prompt {
+                font-size: 0.9rem;
+            }
+
+            .pathway-cta {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.8rem;
+                margin-top: 0.5rem;
+            }
+
+            .pathway-number {
+                font-size: 1.3rem;
             }
         }
     }
@@ -690,4 +906,49 @@ $pathway-dark: #1b2331;
 
 .min-vh-100 {
     min-height: 100vh;
+}
+
+.counter-section {
+    padding: 2.4rem 0;
+
+    .counter {
+        @media (max-width: 575.98px) {
+            /* On very small screens, ensure there's enough space */
+            justify-content: space-around;
+        }
+    }
+
+    .counter-item {
+        /* Adapt width based on screen size */
+        flex: 0 0 auto;
+
+        @media (max-width: 767.98px) {
+            min-width: 100px;
+        }
+
+        @media (max-width: 575.98px) {
+            min-width: 90px;
+        }
+    }
+
+    .counter-number {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #FF784E;
+        display: block;
+
+        @media (min-width: 576px) {
+            font-size: 2.25rem;
+        }
+
+        @media (min-width: 768px) {
+            font-size: 3rem;
+        }
+    }
+
+    p {
+        @media (max-width: 575.98px) {
+            font-size: 0.8rem;
+        }
+    }
 }
