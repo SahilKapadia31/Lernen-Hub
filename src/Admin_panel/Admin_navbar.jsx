@@ -135,7 +135,7 @@ const Admin_navbar = () => {
               </li>
               <li data-bs-dismiss="offcanvas" className="nav-item">
                 <a onClick={() => {
-                  navigate('/organization_details')
+                  navigate('/university_details')
                 }} className="nav-link" type="button"><span className="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 27" fill="none">
                   <path d="M4.47908 21.7917V10.125H5.93742V21.7917H4.47908ZM11.7708 21.7917V10.125H13.2291V21.7917H11.7708ZM0.160156 26.1667V24.7083H24.8397V26.1667H0.160156ZM19.0624 21.7917V10.125H20.5208V21.7917H19.0624ZM0.160156 7.20834V5.97437L12.4999 0.0849304L24.8397 5.97437V7.20834H0.160156ZM4.01355 5.75001H20.9863L12.4999 1.73959L4.01355 5.75001Z" fill="currentColor" />
                 </svg></span>

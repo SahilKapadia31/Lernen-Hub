@@ -14,7 +14,7 @@ const toastConfig = { autoClose: 3000, theme: 'colored', position: 'top-right' }
 const Courses = () => {
   let { translate_value, addsubjects_layout, setgroup_visible, setstudylist_visible, setcourse_visible, navbar_dropdown_visible, setnavbar_dropdown_visible } = useContext(Context);
 
-  const organization = JSON.parse(getDecryptedData('user'));
+  const university = JSON.parse(getDecryptedData('user'));
   const [loading, setLoading] = useState(true);
   const [isSubject, setSubject] = useState(false);
   const [open, isOpen] = useState(true);
@@ -32,7 +32,7 @@ const Courses = () => {
   let [count, setCount] = useState(0);
 
   useEffect(() => {
-    axiosInstance.get(`${ipaddress}/CoursesView/${organization.user_id}/`)
+    axiosInstance.get(`${ipaddress}/CoursesView/${university.user_id}/`)
       .then((r) => {
         setCourses(r.data.courses.reverse());
         setJoinedCourses(r.data.joined_courses.reverse());
@@ -73,7 +73,7 @@ const Courses = () => {
   const searchSubject = (value) => {
     setSearchvalue(value);
     if (value.length > 0) {
-      axiosInstance.get(`${ipaddress}/CoursesSearch/${organization.user_id}/${value}/`)
+      axiosInstance.get(`${ipaddress}/CoursesSearch/${university.user_id}/${value}/`)
         .then((r) => {
           // console.log("Searched Subjects Found", r.data)
           setSearchedSubjects(r.data);
@@ -97,7 +97,7 @@ const Courses = () => {
       toast.error('Please accept the terms and conditions to proceed.', toastConfig);
       return;
     }
-    axiosInstance.post(`${ipaddress}/RequestingForCourseAddition/${organization.user_id}/`, { 'course_name': subjectName })
+    axiosInstance.post(`${ipaddress}/RequestingForCourseAddition/${university.user_id}/`, { 'course_name': subjectName })
       .then((r) => {
         // console.log("Subject successfully created", r.data)
         setCount(count + 1);
@@ -244,7 +244,7 @@ const Courses = () => {
                     }
                   `}</style>
                   {/* ------------------------------------------------Older info- not needed anymore ------------------------------------------- *
-                  <span className='' style={{ fontSize: '16px', letterSpacing: '0.32px', lineHeight: '22px', fontWeight: 450 }}>Here are the popular subjects from your organization.</span><br />
+                  <span className='' style={{ fontSize: '16px', letterSpacing: '0.32px', lineHeight: '22px', fontWeight: 450 }}>Here are the popular subjects from your university.</span><br />
                   <span className='' style={{ fontSize: '16px', letterSpacing: '0.32px', lineHeight: '22px', fontWeight: 450 }}>Join & Stay Updated to receive recommendations and alerts for new documents.</span>
                
                {/* ------------------------------------------------Older info-------------------------------------------- */}
@@ -273,7 +273,7 @@ const Courses = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bank2" viewBox="0 0 16 16">
                                   <path d="M8.277.084a.5.5 0 0 0-.554 0l-7.5 5A.5.5 0 0 0 .5 6h1.875v7H1.5a.5.5 0 0 0 0 1h13a.5.5 0 1 0 0-1h-.875V6H15.5a.5.5 0 0 0 .277-.916zM12.375 6v7h-1.25V6zm-2.5 0v7h-1.25V6zm-2.5 0v7h-1.25V6zm-2.5 0v7h-1.25V6zM8 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2M.5 15a.5.5 0 0 0 0 1h15a.5.5 0 1 0 0-1z" />
                                 </svg>
-                                <span className='ms-2'>{x.organization_name.organization_name}</span>
+                                <span className='ms-2'>{x.university_name.university_name}</span>
                               </span>
                             </div>
                           </div>

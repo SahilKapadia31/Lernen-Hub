@@ -329,7 +329,7 @@ const Subjects = (props) => {
           setreplies_for_reply_status(false);
           setReplies_reply_image([]);
         } else {
-          console.error('Organization Reply under reply sending error');
+          console.error('University Reply under reply sending error');
         }
       } catch (error) {
         console.error('Error reply uploading files:', error);
@@ -404,7 +404,7 @@ const Subjects = (props) => {
   function handlereplies_replydislike(replies_reply_id, disc_replyid) {
     axiosInstance.post(`${ipaddress}/CourseDiscussionRepliesReplyDislike/${userdata.user_id}/${replies_reply_id}/`)
       .then((r) => { getreplies_for_reply(disc_replyid) })
-      .catch(() => { console.log("Organization replies reply dislike error") })
+      .catch(() => { console.log("University replies reply dislike error") })
   }
   // -----------------------------------------------------To Edit the post in subject discussion--------------------------------------------------------
   const [editedpost, setEditedpost] = useState("");

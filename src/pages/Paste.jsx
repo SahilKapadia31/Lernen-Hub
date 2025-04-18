@@ -3,7 +3,7 @@ import axios from 'axios';
 import apiClient from '../pages/Middlewares/axiosConfig';
 import { toast } from 'react-toastify'
 
-const OTPValidationForm = ({ otpvalidationform, translate_value, organization, ipaddress, setotpvalidationform, setvalidatedform }) => {
+const OTPValidationForm = ({ otpvalidationform, translate_value, university, ipaddress, setotpvalidationform, setvalidatedform }) => {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [timer, setTimer] = useState(30);
   const [otpValid, setOTPValid] = useState(true);
@@ -73,9 +73,9 @@ const OTPValidationForm = ({ otpvalidationform, translate_value, organization, i
 
     setTimer(120);
     setOTPValid(true);
-    const organizationmail = new FormData();
-    organizationmail.append('email', organization);
-    apiClient.post(`${ipaddress}/userverification/`, organizationmail)
+    const universitymail = new FormData();
+    universitymail.append('email', university);
+    apiClient.post(`${ipaddress}/userverification/`, universitymail)
       .then((r) => {
         if (r.data === 'This email is already registered with other account') {
           toast.warn('This Email is already registered', {

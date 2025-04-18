@@ -1,33 +1,78 @@
-import React from "react";
-import seacrh_icon from '../../../../img/search-icon.svg';
-import verticle_line_icon from '../../../../img/verticle-line-icon.svg';
-import eye_icon from '../../../../img/eye-icon.svg'
-import './my-programs.scss'
+import React, { useState, useEffect } from "react";
+import { Link,useNavigate } from "react-router-dom";
+import Loading from "react-fullscreen-loading";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import axiosInstance from "../../components/services/axiosInstance";
+import ShowSubject from "./show-subject/show-subject";
+import seacrh_icon from "../../../../img/search-icon.svg";
+import verticle_line_icon from "../../../../img/verticle-line-icon.svg";
+import eye_icon from "../../../../img/eye-icon.svg";
+import "./my-programs.scss";
+import { use } from "react";
+import { Modal, Button } from "react-bootstrap";
+import SortableHeader from "../../components/SortableHeader";
 const OrganizationDashboard = () => {
+  const navigate = useNavigate();
+  const staffData = useSelector((state) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userPrograms, setUserPrograms] = useState([]);
+  const [showSubject, setShowSubject] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState(null);
+  const [showStudent, setShowStudent] = useState(false);
 
-  const programs = [
-    { name: 'Engineering' },
-    { name: 'Medical' },
-    { name: 'Law' },
-    { name: 'Management' },
-    { name: 'Pharmacy' },
-    { name: 'Architecture' },
-    { name: 'Nursing' },
-    { name: 'Dentistry' },
-    { name: 'Computer Science' },
-    { name: 'Mass Communication' },
-    { name: 'Agriculture' },
-    { name: 'Hotel Management' },
-    { name: 'Education' },
-    { name: 'Fashion Design' },
-    { name: 'Fine Arts' },
-    { name: 'Veterinary Science' },
-    { name: 'Social Work' },
-    { name: 'Paramedical Sciences' },
-    { name: 'Aviation' },
-    { name: 'Physical Education' }
-  ];
+  const getUserPrograms = async () => {
+    try {
+      setSelectedProgram(null);
+      setIsLoading(true);
+      const response = await axiosInstance.get(
+        `/userProgram/${staffData?.user?.id}/`
+      );
+      if (response.data && response.data.data.length) {
+        let userPrograms = response.data.data;
+        userPrograms.forEach((program) => {
+          const allCourses = [];
 
+          // Gather all courses from all semesters
+          program.semester.forEach((semester) => {
+            allCourses.push(...semester.courses);
+          });
+
+          // Get unique courses using a Set
+          const uniqueCourses = new Set(allCourses);
+
+          // Add the total_courses key to the program object
+          program["total_courses"] = uniqueCourses.size;
+        });
+
+        setUserPrograms(userPrograms);
+      }
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      console.log("Error in getUserPrograms", err);
+    }
+  };
+
+  useEffect(() => {
+    getUserPrograms();
+  }, []);
+
+  const [studentList, setStudentList] = useState([])
+  const getStudents = async (program_id) => {
+    try {
+      setStudentList([])
+      setIsLoading(true);
+      const response = await axiosInstance.get(`/getAllStudentsbyProgram/${program_id}/`);
+      if (response.data && response.data.data.length) {
+        setStudentList(response.data.data);
+      }
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      console.log("Error in getStudents", err);
+    }
+  };
   return (
     <>
       <div className="myprogram-dashboard">
@@ -197,7 +242,12 @@ const OrganizationDashboard = () => {
             <div className="search position-relative">
               <img src={seacrh_icon} className="search-icon" />
               <img src={verticle_line_icon} className="line-icon" />
-              <input type="text" name="" placeholder="Search here..." className="search-input form-control" />
+              <input
+                type="text"
+                name=""
+                placeholder="Search here..."
+                className="search-input form-control"
+              />
             </div>
           </div>
         </div>
@@ -206,30 +256,97 @@ const OrganizationDashboard = () => {
           <div className="col-md-8 m-auto">
             <div className="programs">
               <div className="row">
-                {programs && programs.length > 0 ?
-                  programs.map(items =>
+                {userPrograms && userPrograms.length > 0
+                  ? userPrograms.map((programs) => (
                     <div className="col-md-4 mb-4 h-auto">
-                      <div className="program-details h-100">
-                        <div className="program-name">
-                          {items.name}
+                      <div className="program-details shadow h-100">
+                        <div className="program-name" onClick={()=> navigate(`/organization/show-documents/${programs?.program_id}`)}>
+                          {programs?.program_name}
                         </div>
                         <div className="d-flex align-items-center justify-content-center gap-2 py-2 show">
                           <img src={eye_icon} className="eye-icon" />
-                          <p className="view">View Courses</p>
+                          {programs?.total_courses > 0 ? (
+                            <p
+                              className="view"
+                              onClick={() => {
+                                setShowSubject(true);
+                                setSelectedProgram(programs);
+                              }}
+                            >
+                              View Subjects
+                            </p>
+                          ) : (
+                            <p
+                              className="view"
+                              style={{ pointerEvents: "none" }}
+                            >
+                              View Subjects
+                            </p>
+                          )}
                         </div>
                         <div className="d-flex align-items-center justify-content-center gap-2 py-1 show">
                           <img src={eye_icon} className="eye-icon" />
-                          <p className="view">View Students</p>
+                          <p className="view" onClick={() => { setShowStudent(true); getStudents(programs?.program_id);setSelectedProgram(programs) }}>
+                            View Students
+                          </p>
                         </div>
                       </div>
                     </div>
-                  ) : ''
-                }
+                  ))
+                  : ""}
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Modal show={showStudent} onHide={() => setShowStudent(false)} size="lg" centered>
+        <Modal.Header closeButton className="border-bottom">
+            <h5 className="mb-0 d-flex gap-2 align-items-center">Student Details <span className="program-type text-uppercase">{selectedProgram?.program_name}</span></h5> 
+        </Modal.Header>
+        <Modal.Body className="table-div">
+          <table className="table fs-9 mb-0">
+            <thead>
+              <tr style={{ textTransform: "uppercase" }}>
+                <th width="5%">
+                  <h5 className="sort mb-0 text-center">#</h5>
+                </th>
+                <th width="35%">
+                  <h5 className="sort mb-0 text-center">Full Name</h5>
+                </th>
+                <th width="35%">
+                  <h5 className="sort mb-0 text-center">Email</h5>
+                </th>
+                <th width="25%">
+                  <h5 className="sort mb-0 text-center">Status</h5>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {(studentList && studentList.length > 0) ?
+                studentList.map((student,index) =>
+                  <tr>
+                    <td className="text-center text-capitalize">{index+1}</td>
+                    <td className="text-center text-capitalize">{student?.first_name + " " + student?.last_name}</td>
+                    <td className="text-center">{student?.email}</td>
+                    <td className={`text-center`} ><span className={`${student?.is_active ? 'active_status' : 'inactive'}`}>{student?.is_active ? 'Active' : 'Inactive'}</span></td>
+                  </tr>
+                ):
+                <tr>
+                  <td colSpan={4} className="text-center">No Record</td>
+                </tr>
+                }
+            </tbody>
+          </table>
+        </Modal.Body>
+      </Modal>
+
+      <ShowSubject
+        show={showSubject}
+        handleClose={() => setShowSubject(false)}
+        selectedProgram={selectedProgram}
+      />
+
+      {isLoading && <Loading loading={true} loaderColor="#000" />}
     </>
   );
 };

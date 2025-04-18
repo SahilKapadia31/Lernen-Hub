@@ -130,7 +130,7 @@ const Signuppage = () => {
       })
   }, [backendotp])
 
-  // To get the organization email id domains
+  // To get the university email id domains
   const search_domain = (value) => {
 
     // ----------------------------------------------To check the condition for @ and then it will call API------------------------
@@ -156,8 +156,8 @@ const Signuppage = () => {
   }
 
   // ----------------------------------------------NEW VALIDATIONS------------------------------------------------------
-  const [organization, setUniversity] = useState("")
-  // const organizationData=(e)=>{
+  const [university, setUniversity] = useState("")
+  // const universityData=(e)=>{
   //   setUniversity(e.target.value)
   // }
 
@@ -262,9 +262,9 @@ const Signuppage = () => {
 
     setTimer(120)
     setOTPValid(true)
-    const organizationmail = new FormData()
-    organizationmail.append('email', organization)
-    apiClient.post(`${ipaddress}/userverification/`, organizationmail)
+    const universitymail = new FormData()
+    universitymail.append('email', university)
+    apiClient.post(`${ipaddress}/userverification/`, universitymail)
       .then((r) => {
         // console.log(r.data)
         if (r.data === 'This email is already registered with other account') {
@@ -297,9 +297,9 @@ const Signuppage = () => {
   const [country_id, setcountry_id] = useState()
   const [UserUniversity, setUserUniversity] = useState("")
   const [UserUniversityid, setUserUniversityid] = useState("")
-  const [organizationstatus, setorganizationstatus] = useState()
+  const [universitystatus, setuniversitystatus] = useState()
 
-  const [fetched_organization_details, setfetched_organization_details] = useState([])
+  const [fetched_university_details, setfetched_university_details] = useState([])
 
   const fetch_country = (value) => {
     if (value.length > 0) {
@@ -330,11 +330,11 @@ const Signuppage = () => {
     setload1(true)
     if (password.length > 6) {
       const formdata = new FormData()
-      formdata.append('email', organization)
+      formdata.append('email', university)
       formdata.append('password', password)
 
-      const organizationdata = new FormData()
-      organizationdata.append('email', organization)
+      const universitydata = new FormData()
+      universitydata.append('email', university)
       if (password === retypepassword) {
         apiClient.post(`${ipaddress}/UserRegistrationAPIView/`, formdata)
           .then((r) => {
@@ -346,11 +346,11 @@ const Signuppage = () => {
           .catch((err) => {
             console.log("Error", err)
           })
-        apiClient.post(`${ipaddress}/UserUniversityAddition/`, organizationdata)
+        apiClient.post(`${ipaddress}/UserUniversityAddition/`, universitydata)
           .then((r) => {
             // console.log("Email successfullllll",r.data)
-            if (r.data === "organization is not present") {
-              setorganizationstatus(true)
+            if (r.data === "university is not present") {
+              setuniversitystatus(true)
               setCity("")
               setcountry("")
               setUserUniversity("")
@@ -358,13 +358,13 @@ const Signuppage = () => {
               setload1(false)
             }
             else {
-              setorganizationstatus(false)
-              setfetched_organization_details(r.data)
+              setuniversitystatus(false)
+              setfetched_university_details(r.data)
               setcountry(r.data[0].country)
               setCity(r.data[0].city)
               // setcountry("Germany")
-              setUserUniversity(r.data[0].organization_name)
-              setUserUniversityid(r.data[0].organization_id)
+              setUserUniversity(r.data[0].university_name)
+              setUserUniversityid(r.data[0].university_id)
               setload1(false)
             }
           })
@@ -385,42 +385,42 @@ const Signuppage = () => {
     }
   }
 
-  // ---------------------------------- Fetch the organization based on the selected city-------------------------------------
-  const fetchMatchedorganization = (city_name) => {
-    fetched_organization_details.map((x) => {
+  // ---------------------------------- Fetch the university based on the selected city-------------------------------------
+  const fetchMatcheduniversity = (city_name) => {
+    fetched_university_details.map((x) => {
       if (x.city === city_name) {
-        setUserUniversity(x.organization_name)
-        setUserUniversityid(x.organization_id)
+        setUserUniversity(x.university_name)
+        setUserUniversityid(x.university_id)
       }
     })
   }
 
-  // ---------------------------------------------SEND Organization DATA AND ID----------------------------------------------
+  // ---------------------------------------------SEND UNIVERSITY DATA AND ID----------------------------------------------
   const [value, setvalue] = useState(false)
-  const sendorganizationdata = (e) => {
+  const senduniversitydata = (e) => {
     e.preventDefault()
     const formdata = new FormData()
-    formdata.append('email', organization)
-    formdata.append('organization_id', UserUniversityid)
+    formdata.append('email', university)
+    formdata.append('university_id', UserUniversityid)
 
     apiClient.put(`${ipaddress}/UserUniversityAddition/`, formdata)
       .then((r) => {
-        // console.log("Organization ID sent successfully",r.data)
+        // console.log("University ID sent successfully",r.data)
         document.getElementById('signup').style.display = 'none'
         setvalue(true)
       })
   }
 
-  // ------------------------------------------------ADD Organization------------------------------------------------------
-  const [organizationname, setorganizationname] = useState("")
+  // ------------------------------------------------ADD UNIVERSITY------------------------------------------------------
+  const [universityname, setuniversityname] = useState("")
   const [state, setstate] = useState(false)
   const [showTerms, setShowTerms] = React.useState(false);
 
-  const addorganization = (e) => {
+  const adduniversity = (e) => {
     e.preventDefault()
     const formdata = new FormData()
-    formdata.append('email', organization)
-    formdata.append('organization_name', organizationname)
+    formdata.append('email', university)
+    formdata.append('university_name', universityname)
     formdata.append('country', country)
     formdata.append('city', city)
 
@@ -497,11 +497,11 @@ const Signuppage = () => {
                       <div className="col-12">
                         <div className="mb-3">
                           <label htmlFor="formGroupExampleInput" className="form-label signup-labels d-flex align-items-center" style={{ fontSize: '16px', color: '#6c757d' }}>
-                            <span className="me-2">{translate_value.signup_page.organization} {translate_value.login_page.email}</span>
+                            <span className="me-2">{translate_value.signup_page.university} {translate_value.login_page.email}</span>
                             <OverlayTrigger
                               placement="top"
                               delay={{ show: 250, hide: 250 }}
-                              overlay={renderTooltip("Only Organization Emails are allowed")}
+                              overlay={renderTooltip("Only University Emails are allowed")}
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#FF845D" className="bi bi-info-circle-fill" viewBox="0 0 16 16">
                                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
@@ -511,9 +511,9 @@ const Signuppage = () => {
                           <OverlayTrigger
                             placement="right"
                             delay={{ show: 250, hide: 250 }}
-                            overlay={renderTooltip("Only Organization Emails are allowed")}
+                            overlay={renderTooltip("Only University Emails are allowed")}
                           >
-                            <input type="text" className="form-control bg-light py-2 shadow" style={{ borderColor: '#3c147d', borderWidth: '2px', borderStyle: 'solid', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }} placeholder="Enter your Organization Email Id" value={organization} aria-label="Username" name="organization_mailid" onChange={(e) => {
+                            <input type="text" className="form-control bg-light py-2 shadow" style={{ borderColor: '#3c147d', borderWidth: '2px', borderStyle: 'solid', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }} placeholder="Enter your University Email Id" value={university} aria-label="Username" name="university_mailid" onChange={(e) => {
                               setUniversity(e.target.value)
                               search_domain(e.target.value)
                             }} aria-describedby="basic-addon1" />
@@ -524,9 +524,9 @@ const Signuppage = () => {
                             domains.map((x) => {
                               return (
                                 <p key={x.domain} className="m-0 mb-1" style={{ fontSize: '14px', cursor: 'pointer' }} onClick={() => {
-                                  const atIndex = organization.indexOf('@');
+                                  const atIndex = university.indexOf('@');
                                   if (atIndex !== -1) {
-                                    const partBeforeAt = organization.substring(0, atIndex + 1);
+                                    const partBeforeAt = university.substring(0, atIndex + 1);
                                     setUniversity(partBeforeAt + x.domain);
                                   }
                                   setdomains([]);
@@ -581,7 +581,7 @@ const Signuppage = () => {
                         fetchOTP()
                       }}
 
-                        className={`btn btn-md py-2 px-2 px-md-5 fw-bold ${isChecked ? '' : 'd-none'}`} disabled={organization.length > 0 ? false : true} style={{ border: '1px solid #5D5FE3', color: '#5D5FE3', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}
+                        className={`btn btn-md py-2 px-2 px-md-5 fw-bold ${isChecked ? '' : 'd-none'}`} disabled={university.length > 0 ? false : true} style={{ border: '1px solid #5D5FE3', color: '#5D5FE3', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}
                       >
                         {loading ? 'Fetching OTP...' : `${translate_value.signup_page.get_otp}`}
                       </button>
@@ -685,15 +685,15 @@ const Signuppage = () => {
                 }}>
                 <h3 className='text-center mb-4 fw-bold'>{translate_value.signup_page.signup}</h3>
 
-                <div className={`text-end ${message === "Organization is not present" ? '' : 'd-none'}`} style={{ color: '#5d5fe3' }}>
-                  <span className="fw-bold">Kindly Add your Organization</span>
+                <div className={`text-end ${message === "University is not present" ? '' : 'd-none'}`} style={{ color: '#5d5fe3' }}>
+                  <span className="fw-bold">Kindly Add your University</span>
                 </div>
                 <form action="" className="p-2 px-4">
                   <div className="row">
                     <div className="col-12">
                       <label for="formGroupExampleInput" className="form-label signup-labels">{translate_value.signup_page.country}</label>
                       <div className="input-group bg-light border py-2">
-                        <input type="text" value={country} disabled={message === "Organization is not present" ? false : true} onChange={(e) => {
+                        <input type="text" value={country} disabled={message === "University is not present" ? false : true} onChange={(e) => {
                           setcountry(e.target.value)
                           fetch_country(e.target.value)
                         }} className="form-control border-0 bg-transparent country-input" placeholder="Select the City" aria-label="Username" aria-describedby="basic-addon1" />
@@ -720,15 +720,15 @@ const Signuppage = () => {
                         <input type="text" value={city} onChange={(e) => {
                           setCity(e.target.value)
                           searchCities(e.target.value)
-                        }} className="form-control border-0 bg-transparent country-input" disabled={message === "Organization is not present" ? false : true} placeholder={translate_value.signup_page.city_placeholder} aria-label="Username" aria-describedby="basic-addon1" />
+                        }} className="form-control border-0 bg-transparent country-input" disabled={message === "University is not present" ? false : true} placeholder={translate_value.signup_page.city_placeholder} aria-label="Username" aria-describedby="basic-addon1" />
                       </div>
                       {/* --------------------------------SEARCH BAR FOR CITY----------------------------------- */}
-                      <div className={`px-3 py-2 bg-light border border-top-0 ${message === "Organization is not present" && city.length > 0 && cities.length > 0 ? '' : 'd-none'}`} style={{ maxHeight: '200px', overflowY: 'scroll' }}>
+                      <div className={`px-3 py-2 bg-light border border-top-0 ${message === "University is not present" && city.length > 0 && cities.length > 0 ? '' : 'd-none'}`} style={{ maxHeight: '200px', overflowY: 'scroll' }}>
                         {cities.map((x) => {
                           return (
                             <>
                               <p onClick={() => {
-                                fetchMatchedorganization(x.name)
+                                fetchMatcheduniversity(x.name)
                                 setCity(x.name)
                                 setCities([])
                               }} className="m-0" style={{ cursor: 'pointer' }}>{x.name}</p>
@@ -737,21 +737,21 @@ const Signuppage = () => {
                         })}
                       </div>
                     </div>
-                    <div className={`col-12 mt-3 ${message === "Organization is not present" ? 'd-none' : ''}`}>
-                      <label for="formGroupExampleInput" className="form-label signup-labels">{translate_value.signup_page.organization}</label>
+                    <div className={`col-12 mt-3 ${message === "University is not present" ? 'd-none' : ''}`}>
+                      <label for="formGroupExampleInput" className="form-label signup-labels">{translate_value.signup_page.university}</label>
                       <div className="input-group mb-3 bg-light rounded border py-2">
-                        <input type="text" value={UserUniversity} disabled={message === "Organization is not present" ? false : true} className="form-control border-0 bg-transparent country-input" placeholder={translate_value.signup_page.organization_placeholder} aria-label="Username" aria-describedby="basic-addon1" />
+                        <input type="text" value={UserUniversity} disabled={message === "University is not present" ? false : true} className="form-control border-0 bg-transparent country-input" placeholder={translate_value.signup_page.university_placeholder} aria-label="Username" aria-describedby="basic-addon1" />
                       </div>
                     </div>
 
-                    <div className={`text-center ${message === "Organization is not present" ? 'mt-4' : 'd-none'}`}>
-                      <a href="" className='btn text-decoration-none fw-medium text-white py-2 px-2 px-md-4' style={{ backgroundColor: '#5d5fe3' }} data-bs-toggle="modal" data-bs-target="#addorganizationmodal">Add your Organization</a>
+                    <div className={`text-center ${message === "University is not present" ? 'mt-4' : 'd-none'}`}>
+                      <a href="" className='btn text-decoration-none fw-medium text-white py-2 px-2 px-md-4' style={{ backgroundColor: '#5d5fe3' }} data-bs-toggle="modal" data-bs-target="#adduniversitymodal">Add your University</a>
                     </div>
                   </div>
-                  <div className={`text-center ${message === "Organization is not present" ? '' : 'mt-3'}`}>
-                    <button disabled={message === "Organization is not present" ? true : false}
+                  <div className={`text-center ${message === "University is not present" ? '' : 'mt-3'}`}>
+                    <button disabled={message === "University is not present" ? true : false}
                       className="btn signup-btn btn-md py-2 px-2 px-md-5 text-white fw-medium"
-                      type="submit" onClick={sendorganizationdata}
+                      type="submit" onClick={senduniversitydata}
                     >
                       {translate_value.signup_page.signup}
                     </button>
@@ -914,7 +914,7 @@ const Signuppage = () => {
               <div className="text-end px-2 pt-2">
 
                 <button onClick={() => {
-                  if (message === "Organization is not present") {
+                  if (message === "University is not present") {
                     document.getElementById('signupform1').style.display = 'none'
                     document.getElementById('signupform3').style.display = 'block'
                     // document.querySelector('.modal-backdrop').remove();
@@ -957,19 +957,19 @@ const Signuppage = () => {
           </div>
         </div>
       </div>
-      {/* --------------------------------------------ADD Organization--------------------------------------------------------- */}
-      <div className="modal fade" id="addorganizationmodal" tabIndex="-1" aria-labelledby="addcoursemodalLabel" aria-hidden="true">
+      {/* --------------------------------------------ADD UNIVERSITY--------------------------------------------------------- */}
+      <div className="modal fade" id="adduniversitymodal" tabIndex="-1" aria-labelledby="addcoursemodalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-body px-2  px-lg-5 py-5 mb-4 mt-2">
               <div className='d-flex flex-column align-items-center'>
-                <h3 className='pb-4'>Add Organization Name</h3>
+                <h3 className='pb-4'>Add University Name</h3>
                 <input type="text" name="" id="" className='form-control py-2' onChange={(e) => {
-                  setorganizationname(e.target.value)
+                  setuniversityname(e.target.value)
                 }} />
               </div>
               <div className='mt-4'>
-                <button className='btn text-white w-100 px-3' data-bs-dismiss="modal" style={{ backgroundColor: '#5D5FE3' }} onClick={addorganization}>Submit for Admin Approval</button>
+                <button className='btn text-white w-100 px-3' data-bs-dismiss="modal" style={{ backgroundColor: '#5D5FE3' }} onClick={adduniversity}>Submit for Admin Approval</button>
               </div>
             </div>
           </div>
@@ -977,7 +977,7 @@ const Signuppage = () => {
       </div>
 
 
-      <Adddetails value={value} email={organization} organization_name={UserUniversity} password={password} />
+      <Adddetails value={value} email={university} university_name={UserUniversity} password={password} />
 
       <div className={state ? '' : 'd-none'} style={{ backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', width: '100%', top: 0, height: '100%' }}>
         <div className="row m-0">

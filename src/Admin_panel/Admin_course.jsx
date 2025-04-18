@@ -13,14 +13,14 @@ const Admin_course = () => {
   const [course_details, setcourse_details] = useState([]);
   const [group_details, setgroup_details] = useState([]);
   const [public_group_details, setpublic_group_details] = useState([]);
-  const { organization_id } = useParams();
+  const { university_id } = useParams();
 
   useEffect(() => {
     fetchmodules()
   }, [])
 
   const fetchmodules = () => {
-    apiClient.get(`${ipaddress}/admin_app/api/CoursesUnderUniversity/${organization_id}/`)
+    apiClient.get(`${ipaddress}/admin_app/api/CoursesUnderUniversity/${university_id}/`)
       .then((r) => {
         setcourse_details(r.data); // console.log("Courses data",r.data)
       })
@@ -28,7 +28,7 @@ const Admin_course = () => {
   }
 
   const fetchgroup = (value) => {
-    apiClient.get(`${ipaddress}/admin_app/GroupsUnderUniversity/${organization_id}/${value}/`)
+    apiClient.get(`${ipaddress}/admin_app/GroupsUnderUniversity/${university_id}/${value}/`)
       .then((r) => {
         setgroup_details(r.data); // console.log("Group data",r.data)
       })
@@ -36,7 +36,7 @@ const Admin_course = () => {
   }
 
   const fetchpublicgroup = (value) => {
-    apiClient.get(`${ipaddress}/admin_app/GroupsUnderUniversity/${organization_id}/${value}/`)
+    apiClient.get(`${ipaddress}/admin_app/GroupsUnderUniversity/${university_id}/${value}/`)
       .then((r) => {
         setpublic_group_details(r.data); // console.log("Public Group data",r.data)
       })
@@ -71,9 +71,9 @@ const Admin_course = () => {
 
       <div className='d-flex'>
         <Admin_sidebar state={"course"} />
-        <div className='px-3 bg-light w-100'>
+        <div className='bg-light w-100 px-3'>
 
-          <div className='py-3 mt-3 bg-white rounded shadow-sm d-flex justify-content-evenly'>
+          <div className='d-flex justify-content-evenly bg-white py-3 shadow-sm rounded mt-3'>
             <span onClick={() => {
               setstate('module')
             }} className='' style={{ fontSize: '16px', color: state === 'module' ? '#5d5fe3' : 'gray', cursor: 'pointer', fontWeight: state === 'module' ? 600 : 400, textDecoration: state === 'module' ? 'underline' : 'none' }}>Modules</span>
@@ -89,9 +89,9 @@ const Admin_course = () => {
 
           {/* Modules */}
           <div className={`${state === 'module' ? '' : 'd-none'}`}>
-            <div className='py-3 d-flex justify-content-between align-items-center'>
+            <div className='d-flex justify-content-between align-items-center py-3'>
               <h6 className='m-0 d-flex align-items-center'><span style={{ cursor: 'pointer' }} onClick={() => {
-                navigate('/organization_details')
+                navigate('/university_details')
               }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16">
                   <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                 </svg></span><span className='ms-2'>Course Details</span></h6>
@@ -108,7 +108,7 @@ const Admin_course = () => {
                     <tr>
                       <th scope="col" className='fw-medium text-secondary'>SI.No</th>
                       <th scope="col" className='fw-medium text-secondary'>Course Name</th>
-                      <th scope="col" className='fw-medium text-secondary'>Organization Name</th>
+                      <th scope="col" className='fw-medium text-secondary'>University Name</th>
                       <th scope="col" className='fw-medium text-secondary'>Document Count</th>
                       <th scope="col" className='fw-medium text-secondary'>Flashset Count</th>
                     </tr>
@@ -122,7 +122,7 @@ const Admin_course = () => {
                           }}>
                             <th scope="row">{index + 1}</th>
                             <td>{x.course_name}</td>
-                            <td>{x.organization_name.organization_name}</td>
+                            <td>{x.university_name.university_name}</td>
                             <td>{x.document_count}</td>
                             <td>{x.flashset_count}</td>
                           </tr>
@@ -139,9 +139,9 @@ const Admin_course = () => {
 
           {/* Private Group */}
           <div className={`${state === 'private' ? '' : 'd-none'}`}>
-            <div className='py-3 d-flex justify-content-between align-items-center'>
+            <div className='d-flex justify-content-between align-items-center py-3'>
               <h6 className='m-0 d-flex align-items-center'><span style={{ cursor: 'pointer' }} onClick={() => {
-                navigate('/organization_details')
+                navigate('/university_details')
               }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16">
                   <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                 </svg></span><span className='ms-2'>Private Groups</span></h6>
@@ -196,9 +196,9 @@ const Admin_course = () => {
 
           {/* Public Group */}
           <div className={`${state === 'public' ? '' : 'd-none'}`}>
-            <div className='py-3 d-flex justify-content-between align-items-center'>
+            <div className='d-flex justify-content-between align-items-center py-3'>
               <h6 className='m-0 d-flex align-items-center'><span style={{ cursor: 'pointer' }} onClick={() => {
-                navigate('/organization_details')
+                navigate('/university_details')
               }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16">
                   <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                 </svg></span><span className='ms-2'>Public Groups</span></h6>

@@ -3,15 +3,17 @@ import { Form, Pagination } from "react-bootstrap";
 import { Modal, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import Loading from "react-fullscreen-loading";
+import ReactPaginate from 'react-paginate';
+import { toast } from "react-toastify";
+
 import ManageStaffAddUpdate from "../add-update/add-update-staff";
 import ManageStaffAssignPrograms from "../assign-programs/assign-programs";
-import ReactPaginate from 'react-paginate';
-
 import SortableHeader from "../../../components/SortableHeader";
-import "./staff-lists.scss";
 import axiosInstance from "../../../components/services/axiosInstance";
-import { toast } from "react-toastify";
 import StatusConfirmationDialog from "../status-confirmation-dialog/status-confirmation-dialog";
+
+//Style
+import "./staff-lists.scss";
 
 const formatPhoneNumber = (phoneNumber) => {
   if (!phoneNumber) {
@@ -45,10 +47,9 @@ const ManageStaff = () => {
 
   const getStaffList = async (payload) => {
     const sortConfigData = payload?.sortConfig || sortConfig
-    const searchData = payload?.search || search
+    const searchData = payload?.clear ? '' : search
     const pageData = payload?.page || currentPage
 
-    setIsLoading(true)
     var queryParams = {
       pageSize: pageSize,
       page: pageData
@@ -72,13 +73,13 @@ const ManageStaff = () => {
 
       let staffList = response.data.data.sort((a, b) => {
         if (a.role_name === "Organization Admin" && b.role_name !== "Organization Admin") {
-            return -1;
+          return -1;
         }
         if (a.role_name !== "Organization Admin" && b.role_name === "Organization Admin") {
-            return 1;
+          return 1;
         }
         return 0;
-    });
+      });
       setStaffList(staffList)
       getAllPrograms();
     }
@@ -133,7 +134,7 @@ const ManageStaff = () => {
       if (response) {
         setIsLoading(false);
         toast.success("Staff inserted successfully");
-        getStaffList(currentPage);
+        getStaffList({ page: currentPage });
         setIsOpenAddForm(false)
       }
     } catch (err) {
@@ -153,6 +154,7 @@ const ManageStaff = () => {
     try {
       setIsLoading(true);
       const payload = {
+        "role_id": value.role_id,
         "firstName": value.firstName,
         "lastName": value.lastName,
         "email": value.email,
@@ -163,7 +165,7 @@ const ManageStaff = () => {
       if (response) {
         setIsLoading(false);
         toast.success("Staff updated successfully");
-        getStaffList(currentPage);
+        getStaffList({ page: currentPage });
         setIsOpenAddForm(false)
       }
     } catch (err) {
@@ -185,207 +187,229 @@ const ManageStaff = () => {
 
 
   const [isShowStatusConfirmatonModal, setIsShowStatusConfirmatonModal] = useState(false);
-  const handleConfirmStatusChange = () => {
-    console.log(`Status changed`);
-    setIsShowStatusConfirmatonModal(false);
+  const handleConfirmStatusChange = async () => {
+    try {
+      setIsLoading(true);
+
+      const updatedStatus = staffDetails?.is_active ? 2 : 1;
+
+      const response = await axiosInstance.put(`/userChangeStatus/${staffDetails?.user_id}/${updatedStatus}`, {});
+
+      if (response) {
+        getStaffList({ page: currentPage });
+        setIsShowStatusConfirmatonModal(false);
+        toast.success("Status updated successfully");
+      } else {
+        setIsLoading(false);
+      }
+    } catch (err) {
+      setIsLoading(false);
+      setIsShowStatusConfirmatonModal(false);
+      console.log("Error in handleConfirmStatusChange", err);
+      //setStep(0);
+      toast.error("Error!!! Please try again")
+    }
   };
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center p-3 border rounded bg-white mb-3">
-        <h5 className="m-0 main-title">Staff</h5>
-        <div className="d-flex justify-content-end gap-2">
-          <div className="d-flex gap-2">
-            <Form.Control
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+      <div className="staff-list">
+
+        <div className="d-flex justify-content-between align-items-center p-3 border rounded bg-white mb-3">
+          <h5 className="m-0 main-title">Staff</h5>
+          <div className="d-flex justify-content-end gap-2">
+            <div className="d-flex gap-2">
+              <Form.Control
+                type="text"
+                placeholder="Search..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Button
+                variant="outline-primary add-organization"
+                onClick={handleSort}
+              >
+                Filter{" "}
+              </Button>
+              <Button
+                variant="outline-danger add-organization"
+                onClick={() => { setSearch(''); getStaffList({ page: currentPage, clear: 'clear' }) }}
+              >
+                Clear
+              </Button>
+            </div>
             <Button
               variant="outline-primary add-organization"
-            // onClick={handleShow}
+              onClick={() => { setIsOpenAddForm(true); setStaffDetails(null) }}
             >
-              Filter{" "}
-            </Button>
-            <Button
-              variant="outline-danger add-organization"
-            // onClick={handleShow}
-            >
-              Clear
+              {" "}
+              New Staff +{" "}
             </Button>
           </div>
-          <Button
-            variant="outline-primary add-organization"
-            onClick={() => { setIsOpenAddForm(true); setStaffDetails(null) }}
-          >
-            {" "}
-            New Staff +{" "}
-          </Button>
         </div>
-      </div>
 
-      <div className="my-3 w-100 staff-table-div overflow-x-auto px-0 hide-scrollbar">
-        <table className="table fs-9 mb-0">
-          <thead>
-            <tr style={{textTransform:'uppercase'}}>
-              <th width="5%">
-                <h5 className="sort mb-0 text-center">#</h5>
-              </th>
-              <th>
-                <SortableHeader
-                  name="First Name"
-                  id="first_name"
-                  column="first_name"
-                  onSort={handleSort}
-                  center={false}
-                />
-              </th>
-              <th>
-                <SortableHeader
-                  name="Last Name"
-                  id="last_name"
-                  column="last_name"
-                  onSort={handleSort}
-                  center={false}
-                />
-              </th>
-              <th>
-                <SortableHeader
-                  name="Email"
-                  id="email"
-                  column="email"
-                  onSort={handleSort}
-                  center={false}
-                />
-              </th>
-              <th className="text-center">
-                <SortableHeader
-                  name="Role"
-                  id="role_name"
-                  column="role_name"
-                  onSort={handleSort}
-                  center={true}
-                />
-              </th>
-              <th>
-                <h5 className="sort mb-0 text-center">Phone Number</h5>
-              </th>
-              <th>
-                <h5 className="sort mb-0 text-center  ">Status</h5>
-              </th>
-              <th>
-                <h5 className="sort mb-0 text-center">Assign Programs</h5>
-              </th>
-              <th>
-                <h5 className="sort mb-0 text-center">Action</h5>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {staffList.length > 0 ? (
-              staffList.map((item, index) => (
-                <tr
-                  key={index}
-                  className="hover-actions-trigger btn-reveal-trigger position-static active-row"
-                >
-                  <td className="total-orders align-middle white-space-nowrap">
-                    <p className="mb-0 text-center">{index+1}</p>
-                  </td>
-                  <td className="total-orders align-middle white-space-nowrap">
-                    <p className="mb-0">{item.first_name || "N/A"}</p>
-                  </td>
-                  <td className="customer align-middle white-space-nowrap">
-                    <p className="mb-0">{item.last_name || "N/A"}</p>
-                  </td>
-                  <td className="customer align-middle white-space-nowrap">
-                    <p className="mb-0">{item.email || "N/A"}</p>
-                  </td>
-                  <td className="customer align-middle white-space-nowrap">
-                    <p className="mb-0 text-center"><span className={`${item.role_name ? 'staff_role' : ''}`}>{item.role_name || "N/A"}</span></p>
-                  </td>
-                  <td className="customer align-middle white-space-nowrap">
-                    <p className="mb-0 text-center">
-                      {formatPhoneNumber(item.phoneNumber)}
-                    </p>
-                  </td>
-                  <td className="customer white-space-nowrap">
-                    <p className="mb-0 text-center">
-                      <Form.Check
-                        type="switch"
-                        id={`switch-${item.user_id}`}
-                        checked={item.is_active}
-                        onChange={() => { setIsShowStatusConfirmatonModal(true); setStaffDetails(item) }}
-                        className={`fw-bold d-flex justify-content-center  gap-2 ${item.is_active ? "text-success" : "text-danger"}`}
-                        label={item.is_active ? "Active" : "Inactive"}
-                      />
-                    </p>
-                  </td>
-                  <td className="customer white-space-nowrap text-center">
-                    <button className="btn btn-sm btn-primary" onClick={() => { setIsOpenAssignProgramsForm(true); setStaffDetails(item) }}>View</button>
-                  </td>
-                  <td className="total-orders align-middle white-space-nowrap">
-                    <div className="text-center">
-                      <button title="Edit Staff" className="shadow-none mx-0 border-0" onClick={() => handleEditStaff(item)} style={{ background: "none" }}>
-                        <img src="https://starlight-admin-v2.web.app/assets/images/pen.svg" alt="Edit" />
-                      </button>
-                      {/* <button className="shadow-none mx-0 border-0" onClick={() => deleteUser(item, index)} style={{ background: "none" }}>
+        <div className="my-3 w-100 staff-table-div overflow-x-auto px-0 hide-scrollbar">
+          <table className="table fs-9 mb-0">
+            <thead>
+              <tr style={{ textTransform: 'uppercase' }}>
+                <th width="5%">
+                  <h5 className="sort mb-0 text-center">#</h5>
+                </th>
+                <th>
+                  <SortableHeader
+                    name="First Name"
+                    id="first_name"
+                    column="first_name"
+                    onSort={handleSort}
+                    center={false}
+                  />
+                </th>
+                <th>
+                  <SortableHeader
+                    name="Last Name"
+                    id="last_name"
+                    column="last_name"
+                    onSort={handleSort}
+                    center={false}
+                  />
+                </th>
+                <th>
+                  <SortableHeader
+                    name="Email"
+                    id="email"
+                    column="email"
+                    onSort={handleSort}
+                    center={false}
+                  />
+                </th>
+                <th className="text-center">
+                  <SortableHeader
+                    name="Role"
+                    id="role_name"
+                    column="role_name"
+                    onSort={handleSort}
+                    center={true}
+                  />
+                </th>
+                <th>
+                  <h5 className="sort mb-0 text-center">Phone Number</h5>
+                </th>
+                <th>
+                  <h5 className="sort mb-0 text-center  ">Status</h5>
+                </th>
+                <th>
+                  <h5 className="sort mb-0 text-center">Assign Programs</h5>
+                </th>
+                <th>
+                  <h5 className="sort mb-0 text-center">Action</h5>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {staffList.length > 0 ? (
+                staffList.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="hover-actions-trigger btn-reveal-trigger position-static active-row"
+                  >
+                    <td className="total-orders align-middle white-space-nowrap">
+                      <p className="mb-0 text-center">{index + 1}</p>
+                    </td>
+                    <td className="total-orders align-middle white-space-nowrap">
+                      <p className="mb-0">{item.first_name || "N/A"}</p>
+                    </td>
+                    <td className="customer align-middle white-space-nowrap">
+                      <p className="mb-0">{item.last_name || "N/A"}</p>
+                    </td>
+                    <td className="customer align-middle white-space-nowrap">
+                      <p className="mb-0">{item.email || "N/A"}</p>
+                    </td>
+                    <td className="customer align-middle white-space-nowrap">
+                      <p className="mb-0 text-center"><span className={`${item.role_name ? 'staff_role' : ''}`}>{item.role_name || "N/A"}</span></p>
+                    </td>
+                    <td className="customer align-middle white-space-nowrap">
+                      <p className="mb-0 text-center">
+                        {formatPhoneNumber(item.phoneNumber)}
+                      </p>
+                    </td>
+                    <td className="customer white-space-nowrap">
+                      <p className="mb-0 text-center">
+                        <Form.Check
+                          type="switch"
+                          id={`switch-${item.user_id}`}
+                          checked={item.is_active}
+                          onChange={() => { setIsShowStatusConfirmatonModal(true); setStaffDetails(item) }}
+                          className={`fw-bold d-flex justify-content-center  gap-2 ${item.is_active ? "text-success" : "text-danger"}`}
+                          label={item.is_active ? "Active" : "Inactive"}
+                        />
+                      </p>
+                    </td>
+                    <td className="customer white-space-nowrap text-center">
+                      <button className="btn btn-sm btn-primary" onClick={() => { setIsOpenAssignProgramsForm(true); setStaffDetails(item) }}>View</button>
+                    </td>
+                    <td className="total-orders align-middle white-space-nowrap">
+                      <div className="text-center">
+                        <button title="Edit Staff" className="shadow-none mx-0 border-0" onClick={() => handleEditStaff(item)} style={{ background: "none" }}>
+                          <img src="https://starlight-admin-v2.web.app/assets/images/pen.svg" alt="Edit" />
+                        </button>
+                        {/* <button className="shadow-none mx-0 border-0" onClick={() => deleteUser(item, index)} style={{ background: "none" }}>
                         <img src="https://starlight-admin-v2.web.app/assets/images/trash-xmark.svg" alt="Delete"/>
                       </button> */}
-                    </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9" className="text-center">
+                    No Records Found
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="9" className="text-center">
-                  No Records Found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div className="d-flex justify-content-between w-100 py-4 px-4 align-items-center">
-          <div className="table-footer">
-            Total Records : {totalRecords > 0 ? currentPage !== pageSize ? (((currentPage) * (pageSize) - pageSize) + 1) : totalRecords : 0} of {totalRecords}
-          </div>
-          <div>
-            <ReactPaginate
-              className='pagination'
-              breakLabel="..."
-              nextLabel=""
-              onPageChange={handlePageClick}
-              pageRangeDisplayed={pageSize}
-              pageCount={totalPages}
-              forcePage={(currentPage - 1)}
-              previousLabel=""
-              renderOnZeroPageCount={null}
-            />
+              )}
+            </tbody>
+          </table>
+          <div className="d-flex justify-content-between w-100 py-4 px-4 align-items-center">
+            <div className="table-footer">
+              Total Records : {totalRecords > 0 ? currentPage !== pageSize ? (((currentPage) * (pageSize) - pageSize) + 1) : totalRecords : 0} of {totalRecords}
+            </div>
+            <div>
+              <ReactPaginate
+                className='pagination'
+                breakLabel="..."
+                nextLabel=""
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={pageSize}
+                pageCount={totalPages}
+                forcePage={(currentPage - 1)}
+                previousLabel=""
+                renderOnZeroPageCount={null}
+              />
+            </div>
           </div>
         </div>
+        <ManageStaffAssignPrograms
+          show={isOpenAssignPrograms}
+          handleClose={() => setIsOpenAssignProgramsForm(false)}
+          submitForm={submitStaffAssignProgramsForm}
+          staffDetails={staffDetails}
+          programList={programList}
+        />
+
+        <ManageStaffAddUpdate
+          show={isOpenAddForm}
+          handleClose={() => setIsOpenAddForm(false)}
+          submitStaffForm={submitStaffForm}
+          staffDetails={staffDetails}
+          updateStaffForm={updateStaffForm}
+        />
+
+        <StatusConfirmationDialog
+          show={isShowStatusConfirmatonModal}
+          handleClose={() => setIsShowStatusConfirmatonModal(false)}
+          handleConfirm={handleConfirmStatusChange}
+          status={staffDetails?.is_active}
+        />
+        {isLoading && <Loading loading={true} loaderColor="#000" />}
       </div>
-      <ManageStaffAssignPrograms
-        show={isOpenAssignPrograms}
-        handleClose={() => setIsOpenAssignProgramsForm(false)}
-        submitForm={submitStaffAssignProgramsForm}
-        staffDetails={staffDetails}
-        programList={programList}
-      />
-
-      <ManageStaffAddUpdate
-        show={isOpenAddForm}
-        handleClose={() => setIsOpenAddForm(false)}
-        submitStaffForm={submitStaffForm}
-        staffDetails={staffDetails}
-        updateStaffForm={updateStaffForm}
-      />
-
-      <StatusConfirmationDialog
-        show={isShowStatusConfirmatonModal}
-        handleClose={() => setIsShowStatusConfirmatonModal(false)}
-        handleConfirm={handleConfirmStatusChange}
-        status={staffDetails?.is_active}
-      />
-      {isLoading && <Loading loading={true} loaderColor="#000" />}
     </>
   );
 };

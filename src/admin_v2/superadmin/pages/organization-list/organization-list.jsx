@@ -3,6 +3,7 @@ import { Form, Pagination } from "react-bootstrap";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Loading from "react-fullscreen-loading";
+import ReactPaginate from 'react-paginate';
 
 import StatusConfirmationDialog from "./status-confirmation-dialog/status-confirmation-dialog";
 import AddOrganizationForm from "./add-organization-form/add-organization-form";
@@ -17,18 +18,47 @@ const OrganizationList = () => {
 
   //Organization list
   const [organiztionList, setOrganiztionList] = useState([]);
-  const getOrganizationList = async () => {
+  const [search, setSearch] = useState("");
+  const [sortConfig, setSortConfig] = useState({ column: "", direction: "" });
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const getOrganizationList = async (payload) => {
+    const sortConfigData = payload?.sortConfig || sortConfig
+    const searchData = payload?.clear ? '' : search
+    const pageData = payload?.page || currentPage
+    var queryParams = {
+      pageSize: pageSize,
+      page: pageData
+    };
+
+    if (searchData != "") {
+      queryParams["filter"] = searchData;
+    }
+
+    if (sortConfigData?.column && sortConfigData?.direction) {
+      queryParams["sortOrder"] = sortConfigData.direction;
+      queryParams["sortKey"] = sortConfigData.column;
+    }
+
+    const queryString = new URLSearchParams(queryParams).toString();
     setLoading(true)
-    const response = await axiosInstance.get(`/superadmin/organization/`);
+    const response = await axiosInstance.get(`/superadmin/organization/?${queryString}`);
     if (response && response.data) {
-      var filteredData = response.data.filter(item => item.organization_type);
-      filteredData = filteredData.map((item, index) => {
-        return { ...item, id: index + 1 };
-      });
-      setOrganiztionList(filteredData)
+      setTotalRecords(response?.data?.pagination?.total);
+      setTotalPages(response?.data?.pagination?.totalPages)
+      setOrganiztionList(response?.data?.data)
       setLoading(false)
     }
   }
+
+
+  const handlePageClick = (event) => {
+    let page = (event.selected + 1)
+    setCurrentPage(page)
+    getOrganizationList({ page });
+  };
 
   //Organization type list
   const [organiztionTypeList, setOrganiztionTypeList] = useState([]);
@@ -42,34 +72,14 @@ const OrganizationList = () => {
 
   useEffect(() => {
     getOrganizationTypeList();
-    getOrganizationList();
+    getOrganizationList({ page: currentPage });
   }, [])
 
-  //Table
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
   const handleSort = ({ column, direction }) => {
-    const sortedData = [...organiztionList].sort((a, b) => {
-      if (!direction) return 0;
-      return direction === "asc"
-        ? a[column] > b[column]
-          ? 1
-          : -1
-        : a[column] < b[column]
-          ? 1
-          : -1;
-    });
-
-    setOrganiztionList(sortedData);
+    console.log({ column, direction });
+    setSortConfig({ column, direction })
+    getOrganizationList({ page: currentPage, sortConfig: { column, direction } });
   };
-
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = organiztionList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(organiztionList.length / itemsPerPage);
 
   //Organization form
   const [isOpenOrganizationForm, setIsOpenOrganizationForm] = useState(false);
@@ -77,6 +87,7 @@ const OrganizationList = () => {
 
   const submitOrganizationForm = async (value) => {
     try {
+    
       setLoading(true);
       const payload = {
         "organization_name": value.organization_name,
@@ -87,20 +98,25 @@ const OrganizationList = () => {
         "domain": value.domain,
         "organization_email": value.organization_email,
         "organization_type_id": Number(value.organization_type_id),
+        "organization_subtype_id": Number(value.organization_subtype_id),
+        "organization_phone_number": value.org_phone,
         "admin": {
           "firstName": value.first_name,
           "lastName": value.last_name,
           "email": value.admin_email,
           "password": value.password,
-          "phoneNumber": value.phone
+          "phoneNumber": value.admin_phone,
+          "countryCode":value.country_code
         }
       }
+      console.log(payload);
+      
       const response = await axiosInstance.post(`/superadmin/organization/`, payload);
 
       if (response) {
         setLoading(false);
         toast.success("Organization inserted successfully");
-        getOrganizationList();
+        getOrganizationList({ page: currentPage });
         //setStep(0);
         setIsOpenOrganizationForm(false)
       }
@@ -117,23 +133,24 @@ const OrganizationList = () => {
       setLoading(true);
       const payload = {
         "organization_type_id": value?.organization_type_id,
-        "organization_name": value.organization_name,
+        "organization_subtype_id": Number(value.organization_subtype_id),
+        "university_name": value.organization_name,
         "address": value.address,
         "country": value.country,
         "city": value.city,
         "state": value.state,
         "domain": value.domain,
-        "organization_email": value.organization_email,
+        "user": value.organization_email,
         "is_verifed": selectedOrganizationData?.is_verifed,
-        "primary_user_id": selectedOrganizationData?.primary_user_id
+        "primary_user_id": selectedOrganizationData?.primary_user_id?.id
       }
 
-      const response = await axiosInstance.put(`/superadmin/organization/${selectedOrganizationData?.organization_id}/`, payload);
+      const response = await axiosInstance.put(`/superadmin/organization/${selectedOrganizationData?.university_id}/`, payload);
 
       if (response) {
         setLoading(false);
         toast.success("Organization updated successfully");
-        getOrganizationList();
+        getOrganizationList({ page: currentPage });
         //setStep(0);
         setIsOpenOrganizationUpdateForm(false)
       }
@@ -154,9 +171,27 @@ const OrganizationList = () => {
 
   //Change status
   const [isShowStatusConfirmatonModal, setIsShowStatusConfirmatonModal] = useState(false);
-  const handleConfirmStatusChange = () => {
-    console.log(`Status changed`);
-    setIsShowStatusConfirmatonModal(false);
+  const handleConfirmStatusChange = async () => {
+    try {
+      setLoading(true);
+
+      const updatedStatus = selectedOrganizationData?.is_active ? 2 : 1;
+      const response = await axiosInstance.put(`/organizationChangeStatus/${selectedOrganizationData?.university_id}/${updatedStatus}`, {});
+
+      if (response) {
+        getOrganizationList({ page: currentPage });
+        setIsShowStatusConfirmatonModal(false);
+        toast.success("Status updated successfully");
+      } else {
+        setLoading(false);
+      }
+    } catch (err) {
+      setLoading(false);
+      setIsShowStatusConfirmatonModal(false);
+      console.log("Error in handleConfirmStatusChange", err);
+      //setStep(0);
+      toast.error("Error!!! Please try again")
+    }
   };
 
   return (
@@ -170,17 +205,17 @@ const OrganizationList = () => {
                 type="text"
                 placeholder="Search..."
                 value={search}
-              // onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
               />
               <Button
                 variant="outline-primary add-organization"
-              // onClick={handleShow}
+                onClick={handleSort}
               >
                 Filter{" "}
               </Button>
               <Button
                 variant="outline-danger add-organization"
-              // onClick={handleShow}
+                onClick={() => { setSearch(''); getOrganizationList({ page: currentPage, clear: 'clear' }) }}
               >
                 Clear
               </Button>
@@ -199,7 +234,7 @@ const OrganizationList = () => {
           <table className="table fs-9 mb-0">
             <thead>
               <tr>
-                <th width="3%">
+                <th width="5%">
                   <h5 className="sort mb-0 text-center">#</h5>
                 </th>
                 <th width="20%">
@@ -213,89 +248,70 @@ const OrganizationList = () => {
                 <th width="15%">
                   <h5 className="sort mb-0 d-flex">Organization Email</h5>
                 </th>
-                <th width="12%">
+                <th width="10%">
                   <h5 className="sort mb-0 d-flex">Organization Domain</h5>
                 </th>
+                <th width="10%">
+                  <h5 className="sort mb-0 d-flex">Admin Name</h5>
+                </th>
                 <th width="20%">
-                  <h5 className="sort mb-0 d-flex">Address</h5>
+                  <h5 className="sort mb-0 d-flex">Full Address</h5>
+                </th>
+                <th width="20%">
+                  <h5 className="sort mb-0 d-flex">Phone Number</h5>
                 </th>
                 <th width="7%">
-                  <SortableHeader
-                    name="City"
-                    id="city"
-                    column="city"
-                    onSort={handleSort}
-                  />
+                  <h5 className="sort mb-0 text-center">Status</h5>
                 </th>
                 <th width="7%">
-                  <SortableHeader
-                    name="State"
-                    id="state"
-                    column="state"
-                    onSort={handleSort}
-                  />
-                </th>
-                <th width="7%">
-                  <SortableHeader
-                    name="Country"
-                    id="country"
-                    column="country"
-                    onSort={handleSort}
-                  />
-                </th>
-                <th width="7%">
-                  <h5 className="sort mb-0 d-flex">Status</h5>
-                </th>
-                <th width="7%">
-                  <h5 className="sort mb-0 d-flex">Action</h5>
+                  <h5 className="sort mb-0 text-center">Action</h5>
                 </th>
               </tr>
             </thead>
             <tbody>
-              {currentItems.length > 0 ? (
-                currentItems.map((item, index) => (
+              {organiztionList.length > 0 ? (
+                organiztionList.map((item, index) => (
                   <tr
                     key={index}
                     className="hover-actions-trigger btn-reveal-trigger position-static active-row"
                   >
                     <td className="total-orders align-middle white-space-nowrap">
-                      <p className="mb-0 text-center">{index+1}</p>
+                      <p className="mb-0 text-center">{(currentPage - 1) * pageSize + index + 1}</p>
                     </td>
                     <td className="total-orders align-middle white-space-nowrap">
-                      <p className="mb-0">{item.organization_name || "N/A"}</p>
+                      {/* <p className="mb-0">{item.organization_name || "N/A"}</p> */}
+                      <p className="mb-0">{item.university_name || "N/A"}</p>
                     </td>
                     <td className="customer align-middle white-space-nowrap pe-5">
-                      <p className="mb-0">{item.organization_email || "N/A"}</p>
+                      {/* <p className="mb-0">{item.organization_email || "N/A"}</p> */}
+                      <p className="mb-0">{item.user || "N/A"}</p>
                     </td>
                     <td className="customer align-middle white-space-nowrap pe-5">
                       <p className="mb-0">{item.domain || "N/A"}</p>
                     </td>
                     <td className="customer align-middle white-space-nowrap pe-5">
-                      <p className="mb-0">{item.address || "N/A"}</p>
+                      <p className="mb-0">{item?.primary_user_id ? (item?.primary_user_id?.first_name + " " + item?.primary_user_id?.last_name) : "N/A"}</p>
                     </td>
                     <td className="customer align-middle white-space-nowrap pe-5">
-                      <p className="mb-0">{item.city || "N/A"}</p>
+                      <p className="mb-0">{item?.address + ', ' + item?.city + ', ' + item?.state + ', ' + item?.country || "N/A"}</p>
                     </td>
                     <td className="customer align-middle white-space-nowrap pe-5">
-                      <p className="mb-0">{item.state || "N/A"}</p>
+                      <p className="mb-0">+91 1234567890</p>
                     </td>
-                    <td className="customer align-middle white-space-nowrap pe-5">
-                      <p className="mb-0">{item.country || "N/A"}</p>
-                    </td>
-                    <td className="customer align-middle white-space-nowrap pe-5">
-                      <p className="mb-0">
+                    <td className="customer align-middle white-space-nowrap">
+                      <p className="mb-0 text-center">
                         <Form.Check
                           type="switch"
-                          id={`switch-${item.id}`}
-                          checked={item.status}
-                          onChange={() => setIsShowStatusConfirmatonModal(true)}
-                          className={`me-2 fw-bold d-flex justify-content-center gap-2 ${item.status ? "text-success" : "text-danger"}`}
-                          label={item.status ? "Active" : "Inactive"}
+                          id={`switch-${item.university_id}`}
+                          checked={item.is_active}
+                          onChange={() => { setIsShowStatusConfirmatonModal(true); setSelectedOrganizationData(item) }}
+                          className={`me-2 fw-bold d-flex justify-content-center gap-2 ${item.is_active ? "text-success" : "text-danger"}`}
+                          label={item.is_active ? "Active" : "Inactive"}
                         />
                       </p>
                     </td>
                     <td className="total-orders align-middle white-space-nowrap">
-                      <div>
+                      <div className="d-flex justify-content-center">
                         <button
                           className="shadow-none mx-0 border-0"
                           onClick={() => editOrganizationDetails(item)}
@@ -312,29 +328,37 @@ const OrganizationList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9" className="text-center">
+                  <td colSpan="7" className="text-center">
                     No Records Found
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-          {currentItems.length ?
-            <div className="d-flex align-items-center justify-content-between mt-3 px-2">
-              <p className="px-2 py-2 mb-0 bg-white border rounded">Total Records : <span className="fw-bold">{organiztionList.length}</span></p>
-              <Pagination className="mb-2">
-                <Pagination.Prev onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
-                {[...Array(totalPages)].map((_, i) => (
-                  <Pagination.Item key={i + 1} active={i + 1 === currentPage} onClick={() => setCurrentPage(i + 1)}>
-                    {i + 1}
-                  </Pagination.Item>
-                ))}
-                <Pagination.Next onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
-              </Pagination>
+          {totalRecords > 0 && (
+            <div className="d-flex justify-content-between w-100 py-4 px-4 align-items-center">
+              <div className="table-footer">
+                {(() => {
+                  const start = (currentPage - 1) * pageSize + 1;
+                  const end = Math.min(currentPage * pageSize, totalRecords);
+                  return `Showing ${start} - ${end} of ${totalRecords}`;
+                })()}
+              </div>
+              <div>
+                <ReactPaginate
+                  className='pagination'
+                  breakLabel="..."
+                  nextLabel=""
+                  onPageChange={handlePageClick}
+                  pageRangeDisplayed={3}
+                  pageCount={totalPages}
+                  forcePage={(currentPage - 1)}
+                  previousLabel=""
+                  renderOnZeroPageCount={null}
+                />
+              </div>
             </div>
-            :
-            ''
-          }
+          )}
         </div>
 
         {/* Add new organization form */}
@@ -357,8 +381,7 @@ const OrganizationList = () => {
           show={isShowStatusConfirmatonModal}
           handleClose={() => setIsShowStatusConfirmatonModal(false)}
           handleConfirm={handleConfirmStatusChange}
-          status={""}
-          organization_id={""}
+          status={selectedOrganizationData?.is_active}
         />
 
         {loading && <Loading loading={true} loaderColor="#000" />}

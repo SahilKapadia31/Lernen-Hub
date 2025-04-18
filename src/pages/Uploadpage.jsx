@@ -311,13 +311,13 @@ const Uploadpage = (props) => {
 
   const [user, setUserdata] = useState({})
   useEffect(() => {
-    const organization = JSON.parse(getDecryptedData('user'))
+    const university = JSON.parse(getDecryptedData('user'))
 
     if (course_id > 0) { setpreview_btn_status1(true) } else {
       setpreview_btn_status1(false)
     }
 
-    axiosInstance.get(`${ipaddress}/CoursesView/${organization.user_id}/`)
+    axiosInstance.get(`${ipaddress}/CoursesView/${university.user_id}/`)
       .then((r) => {
         // console.log(r.data)
         setJoinedCourses(r.data.joined_courses)

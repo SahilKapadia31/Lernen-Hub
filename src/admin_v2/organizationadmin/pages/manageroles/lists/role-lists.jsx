@@ -5,9 +5,11 @@ import Loading from "react-fullscreen-loading";
 import ReactPaginate from 'react-paginate';
 import { useSelector } from "react-redux";
 import ManageRoleAddUpdate from "../add-update/add-update-role";
+import DeleteConfirmationDialog from "../../../components/delete-confirmation-dialog/delete-confirmation-dialog";
 import SortableHeader from "../../../components/SortableHeader";
 import "./role-lists.scss";
 import axiosInstance from "../../../components/services/axiosInstance";
+import { toast } from "react-toastify";
 
 const ManageStaff = () => {
   const orgData = useSelector((state) => state.auth);
@@ -34,14 +36,14 @@ const ManageStaff = () => {
   const getAllPermission = async () => {
     setIsLoading(true)
     const response = await axiosInstance.get(`/organization/permissions/`);
-    console.log(response?.data.data);
-    setPermissions(response?.data.data);
+    console.log(response?.data?.data);
+    setPermissions(response?.data?.data);
     setIsLoading(false)
   };
 
   const getAllRoles = async (payload) => {
     const sortConfigData = payload?.sortConfig || sortConfig
-    const searchData = payload?.search || search
+    const searchData = payload?.clear ? '' : search
     const pageData = payload?.page || currentPage
 
     setIsLoading(true)
@@ -74,21 +76,85 @@ const ManageStaff = () => {
   };
 
   const onSubmit = async (data) => {
-    const payload = {
-      role_name: data.role_name,
-      organization_id: orgData?.role?.organization_id,
-      option_id: "4",
-      permissions: data.permissions.map((item) => ({
-        permission_name: item.permission_name,
-        is_active: item.is_active,
-      })),
-    };
-    await axiosInstance.post(`/organization/add-roles/`, payload);
-    getAllRoles();
-    handleClose();
+    try {
+      setIsLoading(true)
+      const payload = {
+        role_name: data.role_name,
+        organization_id: orgData?.role?.organization_id,
+        option_id: "4",
+        permissions: data.permissions.map((item) => ({
+          "permission_id": item.permission_id,
+          permission_name: item.permission_name,
+          is_active: item.is_active,
+        })),
+      };
+
+      const res = await axiosInstance.post(`/organization/add-roles/`, payload);
+
+      if (res && res.status) {
+        toast.success("Role added successfully");
+        getAllRoles({ page: currentPage });
+        handleClose();
+      } else {
+        toast.error("Error!!! Please try again");
+      }
+      setIsLoading(false)
+    } catch (err) {
+      console.log("Error in onSubmitRole", err);
+      setIsLoading(false)
+    }
   };
 
-  const [selectedRole,setSelectedRole] = useState(null);
+  const handleUpdateRole = async (data) => {
+    try {
+      setIsLoading(true)
+      const payload = {
+        "role_id": selectedRole?.role_id,
+        role_name: data.role_name,
+        organization_id: orgData?.role?.organization_id,
+        option_id: "4",
+        permissions: data.permissions.map((item) => ({
+          "permission_id": item.permission_id,
+          permission_name: item.permission_name,
+          is_active: item.is_active,
+        })),
+      };
+
+      const res = await axiosInstance.put(`/organization/update-roles/`, payload);
+
+      if (res && res.status) {
+        toast.success("Role updated successfully")
+        getAllRoles({ page: currentPage });
+        handleClose();
+      } else {
+        toast.success("Error!!! Please try again")
+      }
+      setIsLoading(true)
+    } catch (err) {
+      console.log("Error in handleUpdateRole", err);
+    }
+  };
+
+  const [openConfirmationModal, setIsOpenConfirmationModal] = useState(false);
+  const deleteRole = async (data) => {
+    try {
+      setIsLoading(true)
+      const res = await axiosInstance.delete(`/organization/delete-roles/${selectedRole?.role_id}/`);
+      if (res && res.status) {
+        toast.success("Role deleted successfully")
+        getAllRoles({ page: currentPage });
+        setIsOpenConfirmationModal(false);
+      } else {
+        toast.success("Error!!! Please try again")
+      }
+      setIsLoading(true)
+    } catch (err) {
+      console.log("Error in deleteRole", err);
+    }
+  };
+
+
+  const [selectedRole, setSelectedRole] = useState(null);
   const edidDetails = (role) => {
     setSelectedRole(role);
     handleShow(true);
@@ -101,13 +167,9 @@ const ManageStaff = () => {
     getAllRoles({ page });
   };
 
-  const deleteRole = () => {
-
-  }
-
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center p-3 border rounded bg-white mb-3">
+      <div className="d-flex justify-content-between align-items-center p-3 border rounded bg-white mb-3 manage-role">
         <h5 className="m-0 main-title">Roles</h5>
         <div className="d-flex justify-content-end gap-2">
           <div className="d-flex gap-2">
@@ -119,20 +181,20 @@ const ManageStaff = () => {
             />
             <Button
               variant="outline-primary add-organization"
-              onClick={(e) => getAllRoles()}
+              onClick={handleSort}
             >
               Filter{" "}
             </Button>
             <Button
               variant="outline-danger add-organization"
-              onClick={() => { getAllRoles({ search: "" }); setSearch("") }}
+              onClick={() => { setSearch(''); getAllRoles({ page: currentPage, clear: 'clear' }) }}
             >
               Clear
             </Button>
           </div>
           <Button
             variant="outline-primary add-organization"
-            onClick={()=>{handleShow();setSelectedRole(null)}}
+            onClick={() => { handleShow(); setSelectedRole(null) }}
           >
             {" "}
             New Role +{" "}
@@ -175,10 +237,10 @@ const ManageStaff = () => {
                   </td>
                   <td className="total-orders align-middle white-space-nowrap">
                     <div className="d-flex gap-2">
-                      <button className="shadow-none mx-0 border-0" onClick={() => edidDetails(item)} style={{ background: "none" }}>
+                      <button className="shadow-none mx-0 border-0" onClick={() => { setSelectedRole(null); edidDetails(item) }} style={{ background: "none" }}>
                         <img src="https://starlight-admin-v2.web.app/assets/images/pen.svg" alt="Edit" />
                       </button>
-                      <button className="shadow-none mx-0 border-0" onClick={() => deleteRole(item, index)} style={{ background: "none" }}>
+                      <button className="shadow-none mx-0 border-0" onClick={() => { setSelectedRole(item); setIsOpenConfirmationModal(true) }} style={{ background: "none" }}>
                         <img src="https://starlight-admin-v2.web.app/assets/images/trash-xmark.svg" alt="Delete" />
                       </button>
                     </div>
@@ -218,8 +280,15 @@ const ManageStaff = () => {
         show={isOpenAddForm}
         onSubmit={onSubmit}
         permissionsData={permissions}
-        handleClose={()=>setIsOpenAddForm(false)}
+        handleClose={() => setIsOpenAddForm(false)}
         selectedRole={selectedRole}
+        onUpdate={handleUpdateRole}
+      />
+
+      <DeleteConfirmationDialog
+        show={openConfirmationModal}
+        handleClose={() => setIsOpenConfirmationModal(false)}
+        handleConfirm={deleteRole}
       />
       {isLoading && <Loading loading={true} loaderColor="#000" />}
     </>

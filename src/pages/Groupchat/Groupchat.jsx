@@ -408,8 +408,8 @@ const Groupchat = () => {
   function handlereplies_replydislike(replies_reply_id, disc_replyid) {
     axiosInstance.post(`${ipaddress}/GroupDiscussionRepliesReplyDisLike/${user.user_id}/${replies_reply_id}/`)
       .then((r) => {
-        getreplies_for_reply(disc_replyid); //  console.log("Organization Replies reply disliked",r.data)
-      }).catch(() => { console.log("Organization replies reply dislike error") })
+        getreplies_for_reply(disc_replyid); //  console.log("University Replies reply disliked",r.data)
+      }).catch(() => { console.log("University replies reply dislike error") })
   }
   // -----------------------------------------------------EDIT POSTS--------------------------------------------------------
   const [editedpost, setEditedpost] = useState("");

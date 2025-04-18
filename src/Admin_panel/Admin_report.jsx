@@ -36,7 +36,7 @@ const Admin_report = () => {
   const ITEMS_PER_PAGE5 = 10;
 
   const [tab, setTab] = useState('users');
-  const { organization_id } = useParams();
+  const { university_id } = useParams();
 
   useEffect(() => { fetchdata() }, []);
 
@@ -182,7 +182,7 @@ const Admin_report = () => {
         <div className='bg-light w-100 px-3'>
 
           <h6 className='mt-4 d-flex align-items-center'><span style={{ cursor: 'pointer' }} onClick={() => {
-            navigate('/organization_details')
+            navigate('/university_details')
           }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16">
               <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
             </svg></span><span className='ms-2'>Report Details</span></h6>
@@ -358,7 +358,7 @@ const Admin_report = () => {
                         <th scope="col"><span className='fw-medium text-secondary'>Course Id</span></th>
                         <th scope="col"><span className='fw-medium text-secondary'>Course Name</span></th>
                         <th scope="col"><span className='fw-medium text-secondary'>Reports Count</span></th>
-                        <th scope="col"><span className='fw-medium text-secondary'>Organization Name</span></th>
+                        <th scope="col"><span className='fw-medium text-secondary'>University Name</span></th>
                         <th scope="col"><span className='fw-medium text-secondary'>City</span></th>
                       </tr>
                     </thead>
@@ -372,8 +372,8 @@ const Admin_report = () => {
                             <td className='py-3'>{x.course_id}</td>
                             <td className='py-3'>{x.ccourse_name}</td>
                             <td className='py-3'>{x.reports_count}</td>
-                            <td className='py-3'>{x.organization_name.organization_name}</td>
-                            <td className='py-3'>{x.organization_name.city}</td>
+                            <td className='py-3'>{x.university_name.university_name}</td>
+                            <td className='py-3'>{x.university_name.city}</td>
 
                           </tr>
                         )

@@ -558,7 +558,7 @@ const Opengroups = () => {
                           <span className='gradient-text' style={{ fontSize: '1rem', fontWeight: 500, lineHeight: '1.5rem', letterSpacing: '0.32px' }}>{translate_value.public_group.row2_A}</span>
                         </div>
                         <div className='col-12 col-sm-6 col-md-4 p-2 card-option' style={{ backgroundColor: '#f8f9fa', borderRadius: '8px', flex: '1 1 300px', padding: '20px', transition: 'background-color 0.3s', display: 'flex', alignItems: 'center' }}>
-                          <i className='fas fa-organization' style={{ marginRight: '10px', fontSize: '1.5rem', color: '#6f42c1' }}></i>
+                          <i className='fas fa-university' style={{ marginRight: '10px', fontSize: '1.5rem', color: '#6f42c1' }}></i>
                           <span className='gradient-text' style={{ fontSize: '1rem', fontWeight: 500, lineHeight: '1.5rem', letterSpacing: '0.32px' }}>{translate_value.public_group.row2_B}</span>
                         </div>
                         <div className='col-12 col-sm-6 col-md-4 p-2 card-option' style={{ backgroundColor: '#f8f9fa', borderRadius: '8px', flex: '1 1 300px', padding: '20px', transition: 'background-color 0.3s', display: 'flex', alignItems: 'center' }}>

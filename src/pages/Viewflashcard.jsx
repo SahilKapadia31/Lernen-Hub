@@ -211,7 +211,7 @@ const Viewflashcard = () => {
                   </div>
                   <div className="modal-body">
                     <div className='d-flex flex-column gap-3 py-3'>
-                      <a href="">Organization</a><a href="">Organization</a><a href="">Organization</a><a href="">Organization</a>
+                      <a href="">University</a><a href="">University</a><a href="">University</a><a href="">University</a>
                     </div>
                   </div>
                 </div>

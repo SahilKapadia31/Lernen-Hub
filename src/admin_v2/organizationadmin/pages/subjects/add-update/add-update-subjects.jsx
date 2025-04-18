@@ -11,7 +11,7 @@ import "./add-update-subjects.scss";
 const AddUpdateSubjects = ({ show, handleClose, updateSubjectForm, selectedSubject, submitSubjectForm, program_id, programSemesters }) => {
 
     useEffect(() => {
-        console.log(programSemesters);
+        console.log(selectedSubject);
     }, []);
 
 

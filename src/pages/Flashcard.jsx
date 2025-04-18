@@ -102,8 +102,8 @@ const Flashcard = () => {
   const [semesterdata, setSemesterdata] = useState([])
 
   useEffect(() => {
-    const organization = JSON.parse(getDecryptedData('user'))
-    axiosInstance.get(`${ipaddress}/CoursesView/${organization.user_id}/`)
+    const university = JSON.parse(getDecryptedData('user'))
+    axiosInstance.get(`${ipaddress}/CoursesView/${university.user_id}/`)
       .then((r) => {
         // console.log("Courses",r.data)
         setJoinedCourses(r.data.joined_courses)

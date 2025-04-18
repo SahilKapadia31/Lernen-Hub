@@ -9,7 +9,7 @@ const SuperAdminLayout = ({ children }) => {
             {isAuthenticated ?
                 <div>
                     <SuperAdminHeader />
-                    <main className="main-org-body" id="main-body">{children}</main>
+                    <main className="main-org-body bg-light pt-3" id="main-body">{children}</main>
                 </div>
                 :
                 <div className="w-100 position-relative">

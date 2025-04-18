@@ -71,6 +71,11 @@ const ManageSubjects = () => {
         // setSortConfig({ column, direction })
         // getAllRoles({ page: currentPage, sortConfig: { column, direction } });
     };
+    const getAllRoles = () => {
+        console.log('');
+        // setSortConfig({ column, direction })
+        // getAllRoles({ page: currentPage, sortConfig: { column, direction } });
+    };
 
     const submitSubjectsForm = async (value) => {
         try {
@@ -78,7 +83,7 @@ const ManageSubjects = () => {
             setIsLoading(true)
             const payload = {
                 "course_name": value.subject_name,
-                "organization_id": orgData?.role?.organization_id,
+                "university_name": orgData?.role?.organization_id,
                 "program_id": Number(program_id),
                 "course_description": value.description,
                 "semester": value.semester.join(","),
@@ -107,6 +112,8 @@ const ManageSubjects = () => {
 
     const updateSubjectsForm = async (value) => {
         try {
+            console.log("sddsd");
+            
             setIsOpenAddForm(false)
             setIsLoading(true)
             const payload = {
@@ -156,10 +163,10 @@ const ManageSubjects = () => {
 
     return (
         <>
-            <div className="p-3 mb-3 bg-white border rounded d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center p-3 border rounded bg-white mb-3">
                 <h5 className="m-0 main-title"> Subjects <span className="program-name text-uppercase">{program}</span></h5>
-                <div className="gap-2 d-flex justify-content-end">
-                    <div className="gap-2 d-flex">
+                <div className="d-flex justify-content-end gap-2">
+                    <div className="d-flex gap-2">
                         <Form.Control
                             type="text"
                             placeholder="Search..."
@@ -168,13 +175,13 @@ const ManageSubjects = () => {
                         />
                         <Button
                             variant="outline-primary add-organization"
-                        // onClick={(e) => getAllRoles()}
+                            // onClick={(e) => getAllRoles()}
                         >
                             Filter{" "}
                         </Button>
                         <Button
                             variant="outline-danger add-organization"
-                        // onClick={() => { getAllRoles({ search: "" }); setSearch("") }}
+                            // onClick={() => { getAllRoles({ search: "" }); setSearch("") }}
                         >
                             Clear
                         </Button>
@@ -189,12 +196,12 @@ const ManageSubjects = () => {
                 </div>
             </div>
 
-            <div className="px-0 my-3 overflow-x-auto w-100 table-div hide-scrollbar">
-                <table className="table mb-0 fs-9">
+            <div className="my-3 w-100 table-div overflow-x-auto px-0 hide-scrollbar">
+                <table className="table fs-9 mb-0">
                     <thead>
                         <tr>
                             <th width="5%">
-                                <h5 className="mb-0 sort d-flex">#</h5>
+                                <h5 className="sort mb-0 d-flex">#</h5>
                             </th>
                             <th width="25%">
                                 <SortableHeader
@@ -205,13 +212,13 @@ const ManageSubjects = () => {
                                 />
                             </th>
                             <th width="35%">
-                                <h5 className="mb-0 sort d-flex text-uppercase">Description</h5>
+                                <h5 className="sort mb-0 d-flex text-uppercase">Description</h5>
                             </th>
                             <th width="35%">
-                                <h5 className="mb-0 sort d-flex text-uppercase">Semester</h5>
+                                <h5 className="sort mb-0 d-flex text-uppercase">Semester</h5>
                             </th>
                             <th width="5%">
-                                <h5 className="mb-0 sort d-flex text-uppercase">Action</h5>
+                                <h5 className="sort mb-0 d-flex text-uppercase">Action</h5>
                             </th>
                         </tr>
                     </thead>
@@ -222,19 +229,19 @@ const ManageSubjects = () => {
                                     key={index}
                                     className="hover-actions-trigger btn-reveal-trigger position-static active-row"
                                 >
-                                    <td className="align-middle total-orders white-space-nowrap">
+                                    <td className="total-orders align-middle white-space-nowrap">
                                         <p className="mb-0">{index + 1}</p>
                                     </td>
-                                    <td className="align-middle customer white-space-nowrap pe-5">
+                                    <td className="customer align-middle white-space-nowrap pe-5">
                                         <p className="mb-0 text-uppercase">{item.course_name || "N/A"}</p>
                                     </td>
-                                    <td className="align-middle customer white-space-nowrap pe-5">
+                                    <td className="customer align-middle white-space-nowrap pe-5">
                                         <p className="mb-0">{item.course_description || "N/A"}</p>
                                     </td>
-                                    {/* <td className="align-middle customer white-space-nowrap pe-5">
+                                    {/* <td className="customer align-middle white-space-nowrap pe-5">
                                         <p className="mb-0">{item?.semester || "N/A"}</p>
                                     </td> */}
-                                    <td className="align-middle customer white-space-nowrap pe-5">
+                                    <td className="customer align-middle white-space-nowrap pe-5">
                                         <p className="mb-0">
                                             {item?.semester ? (
                                                 item.semester
@@ -249,10 +256,10 @@ const ManageSubjects = () => {
                                         </p>
                                     </td>
 
-                                    <td className="align-middle total-orders white-space-nowrap">
-                                        <div className="gap-2 d-flex">
+                                    <td className="total-orders align-middle white-space-nowrap">
+                                        <div className="d-flex gap-2">
                                             <button
-                                                className="mx-0 border-0 shadow-none"
+                                                className="shadow-none mx-0 border-0"
                                                 onClick={() => editSubject(item)}
                                                 style={{ background: "none" }}
                                             >
@@ -262,7 +269,7 @@ const ManageSubjects = () => {
                                                 />
                                             </button>
                                             <button
-                                                className="mx-0 border-0 shadow-none"
+                                                className="shadow-none mx-0 border-0"
                                                 onClick={() => { setIsOpenConfirmationModal(true); setSelectedSubject(item) }}
                                                 style={{ background: "none" }}
                                             >
@@ -286,7 +293,7 @@ const ManageSubjects = () => {
                 </table>
 
                 {currentItems.length ?
-                    <div className="px-2 mt-3 d-flex align-items-center justify-content-between">
+                    <div className="d-flex align-items-center justify-content-between mt-3 px-2">
                         <p className="px-2 py-2 mb-0 bg-white border rounded">Total Records : <span className="fw-bold">{subjectsList.length}</span></p>
                         <Pagination className="mb-2">
                             <Pagination.Prev onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} />

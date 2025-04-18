@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Navbar, Nav, Container, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaTachometerAlt } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import logo from "../../../../img/landing_page/Group 385.png";
+import UploadFile from "../upload-file/upload-file";
 import "./organization-header.scss";
 const menuItems = [
   {
@@ -18,51 +20,79 @@ export const adminRoutes = [
   {
     displayName: "Dashboard",
     iconName: "person",
-    route: "organization/dashboard",
+    route: "/organization/dashboard",
     icon: 'assets/images/dashboard/dashboard-svg.svg',
   },
   {
     displayName: "My Programs",
     iconName: "person",
-    route: "organization/my-programs",
+    route: "/organization/my-programs",
     icon: 'assets/images/dashboard/chart-user-square.svg',
     color: '#11cdef'
   },
   {
     displayName: "Manage Staff",
     iconName: "person",
-    route: "organization/staff",
+    route: "/organization/staff",
     icon: 'assets/images/dashboard/chart-user-square.svg',
     color: '#11cdef'
   },
   {
     displayName: "Students",
     iconName: "person",
-    route: "organization/student",
+    route: "/organization/student",
     icon: 'assets/images/dashboard/users.svg',
     color: '#11cdef'
   },
   {
     displayName: "Manage Roles",
     iconName: "person",
-    route: "organization/roles",
+    route: "/organization/roles",
+    icon: 'assets/images/dashboard/users.svg',
+    color: '#11cdef'
+  },
+  {
+    displayName: "Manage PromoCode",
+    iconName: "person",
+    route: "/organization/promoCode",
     icon: 'assets/images/dashboard/users.svg',
     color: '#11cdef'
   },
   {
     displayName: "Programs",
     iconName: "person",
-    route: "organization/program-types",
+    route: "/organization/program-types",
     icon: 'assets/images/dashboard/users.svg',
     color: '#11cdef'
-  }
+  },
+  {
+    displayName: "Pending Request",
+    iconName: "person",
+    route: "/organization/pending-requests",
+    icon: 'assets/images/dashboard/chart-user-square.svg',
+    color: '#11cdef'
+  },
 ];
 
+const permissionMap = {
+  "Manage Staff": "Manage Staff",
+  "Student": "Manage Student",
+  "Manage Roles": "Manage Role",
+  "Programs": "Manage Programs",
+  "Pending Request": "Assign Staff Programs",
+  "My Programs": "Assign Student Progrrams",
+  "Manage PromoCode": "Manage Join Code",
+  "My Student": "Assign Student Progrrams",
+  "View Students": "View Students",
+};
 
 const OrganizationHeader = () => {
+  const location = useLocation();
   const [selectedNavMenu, setSelectedNavMenu] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const navigate = useNavigate();
+  const orgData = useSelector((state) => state.auth);
+  const role = orgData?.role || {}
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -117,7 +147,22 @@ const OrganizationHeader = () => {
     window.location.href = "/"
   }
 
+  const getPermittedRoutes = (routes, role) => {
+    if (role.option_id === 2) {
+      return routes;
+    }
 
+    const activePermissions = role.permissions
+      .filter(p => p.is_active)
+      .map(p => p.permission_name);
+
+    return routes.filter(route => {
+      const requiredPermission = permissionMap[route.displayName];
+      return !requiredPermission || activePermissions.includes(requiredPermission);
+    });
+  };
+
+  const permittedRoutes = getPermittedRoutes(adminRoutes, role);
 
   return (
     <Navbar
@@ -133,87 +178,16 @@ const OrganizationHeader = () => {
         <div className="d-flex justify-content-between align-items-center flex-shrink-0 img-logo">
           <div className="main-navigation">
             <ul className="main-nav">
-              {adminRoutes.map((item, index) => (
+              {permittedRoutes.map((item, index) => (
                 <React.Fragment key={index}>
                   {item.route ? (
-                    <li className="main-nav-items">
+                    <li className={`main-nav-items ${location.pathname === item.route ? 'active' : ''}`}>
                       <Link to={item.route} className="d-flex align-items-center">
                         <div className="mx-2">
                           <img src={item.icon} alt="" className="my-0" width="17" />
                         </div>
-                        <span className="nav-link-text">{item.displayName}</span>
+                        <span className="nav-link-text ">{item.displayName}</span>
                       </Link>
-                    </li>
-                  ) : null}
-
-                  {item.children?.length ? (
-                    <li
-                      className={`dropdown main-nav-items ${openDropdowns[item.displayName] ? "active" : ""}`}
-                      onClick={(e) => toggleDropdown(e, item)}
-                    >
-                      <button className="main-m d-flex align-items-center">
-                        <div className="mx-2">
-                          <img src={item.icon} alt="" className="my-0" width="17" />
-                        </div>
-                        <span className="nav-link-text">{item.displayName}</span>
-                      </button>
-                      {openDropdowns[item.displayName] && (
-                        <div className="dropdown-menu" id={item.displayName}>
-                          <ul className="parent-drop">
-                            {item.children.map((child, cIndex) => (
-                              <React.Fragment key={cIndex}>
-                                {child.subChildrens?.length ? (
-                                  <li className="subdropdown sub-child" onMouseEnter={() => hoverCard(item.displayName, child.displayName)}>
-                                    <span className="dropdown-link d-flex py-2 px-2 justify-content-between">
-                                      <div>
-                                        <i className={`bi mx-2 ${child.icon}`}></i>
-                                        <span className="nav-link-text">{child.displayName}</span>
-                                      </div>
-                                    </span>
-                                    <ul className="sub-dropdown-menu" id={child.displayName}>
-                                      {child.subChildrens.map((subchild, scIndex) => (
-                                        <li key={scIndex} className="subsubdropdown sub-child" onMouseEnter={() => hoverCard(item.displayName, child.displayName, subchild.displayName)}>
-                                          {subchild.subSubChilds?.length ? (
-                                            <>
-                                              <span className="dropdown-link py-2 px-2 d-flex justify-content-between align-items-center">
-                                                {subchild.displayName}
-                                              </span>
-                                              <ul className="sub-sub-dropdown-menu" id={subchild.displayName}>
-                                                {subchild.subSubChilds.map((subsubChild, sscIndex) => (
-                                                  <li key={sscIndex}>
-                                                    <Link className="dropdown-link py-2 px-2" to="#">
-                                                      {subsubChild.displayName}
-                                                    </Link>
-                                                  </li>
-                                                ))}
-                                              </ul>
-                                            </>
-                                          ) : (
-                                            <Link className="dropdown-link py-2 px-2" to="#">
-                                              {subchild.displayName}
-                                            </Link>
-                                          )}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </li>
-                                ) : (
-                                  <li className="single-child" onClick={(e) => closeDropdownAfterClick(e, item.displayName)}>
-                                    <Link className="dropdown-link py-2 px-2" to={child.route}>
-                                      <div className="d-flex align-items-center">
-                                        <div className="mx-2">
-                                          <i className={`bi ${child.icon}`}></i>
-                                        </div>
-                                        <span className="nav-link-text">{child.displayName}</span>
-                                      </div>
-                                    </Link>
-                                  </li>
-                                )}
-                              </React.Fragment>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
                     </li>
                   ) : null}
                 </React.Fragment>
@@ -224,13 +198,19 @@ const OrganizationHeader = () => {
 
         <div className="d-flex align-items-center gap-3">
           <ul class="navbar-nav align-items-center ms-auto">
-            <li class="nav-item dropdown">
+            {/* <li class="nav-item dropdown  position-relative">
+              <a href="#" class="nav-link dropdown-toggle no-caret" role="button" >
+                <div className="user-login"><span>Anup Maurya</span> <span>(Admin)</span></div>
+              </a>
+
+            </li> */}
+            <li class="nav-item dropdown d-none">
               <a href="#" class="nav-link dropdown-toggle no-caret" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="false">
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                 </svg>
               </a>
-              <div class="dropdown-menu dropdown-menu-end p-3">
+              <div class="dropdown-menu dropdown-menu-end p-3 d-none">
                 <form><input type="text" class="form-control border-0 shadow-none px-3" placeholder="Search..." autofocus="" /></form>
                 <div class="dropdown-divider"></div>
                 <h6 class="dropdown-header d-flex justify-content-between">

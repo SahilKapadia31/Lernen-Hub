@@ -4,10 +4,13 @@ import { useSelector } from "react-redux";
 import { Formik, Field, Form as FormikForm, ErrorMessage } from "formik";
 import { Modal, Button } from "react-bootstrap";
 import * as Yup from "yup";
+
 import add_organization from "../../../../../img/add-organization.svg";
 import close_icon from '../../../../../img/close-icon.svg';
-import "./add-update-staff.scss";
 import axiosInstance from "../../../components/services/axiosInstance";
+
+//Style
+import "./add-update-staff.scss";
 
 const ManageStaffAddUpdate = ({ show, handleClose, submitStaffForm, staffDetails, updateStaffForm }) => {
   const orgData = useSelector((state) => state.auth);
@@ -68,20 +71,19 @@ const ManageStaffAddUpdate = ({ show, handleClose, submitStaffForm, staffDetails
             {({ errors, touched, isValid }) => (
               <FormikForm className="border rounded p-3 form-wizard">
                 <>
-                  {!staffDetails &&
-                    <Form.Group className="mb-2 w-50">
-                      <Form.Label className="form-label">
-                        Role Type <span className="required">*</span>
-                      </Form.Label>
-                      <Field as="select" name="role_id" className={`form-control ${errors.role_id && touched.role_id ? "is-invalid" : ""}`}>
-                        <option value="">Select Type</option>
-                        {roleList.map((item) => (
-                          <option value={item.role_id}>{item.role_name}</option>
-                        ))}
-                      </Field>
-                      <ErrorMessage name="role_id" component="div" className="invalid-feedback" />
-                    </Form.Group>
-                  }
+
+                  <Form.Group className="mb-2 w-50">
+                    <Form.Label className="form-label">
+                      Role Type <span className="required">*</span>
+                    </Form.Label>
+                    <Field as="select" name="role_id" className={`form-control ${errors.role_id && touched.role_id ? "is-invalid" : ""}`}>
+                      <option value="">Select Type</option>
+                      {roleList.map((item) => (
+                        <option value={item.role_id}>{item.role_name}</option>
+                      ))}
+                    </Field>
+                    <ErrorMessage name="role_id" component="div" className="invalid-feedback" />
+                  </Form.Group>
                   <div className="d-flex gap-2">
                     <Form.Group className="mb-2 w-50">
                       <Form.Label className="form-label">

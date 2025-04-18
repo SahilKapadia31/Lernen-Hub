@@ -41,7 +41,7 @@ const Profile = () => {
 
   const [formData, setFormData] = useState({
     user_id: "",
-    organization: "",
+    university: "",
     program: "",
     semester: "",
   });
@@ -56,7 +56,7 @@ const Profile = () => {
   const [count, setCount] = useState(0)
 
   const [joinedUniversity, setJoinedUniversity] = useState([])
-  const [organizationdata, setUniversitydata] = useState([])
+  const [universitydata, setUniversitydata] = useState([])
   const [semesterdata, setSemesterdata] = useState([])
   const [favouriteDocs, setFavouriteDocs] = useState([])
   const [joinedcourses, setjoinedcourses] = useState([])
@@ -114,7 +114,7 @@ const Profile = () => {
     axiosInstance.get(`${ipaddress}/universities/`)
       .then((r) => {
         setUniversitydata(r.data)
-        // console.log("Organization data : ",r.data)
+        // console.log("University data : ",r.data)
       })
     axiosInstance.get(`${ipaddress}/Semesters/`)
       .then((p) => {
@@ -126,7 +126,7 @@ const Profile = () => {
   const resetForm = () => {
     setFormData({
       // user_id: userData.user_id,
-      organization: "",
+      university: "",
       program: "",
       semester: "",
     });
@@ -199,23 +199,23 @@ const Profile = () => {
       })
   }
 
-  // ----------------------------------------------------------ADD Organization NAMES----------------------------------------
+  // ----------------------------------------------------------ADD UNIVERSITY NAMES----------------------------------------
   const [selectedUniversityName, setSelectedUniversityName] = useState("");
   const [selectedUniversityId, setSelectedUniversityId] = useState(0);
   const [programs, setPrograms] = useState([])
-  const addorganizationname = (organizationName, event, organizationId) => {
+  const adduniversityname = (universityName, event, universityId) => {
     event.preventDefault()
-    // console.log("organization selected nameeeeeeeee",organizationName,organizationId)
-    setSelectedUniversityName(organizationName);
-    setSelectedUniversityId(organizationId)
+    // console.log("university selected nameeeeeeeee",universityName,universityId)
+    setSelectedUniversityName(universityName);
+    setSelectedUniversityId(universityId)
 
     setFormData((prevData) => ({
       ...prevData,
       user_id: userData.user_id,
-      organization: organizationId,
+      university: universityId,
     }));
 
-    axiosInstance.get(`${ipaddress}/Programs/${organizationId}`)
+    axiosInstance.get(`${ipaddress}/Programs/${universityId}`)
       .then((r) => {
         // console.log("Programs Successfullyyyyyy Fetched",r.data)
         setPrograms(r.data)
@@ -224,17 +224,17 @@ const Profile = () => {
     setUniversityNamesVisible(false)
   }
 
-  // -----------------------------------------FETCH PROGRAMS BASED ON Organization--------------------------------------------
+  // -----------------------------------------FETCH PROGRAMS BASED ON UNIVERSITY--------------------------------------------
 
 
-  // --------------------------------------SEARCH Organization NAME-----------------------------------------------------------
+  // --------------------------------------SEARCH UNIVERSITY NAME-----------------------------------------------------------
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = (value) => {
     setSelectedUniversityName(value);
 
-    const results = organizationdata.filter(item => item.organization_name.toLowerCase().includes(value.toLowerCase()));
+    const results = universitydata.filter(item => item.university_name.toLowerCase().includes(value.toLowerCase()));
     setSearchResults(results);
   };
 
@@ -358,7 +358,7 @@ const Profile = () => {
                           {joinedUniversity.map((x) => {
                             return (
                               <div>
-                                <span style={{ fontSize: '13px' }}>{x.organization_id.organization_name}</span>
+                                <span style={{ fontSize: '13px' }}>{x.university_id.university_name}</span>
                               </div>
                             )
                           })}
@@ -403,7 +403,7 @@ const Profile = () => {
                               return (
                                 <div className="row">
                                   <div className="col-12">
-                                    <span className=''><i className="fa-solid fa-building-columns  me-2"></i>{x.organization_id.organization_name}</span>
+                                    <span className=''><i className="fa-solid fa-building-columns  me-2"></i>{x.university_id.university_name}</span>
                                   </div>
                                   <div className="col-12 mt-3"><span className=''>
                                     <i className="fa-solid fa-envelope me-2"></i>{userdetails.email}</span></div>
@@ -483,7 +483,7 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Organization MODAL FORM */}
+          {/* UNIVERSITY MODAL FORM */}
           <div
             className="modal fade"
             id="add_details"
@@ -513,8 +513,8 @@ const Profile = () => {
                       <input
                         type="text"
                         className='form-control py-3 mb-0'
-                        id='organizationnamefield'
-                        placeholder='Select the Organization'
+                        id='universitynamefield'
+                        placeholder='Select the University'
                         onClick={() => setUniversityNamesVisible(true)}
                         // onFocus={() => setUniversityNamesVisible(true)}
                         // onBlur={() => setUniversityNamesVisible(false)}
@@ -523,27 +523,27 @@ const Profile = () => {
                         }}
                         value={selectedUniversityName}
                       />
-                      {/* ------------------------------------------------SEARCH Organization-------------------------------------------------- */}
-                      <div id='organizationnames' className={`mt-0 border bg-light ${isUniversityNamesVisible ? 'd-block' : 'd-none'}`} style={{ overflowY: 'scroll' }}>
+                      {/* ------------------------------------------------SEARCH UNIVERSITY-------------------------------------------------- */}
+                      <div id='universitynames' className={`mt-0 border bg-light ${isUniversityNamesVisible ? 'd-block' : 'd-none'}`} style={{ overflowY: 'scroll' }}>
                         <div className='px-2 m-0 bg-info-subtle' style={{ listStyleType: 'none' }}>
                           {searchResults && (
-                            searchResults.map((organization, index) => (
+                            searchResults.map((university, index) => (
                               <li key={index}><a href='' className='text-decoration-none text-dark ' style={{ fontSize: '14px' }} onClick={(event) => {
-                                addorganizationname(organization.organization_name, event, organization.organization_id)
-                              }}>{organization.organization_name}</a></li>
+                                adduniversityname(university.university_name, event, university.university_id)
+                              }}>{university.university_name}</a></li>
                             ))
                           )}
                         </div>
 
                         <ul className='px-2 m-0' style={{ listStyleType: 'none' }}>
-                          {organizationdata.map((x, index) => {
-                            const isMatch = searchResults.some(y => y.organization_name === x.organization_name);
+                          {universitydata.map((x, index) => {
+                            const isMatch = searchResults.some(y => y.university_name === x.university_name);
                             return (
                               !isMatch && (
                                 <li key={index}>
                                   <a href='' className='text-decoration-none text-dark ' style={{ fontSize: '14px' }} onClick={(event) => {
-                                    addorganizationname(x.organization_name, event, x.organization_id)
-                                  }}>{x.organization_name}</a>
+                                    adduniversityname(x.university_name, event, x.university_id)
+                                  }}>{x.university_name}</a>
                                 </li>
                               )
                             );

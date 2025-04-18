@@ -139,7 +139,7 @@ const Subject_discussion = ({ course_id, pinnedcomments_status, course_name, set
           setReplies_reply_image3([]);
           toast.success('Replied successfully', { autoClose: 2000 });
         } else {
-          console.error('Organization Reply under reply sending error');
+          console.error('University Reply under reply sending error');
         }
       } catch (error) { console.error('Error reply uploading files:', error) }
     }
@@ -195,7 +195,7 @@ const Subject_discussion = ({ course_id, pinnedcomments_status, course_name, set
   function handlereplies_replydislike(replies_reply_id, disc_replyid) {
     axiosInstance.post(`${ipaddress}/CourseDiscussionRepliesReplyDislike/${user.user_id}/${replies_reply_id}/`)
       .then((r) => { getreplies_for_reply(disc_replyid) })
-      .catch(() => { console.log("Organization replies reply dislike error") })
+      .catch(() => { console.log("University replies reply dislike error") })
   }
   // -----------------------------------------------------To Edit the post in subject discussion--------------------------------------------------------
   const [editedpost, setEditedpost] = useState("");

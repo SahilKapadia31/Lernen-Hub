@@ -94,7 +94,7 @@ const Users_page = () => {
                       <span className='fw-medium text-secondary'>Email</span>
                     </th>
                     <th scope='col'>
-                      <span className='fw-medium text-secondary'>Organization</span>
+                      <span className='fw-medium text-secondary'>University</span>
                     </th>
                     <th scope='col'>
                       <span className='fw-medium text-secondary'>Program</span>
@@ -120,7 +120,7 @@ const Users_page = () => {
                       </td>
                       <td>{x.nickname}</td>
                       <td>{x.email}</td>
-                      <td>{x.organization}</td>
+                      <td>{x.university}</td>
                       <td>{x.program}</td>
                       <td>{x.city}</td>
                       <td>

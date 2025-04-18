@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Navbar } from '../Navbar/Navbar';
 import './Hero.scss';
-
+import { ipaddress3 } from '../../../App';
+import axiosInstance from '../../../pages/axiosInstance';
 import {
     Button,
     ButtonDropdown,
@@ -19,6 +20,7 @@ import { Features } from '../Features/Features';
 export const HeroSection = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const headerRef = useRef(null);
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
     // Track window resize to adjust responsive elements
@@ -32,13 +34,41 @@ export const HeroSection = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+    
+    const [cardData,setCardData] = useState([
+        { title: "Universities",key:'total_universities' },
+        { title: "Schools",key:'total_study_centers' },
+        { title: "Study Centers",key:'total_schools' },
+        { title: "Tutors",key:'total_tutors' },
+    ]);
 
-    const cardData = [
-        { title: "Universities", count: 366 },
-        { title: "Schools", count: 229 },
-        { title: "Study Centers", count: 357 },
-        { title: "Tutors", count: 149 },
-    ];
+    const [allOrganizationCount,setAllOrganizationCount] = useState(null)
+    const getAllOrganizationCount = async () => {
+        try {
+            const response = await axiosInstance.get(`${ipaddress3}/public/home/allOrganizationCount/`);
+            if (response?.data?.status) {
+                const countData = response.data.data;
+                setAllOrganizationCount(countData);
+            }
+        } catch (err) {
+            console.error('Error in getAllOrganizationCount:', err);
+        }
+    };
+    
+    useEffect(() => {
+        getAllOrganizationCount();
+        // Only add the scroll event listener on larger screens
+        if (window.innerWidth > 991 && headerRef.current) {
+            const updateScroll = () => {
+                const windowScrollTop = window.pageYOffset / 3;
+                headerRef.current.style.transform = `translate3d(0, ${windowScrollTop}px, 0)`;
+            };
+
+            window.addEventListener('scroll', updateScroll);
+            return () => window.removeEventListener('scroll', updateScroll);
+        }
+    }, []);
+
 
     // Determine placeholder text based on screen size
     const getPlaceholder = () => {
@@ -52,14 +82,13 @@ export const HeroSection = () => {
     };
 
     return (
-        <>
-            <div className='hero-section'>
-                <Navbar />
-                <div className="container">
-                    <div className="main-land-div">
-                        <h1 className='fw-semibold text-white text-center display-5 hero-title'>
-                            Your personalized path to the <br className="d-none d-md-block" /> right learning institution.
-                        </h1>
+        <div className='hero-section' ref={headerRef}>
+            <Navbar />
+            <div className="container">
+                <div className="main-land-div">
+                    <h1 className='fw-semibold text-white text-center display-5 hero-title'>
+                        Your personalized path to the <br className="d-none d-md-block" /> right learning institution.
+                    </h1>
 
                         <div className='hero-search d-flex align-items-stretch mx-auto px-0 px-md-2'>
                             {/* City Selector Dropdown */}
@@ -94,26 +123,21 @@ export const HeroSection = () => {
                         </div>
 
                         <div className="card-container px-md-2">
-                            {cardData.map((card, index) => (
-                                <Card key={index} className="custom-card text-white">
-                                    <CardBody>
-                                        <CardTitle tag="h5" className='mb-1'>{card.title}</CardTitle>
-                                        <CardText className="d-flex align-items-center justify-content-between fw-light">
-                                            {card.count}
-                                            <i className="bi bi-box-arrow-up-right text-orange fs-5"></i>
-                                        </CardText>
-                                    </CardBody>
-                                </Card>
-                            ))}
-                        </div>
+                        {cardData.map((card, index) => (
+                            <Card key={index} className="custom-card text-white">
+                                <CardBody>
+                                    <CardTitle tag="h5" className='mb-1'>{card.title}</CardTitle>
+                                    <CardText className="d-flex align-items-center justify-content-between fw-light">
+                                        {(allOrganizationCount && allOrganizationCount[card.key]) || 0}
+                                        <i className="bi bi-box-arrow-up-right text-orange fs-5"></i>
+                                    </CardText>
+                                </CardBody>
+                            </Card>
+                        ))}
                     </div>
-                </div>
-                <div className="contact-btn rounded-circle d-inline-flex align-items-center justify-content-center">
-                    <i class="bi bi-telephone-fill"></i>
                 </div>
             </div>
             <Features />
-        </>
-
+        </div>
     );
 };

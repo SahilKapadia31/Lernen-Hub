@@ -16,7 +16,7 @@ const StatusConfirmationDialog = ({ show, handleClose, handleConfirm, status }) 
                         <strong className={!status ? "text-success" : "text-danger"}>
                             {!status ? "Activate" : "Deactivate"}
                         </strong>{" "}
-                        this organization?
+                        this staff?
                     </p>
                 </Modal.Body>
                 <Modal.Footer className="border-top">

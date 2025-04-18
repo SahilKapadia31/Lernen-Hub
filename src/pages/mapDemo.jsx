@@ -23,9 +23,9 @@ const MapDemo = () => {
       id: 1,
       lat: 50.778904255973856, // Aachen
       lng: 6.080215113372039,
-      title: "Organization Library I RWTH",
-      host: "Organization Library I RWTH",
-      description: "Organization Library I RWTH",
+      title: "University Library I RWTH",
+      host: "University Library I RWTH",
+      description: "University Library I RWTH",
     },
     {
       id: 2,
@@ -64,7 +64,7 @@ const MapDemo = () => {
                 <div className="card w-100">
                   <div className="card-body d-flex gap-2">
                     <div style={{ height: '100px', width: '100px', objectFit: 'cover' }}>
-                      <img src={'https://img.freepik.com/premium-vector/campus-collage-organization-education-logo-design-template_7492-65.jpg'} className="card-img-top" alt={location.title} />
+                      <img src={'https://img.freepik.com/premium-vector/campus-collage-university-education-logo-design-template_7492-65.jpg'} className="card-img-top" alt={location.title} />
                     </div>
                     <div>
                       <h5 className="card-title">{location.title}</h5>

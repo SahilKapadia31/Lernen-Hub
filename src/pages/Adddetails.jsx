@@ -1,447 +1,382 @@
-// After Email validation and OTP Verification the user need to add their details
-
-import React, { useState, useContext } from 'react'
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ipaddress } from '../App';
-import { Context } from '../context/Context_provider';
-import First_navabr from '../components/First_navabr';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Formik, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import Select from "react-select";
 import { toast } from 'react-toastify';
-import apiClient from '../pages/Middlewares/axiosConfig';
+
+import First_navabr from '../components/First_navabr';
 import axiosInstance from './axiosInstance';
 import axios from 'axios';
-import { setAccessToken } from './authService';
-import { Formik, ErrorMessage, Form } from 'formik';
-import * as Yup from 'yup';
-import { setEncryptedData, getDecryptedData, removeData } from '../utils/helperFunctions';
 
-const Adddetails = ({ value, email, organization_name, password }) => {
-  const userdata = JSON.parse(getDecryptedData('user'))
+import { ipaddress, ipaddress3 } from '../App';
+import Loading from "react-fullscreen-loading";
+import { Modal, Button } from "react-bootstrap";
+import { useSelector } from 'react-redux';
 
-  const renderTooltip = (value) => (
-    <Tooltip id="button-tooltip">
-      {value}
-    </Tooltip>
-  );
+const Adddetails = ({ show, handleClose, university_id, orgLogo }) => {
+  const studentData = useSelector((state)=>state.auth.user);
 
-  const { translate_value, setAddsubjects_layout } = useContext(Context);
-  let navigate = useNavigate();
-  const [firstname, setFirstname] = useState();
-  const [lastname, setlastname] = useState();
-  const [nickname, setnickname] = useState("");
-  const [coursename, setcoursename] = useState(0);
-  const [type, settype] = useState('');
-  const [degrees, setdegrees] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [btn_status, setbtn_status] = useState(false);
-  const [loading, setloading] = useState();
-  const [success, setsuccess] = useState(false);
-  const [error, seterror] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (value == true) {
-      apiClient.get(`${ipaddress}/SendDegrees/`)
-        .then((r) => { setdegrees(r.data) })
-        .catch(() => { console.log("Joined degrees fetching error") })
+  const [loading, setLoading] = useState(false);
+  const [nicknameStatus, setNicknameStatus] = useState({ success: false, error: false });
+
+  const [programTypeList, setProgramTypeList] = useState([]);
+  const [programList, setProgramList] = useState([]);
+  const [semesterList, setSemesterList] = useState([]);
+  const [subjectsList, setSubjectsList] = useState([]);
+  const [masterProgramList, setMasterProgramList] = useState([]);
+
+  const initialValues = {
+    degree: null,
+    program: null,
+    semester: null,
+    course_id: null,
+    firstName:  studentData?.first_name ||  '',
+    lastName: studentData?.last_name || '',
+    dob: '',
+    joinCode: '',
+  };  
+
+  const getValidationSchema = (isJoinCode) => {
+    if (isJoinCode) {
+      return Yup.object().shape({
+        firstName: Yup.string().required("First name is required."),
+        lastName: Yup.string().required("Last name is required."),
+        dob: Yup.date().required("Date of birth is required."),
+        joinCode: Yup.string().required("Join code is required."),
+      });
     }
-  }, [value])
+  
+    return Yup.object().shape({
+      firstName: Yup.string().required("First name is required."),
+      lastName: Yup.string().required("Last name is required."),
+      degree: Yup.object().required("Degree is required."),
+      program: Yup.object().required("Program is required."),
+      semester: Yup.object().required("Semester is required."),
+      course_id: Yup.object().required("Course is required."),
+    });
+  };  
 
-  // Fetch programs
-  const fetch_programs = (id) => {
-    apiClient.get(`${ipaddress}/ProgramsView/${id}/`)
-      .then((r) => {
-        setCourses(r.data)
-      }).catch(() => { console.log("Joined courses fetching error") })
-  }
-  // --------------To get the firstname and lastname from email-------------------------------
-  const [beforeDot, setBeforeDot] = useState("");
-  const [afterDot, setAfterDot] = useState("");
-  useEffect(() => {
-    const emailParts = email.split('@');
-    let first_name = '';
-    let last_name = '';
+  const [formData, setFormData] = useState({ isJoinCode: null, joinCode: null });
+  const handleJoinCodeSelection = (value) => {
+    setFormData((prev) => ({ ...prev, isJoinCode: value }));
 
-    if (emailParts[0].includes('.')) {
-      first_name = emailParts[0].split('.')[0];
-      last_name = emailParts[0].split('.')[1];
-    } else if (emailParts[0].includes('_')) {
-      console.log(emailParts[0]);
-      first_name = emailParts[0].split('_')[0];
-      last_name = emailParts[0].split('_')[1];
-    } else {
-      first_name = emailParts[0];
-      last_name = emailParts[1];
+    if (value == false) {
+      setFormData((prev) => ({ ...prev, joinCode: null }));
     }
-
-    setFirstname(first_name);
-    setlastname(last_name);
-
-  }, [email]);
-
-  var initialValues = {
-    title: '',
-    firstname: firstname || '',
-    lastname: lastname || '',
-    nickname: '',
-    type: '',
-    program_name: ''
   };
 
-  const validationSchema = Yup.object().shape({
-    title: Yup.string().required("title is a required."),
-    firstname: Yup.string().required("firstname is a required."),
-    lastname: Yup.string().required("lastname is a required."),
-    nickname: Yup.string().required("nicname is required."),
-    type: Yup.string().required("degrees is required."),
-    program_name: Yup.string().required("program name is required."),
-  });
-
-  const senduserdata = (values) => {
-    setloading(true);
-    const formdata = new FormData();
-    formdata.append('title', values.title);
-    formdata.append('first_name', values.firstname);
-    formdata.append('last_name', values.lastname);
-    formdata.append('nickname', values.nickname);
-    formdata.append('course_name', coursename);
-    formdata.append('degree', values.type);
-    formdata.append('email', email);
-    setFirstname(values.firstname);
-    setlastname(values.lastname);
-    setnickname(values.nickname);
-    settype(values.type);
-    apiClient.post(`${ipaddress}/UserRegistrationAPIView/`, formdata)
-      .then((r) => {
-        generate_token();
-        setAddsubjects_layout(true);
-        setloading(false);
-      })
-  }
-
-  const generate_token = () => {
-    apiClient.post(`${ipaddress}/api/token/`, { email: email, password: password })
-      .then((r) => {
-        setAccessToken(r.data.access, r.data.refresh);
-        signin();
-      })
-      .catch((err) => { console.error("Token error", err) })
-  }
-
-  const signin = () => {
-    // console.log("Triggered")
-    apiClient.get(`${ipaddress}/UserDetails/${email}/`)
-      .then((r) => {
-        setEncryptedData('user', JSON.stringify(r.data), 180);
-        navigate('/dashboard/mainpage');
-      }).catch((err) => { console.log("ERROR", err) })
-  }
-
-  //  Validate nickame
-  const [loading1, setloading1] = useState();
-  const [val, setval] = useState("");
-  const verifyNickname = (value) => {
-    setloading1(true)
-    if (value.length > 0) {
-      setval('Checking...')
-      apiClient.get(`${ipaddress}/admin_app/NickNameCheck/${value}/`)
-        .then((r) => {
-          document.getElementById('span').style.color = "black";
-          setloading1(false);
-          if (r.data.message === 'Not There') {
-            setsuccess(true);
-            seterror(false);
-            setbtn_status(true);
-          } else {
-            seterror(true);
-            setsuccess(false);
-            setbtn_status(false);
-          }
-        }).catch((err) => { console.log("Nickname error", err) })
-    } else {
-      setbtn_status(false);
-    }
-  }
-  const [showprogram, setShowprogram] = useState(false);
-  const [program_name, setprogram_name] = useState('');
-  const [filteredprograms, setfilteredprograms] = useState([]);
-  const searchProgram = (value) => {
-    if (value.length > 0) {
-      // console.log(value.toLowerCase())
-      setShowprogram(true)
-      const programs = courses.filter((x) => {
-        if (x.program_name.toLowerCase().includes(value.toLowerCase())) {
-          return x
-        }
-      })
-      // console.log(programs)
-      setfilteredprograms(programs);
-    } else {
-      setfilteredprograms([]);
-    }
-  }
-
-  //  ------------------------------------------ADD COURSE-------------------------------------------------
-  const [newcourse, setNewcourse] = useState("");
-  const [state, setstate] = useState(false);
-  const addcourse = () => {
-    setloading(true)
-    const formdata = new FormData();
-    formdata.append('course_name', newcourse);
-    formdata.append('degree', type);
-    formdata.append('first_name', firstname);
-    formdata.append('last_name', lastname);
-    formdata.append('nickname', nickname);
-    formdata.append('email', email);
-    apiClient.post(`${ipaddress}/UserRegistrationAPIView/`, formdata)
-      .then((r) => {
-        setloading(false);
-        setAddsubjects_layout(true);
-        // console.log("Course Added Successfully")
-        setstate(true);
-        setTimeout(() => {
-          generate_token()
-        }, 3000);
-      }).catch((error) => { console.error("Error adding course:", error) });
+  const handleJoinCode = (value) => {
+    setFormData((prev) => ({ ...prev, joinCode: value }));
   };
+
+  const fetchProgramTypes = async (orgId) => {
+    if (!orgId) return;
+    try {
+      const res = await axios.get(`${ipaddress3}/typeProgram/organization/${orgId}/`);
+      const data = res.data?.data || [];
+      const formatted = data.map(type => ({
+        label: type.name,
+        value: type.id,
+      }));
+      setProgramTypeList(formatted);
+    } catch (err) {
+      console.error("Error fetching program types", err);
+    }
+  };
+
+  const fetchPrograms = async (orgId, typeId) => {
+    if (!orgId || !typeId) return;
+    try {
+      const res = await axiosInstance.get(`${ipaddress3}/program/organization/${orgId}/${typeId}/`);
+      const data = res.data?.data || [];
+      const formatted = data.map(prog => ({
+        label: prog.program_name,
+        value: prog.pid,
+      }));
+      setProgramList(formatted);
+      setMasterProgramList(data);
+    } catch (err) {
+      console.error("Error fetching programs", err);
+    }
+  };
+
+  const fetchSemesters = (pid) => {
+    if (!pid) return;
+    const selected = masterProgramList.find(p => p.pid === pid);
+    if (selected?.semester?.length > 0) {
+      const formatted = selected.semester.map(sem => ({
+        label: sem.sem_name,
+        value: sem.semester_id,
+      }));
+      setSemesterList(formatted);
+    } else {
+      setSemesterList([]);
+    }
+  };
+
+  const fetchCourses = async (pid, orgId, semId) => {
+    if (!pid) return;
+    try {
+      console.log(pid, orgId, semId);
+      const res = await axios.get(`${ipaddress3}/courses/${pid}/${orgId}/`);
+      let subjectList = res.data?.data || [];
+      subjectList = subjectList.filter(subject => subject?.semester?.includes(semId))
+      subjectList = subjectList.map(subject => ({
+        label: subject.course_name,
+        value: subject.course_id,
+      }));
+      console.log(subjectList);
+
+      setSubjectsList(subjectList);
+    } catch (err) {
+      console.error("Error fetching programs", err);
+    }
+  };
+
+  const handleSubmit = async (values) => {
+    try {
+      const payloadWithoutJoinCode = {
+        organization_id: university_id || null,
+        first_name:values.firstName,
+        last_name:values.lastName,
+        degree_id: values.degree?.value || null,
+        program_id: values.program?.value || null,
+        semester_id: values.semester?.value || null,
+        course_id: values.course_id?.value || null,
+      };
+      const payloadWithJoinCode = {
+        organization_id: university_id || null,
+        first_name:values.firstName,
+        last_name:values.lastName,
+        date_of_birth:values.dob,
+        join_code:values.joinCode
+      };
+
+      const payload = formData.isJoinCode ? payloadWithJoinCode : payloadWithoutJoinCode;
+      console.log(payload);
+      setLoading(true)
+      const res = await axios.post(`${ipaddress3}/public/home/joinOrganization`, payload);
+      if (res && res.status) {
+        toast.success("University joined successfully");
+      }
+      setLoading(false)
+    } catch (err) {
+      console.log(err);
+      setLoading(false)
+      toast.error("Something went wrong during joining.");
+    } finally {
+
+    }
+  };
+
+  useEffect(() => {
+    if (show) {
+      fetchProgramTypes(university_id);
+    }
+  }, [show]);
 
   return (
-    <div className={`bg-light pt-3 ${value ? 'd-block' : 'd-none'}`} style={{ height: '100vh' }}>
-      <div className='container animate__animated animate__fadeIn'>
-        <div>
-          <First_navabr />
-        </div>
-        <div className='text-center mt-4'>
-          <img src={require('../img/images_icons/2c35e26927acc836b92bc5c724acb417.jpg')} className='rounded-circle' width={150} height={150} alt="add-de" />
-          <h4 className='fw-medium mt-4 pb-2' style={{ fontSize: '32px', lineHeight: 'normal', letterSpacing: '0.64px' }}>Hello {firstname}! You are about to set up</h4>
-        </div>
-        <div className='mt-4'>
-          <Formik
-            enableReinitialize={true}
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={(values) => senduserdata(values)}>
-            {({ values, isSubmitting, handleChange, handleBlur, setFieldValue }) => (
-              <Form action="" className='m-0 w-100'>
-                <div className='row mb-2'>
-                  <div className="col-lg-2">
-                    <label for="formGroupExampleInput1" className="form-label text-secondary">Title<span style={{ color: 'red' }}>*</span></label>
-                    <select
-                      className="form-control py-3"
-                      value={values.title}
-                      id="formGroupExampleInput1"
-                      name='title'
-                      onChange={handleChange}
-                      onBlur={handleBlur}>
-                      <option value="" disabled>Select Title</option>
-                      <option value="student">Student</option>
-                      <option value="professor">Professor</option>
-                      <option value="alumni">Alumni</option>
-                    </select>
-                    <ErrorMessage className="validation-error" name='title' component='div' />
-                  </div>
-                </div>
-                <div className='row'>
-                  <div className="mb-3 col-lg-6">
-                    <label for="formGroupExampleInput1" className="form-label text-secondary d-flex align-items-center" ><span className='me-2'>{translate_value.signup_page.first_name}<span style={{ color: 'red' }}>*</span></span>
-                      {/* <OverlayTrigger placement="top" delay={{ show: 250, hide: 250 }} overlay={renderTooltip("First Name")}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#FF845D" className="bi bi-info-circle-fill" viewBox="0 0 16 16">
-                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
-                      </svg>
-                    </OverlayTrigger> */}
-                    </label>
-                    <input
-                      type="text"
-                      name='firstname'
-                      value={values.firstname}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className="form-control py-3"
-                      id="formGroupExampleInput1"
-                      placeholder='Enter your Firstname' />
-                    <ErrorMessage className="validation-error" name='firstname' component='div' />
-                  </div>
+    <Modal show={show} onHide={handleClose} className="" size='lg' centered>
+      <Modal.Body className="bg-light">
+        <div className='container'>
+          <div className='text-center mt-4'>
+            <img src={orgLogo} className='rounded-circle' width={150} height={150} alt="avatar" />
+            <h4 className='fw-medium mt-4'>Hello! You are about to set up</h4>
+          </div>
 
-                  <div className="mb-3 col-lg-6">
-                    <label for="formGroupExampleInput1" className="form-label text-secondary d-flex align-items-center" ><span className='me-2'>{translate_value.signup_page.last_name}<span style={{ color: 'red' }}>*</span></span>
-                      {/* <OverlayTrigger placement="top" delay={{ show: 250, hide: 250 }} overlay={renderTooltip("Last Name")}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#FF845D" className="bi bi-info-circle-fill" viewBox="0 0 16 16">
-                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
-                      </svg>
-                    </OverlayTrigger> */}
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control py-3"
-                      name='lastname'
-                      id="formGroupExampleInput1"
-                      placeholder='Enter your Lastname'
-                      value={values.lastname}
-                      onChange={handleChange}
-                      onBlur={handleBlur} />
-                    <ErrorMessage className="validation-error" name='lastname' component='div' />
-                  </div>
+          <Formik initialValues={initialValues} validationSchema={getValidationSchema(formData.isJoinCode)} onSubmit={handleSubmit} enableReinitialize>
+            {({ values, handleChange, setFieldValue,resetForm  }) => (
+              <Form>
 
-                  <div className="col-lg-6 mb-3">
-                    <label for="formGroupExampleInput1" className="form-label text-secondary d-flex align-items-center" ><span className='me-2'>{translate_value.signup_page.nick_name}<span style={{ color: 'red' }}>*</span></span>
-                      {/* <OverlayTrigger placement="top" delay={{ show: 250, hide: 250 }} overlay={renderTooltip("Nickname")}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#FF845D" className="bi bi-info-circle-fill" viewBox="0 0 16 16">
-                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
-                      </svg>
-                    </OverlayTrigger> */}
-                    </label>
-                    <div className="input-group rounded border bg-white">
+                <div className="row">
+                  <div className="mb-3 d-flex justify-content-between align-items-center mt-3">
+                    <label>Have join code?</label>
+                    <div className="form-check form-switch my-0 py-0">
                       <input
-                        type="text"
-                        className="form-control border-0 py-3 bg-transparent"
-                        id="formGroupExampleInput1"
-                        placeholder='Enter your Nickname'
-                        maxLength={12}
-                        // onChange={(e) => {
-
-                        //   setTimeout(() => {
-                        //     setnickname(e.target.value)
-                        //     verifyNickname(e.target.value)
-                        //   }, 1000)
-                        // }} 
-                        name='nickname'
-                        value={values.nickname}
-                        onChange={(e) => { handleChange(e); verifyNickname(e.target.value) }}
-                        onBlur={handleBlur} />
-
-                      <span id='span' className={`input-group-text bg-transparent border-0 ${values.nickname.length > 0 ? '' : 'd-none'}`}>
-                        {loading1 ? (<div className="spinner-border text-info spinner-border-sm" role="status">
-                          <span className="visually-hidden">Loading...</span>
-                        </div>) : (
-                          <span className='ms-2' style={{ fontSize: '13px' }}><span className={`${success ? '' : 'd-none'}`}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" className="bi bi-check2-circle" viewBox="0 0 16 16">
-                            <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0" />
-                            <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z" />
-                          </svg></span>
-                          </span>
-                        )}
-                      </span>
-                    </div>
-                    <ErrorMessage className="validation-error" name='nickname' component='div' />
-                    <span className={`${error ? '' : 'd-none'}`} style={{ fontSize: '13px', color: '#ff845d' }}>Nickname already exist</span>
-                  </div>
-
-                  <div className="mb-3 col-lg-6 ">
-                    <label for="formGroupExampleInput1" className="form-label text-secondary" >Select the Degree</label>
-                    <select
-                      className="form-control py-3"
-                      id="formGroupExampleInput1"
-                      name='type'
-                      //  onChange={(e) => { settype(e.target.value); fetch_programs(e.target.value) }}
-                      value={values.degrees}
-                      onChange={(e) => { handleChange(e); fetch_programs(e.target.value) }}
-                      onBlur={handleBlur}
-                    >
-                      <option value="">Select the Degree</option>
-                      {degrees && degrees.map((x, index) => {
-                        return (
-                          <option key={index} value={x.id}>{x.name}</option>
-                        )
-                      })}
-                    </select>
-                    <ErrorMessage className="validation-error" name='type' component='div' />
-                  </div>
-
-                  <div className="col-lg-6 mb-3">
-                    <label for="formGroupExampleInput" className="form-label text-secondary">Program</label>
-                    <div className="input-group bg-white border py-2">
-                      <input
-                        type="text"
-                        // onChange={(e) => { setprogram_name(e.target.value); searchProgram(e.target.value) }}
-                        className="form-control border-0 bg-transparent country-input"
-                        placeholder="Search and select program"
-                        aria-label="Username"
-                        name='program_name'
-                        aria-describedby="basic-addon1"
-                        value={values.program_name}
-                        onChange={(e) => { handleChange(e); searchProgram(e.target.value) }}
-                        onBlur={handleBlur}
+                        className="form-check-input"
+                        type="checkbox"
+                        id="isJoinCodeSwitch"
+                        checked={formData.isJoinCode || false}
+                        onChange={(e) => {resetForm();handleJoinCodeSelection(e.target.checked)}}
                       />
                     </div>
-
-                    {/* --------------------------------SEARCH BAR FOR PROGRAM----------------------------------- */}
-                    <div className={`px-3 py-2 bg-light border border-top-0 ${showprogram && filteredprograms.length > 0 ? '' : 'd-none'}`} style={{ maxHeight: '200px', overflowY: 'scroll' }}>
-                      {filteredprograms.map((x, index) => {
-                        const backgroundColor = `rgba(93, 95, 227, ${(index % 2 === 0) ? 0.1 : 0.2})`; // alternating background color
-                        return (
-                          <p onClick={() => { setcoursename(x.pid); setprogram_name(x.program_name); setFieldValue("program_name", x.program_name); setShowprogram(!showprogram) }}
-                            className="m-0 p-2" style={{ cursor: 'pointer', backgroundColor, transition: 'background-color 0.3s', borderRadius: '5px' }}>
-                            {x.program_name}
-                          </p>
-                        )
-                      })}
-                    </div>
-                    <ErrorMessage className="validation-error" name='program_name' component='div' />
                   </div>
 
-                  <div className='text-start'>
-                    <a href="" className='text-decoration-none fw-medium' style={{ color: '#FF845D' }} data-bs-toggle="modal" data-bs-target="#addcoursemodal">Didn't find the program</a>
-                  </div>
+                  {formData.isJoinCode === true ? (
+                    <>
+                      <div className="mb-3 col-lg-6">
+                        <label className='mb-2'>First Name<span className='text-danger'>*</span></label>
+                        <input
+                          placeholder='Enter first name'
+                          type="text"
+                          name="firstName"
+                          className="form-control shadow-none"
+                          style={{ height: '50px' }}
+                          value={values.firstName}
+                          onChange={handleChange}
+                        />
+                        <ErrorMessage name="firstName" component="div" className="text-danger" />
+                      </div>
+                      <div className="mb-3 col-lg-6">
+                        <label className='mb-2'>Last Name<span className='text-danger'>*</span></label>
+                        <input
+                          placeholder='Enter last name'
+                          type="text"
+                          name="lastName"
+                          className="form-control shadow-none"
+                          style={{ height: '50px' }}
+                          value={values.lastName}
+                          onChange={handleChange}
+                        />
+                        <ErrorMessage name="lastName" component="div" className="text-danger" />
+                      </div>
+                      <div className="mb-3 col-lg-6">
+                        <label className='mb-2'>Date of Birth<span className='text-danger'>*</span></label>
+                        <input
+                          placeholder='Enter Date of Birth'
+                          type="date"
+                          name="dob"
+                          className="form-control shadow-none"
+                          style={{ height: '50px' }}
+                          value={values.dob}
+                          onChange={handleChange}
+                        />
+                        <ErrorMessage name="dob" component="div" className="text-danger" />
+                      </div>
+                      <div className="mb-3 col-lg-6">
+                        <label className='mb-2'>Join Code<span className='text-danger'>*</span></label>
+                        <input
+                          placeholder='Enter join code'
+                          type="text"
+                          name="joinCode"
+                          className="form-control shadow-none"
+                          style={{ height: '50px' }}
+                          value={values.joinCode}
+                          onChange={handleChange}
+                        />
+                        <ErrorMessage name="joinCode" component="div" className="text-danger" />
+                      </div>
+                    </>
+                  ) : (<>
+                      {/* Degree */}
+                      <div className="mb-3 col-lg-6">
+                        <label className='mb-2'>First Name<span className='text-danger'>*</span></label>
+                        <input
+                          placeholder='Enter first name'
+                          type="text"
+                          name="firstName"
+                          className="form-control shadow-none"
+                          style={{ height: '50px' }}
+                          value={values.firstName}
+                          onChange={handleChange}
+                        />
+                        <ErrorMessage name="firstName" component="div" className="text-danger" />
+                      </div>
+                      <div className="mb-3 col-lg-6">
+                        <label className='mb-2'>Last Name<span className='text-danger'>*</span></label>
+                        <input
+                          placeholder='Enter last name'
+                          type="text"
+                          name="lastName"
+                          className="form-control shadow-none"
+                          style={{ height: '50px' }}
+                          value={values.lastName}
+                          onChange={handleChange}
+                        />
+                        <ErrorMessage name="lastName" component="div" className="text-danger" />
+                      </div>
+                      <div className="col-lg-6 mb-3">
+                        <label className="form-label text-secondary">Degree<span className='text-danger'>*</span></label>
+                        <Select
+                          name="degree"
+                          options={programTypeList}
+                          value={values.degree}
+                          placeholder="Select Degree"
+                          classNamePrefix="react-select"
+                          onChange={(opt) => {
+                            setFieldValue("degree", opt);
+                            setFieldValue("program", null);
+                            setFieldValue("semester", null);
+                            setFieldValue("course_id", null);
+                            fetchPrograms(university_id, opt?.value);
+                          }}
+                        />
+                        <ErrorMessage name="degree" component="div" className="text-danger" />
+                      </div>
 
-                  <div className="mb-3 col-12 text-center mt-3">
-                    <button disabled={error ? true : false} className='text-white fw-medium btn py-2' type='submit' style={{ backgroundColor: '#585FE3' }}>
-                      {loading ? 'Registering...' : 'Sign Up'}
+                      {/* Program */}
+                      <div className="col-lg-6 mb-3">
+                        <label className="form-label text-secondary">Program<span className='text-danger'>*</span></label>
+                        <Select
+                          name="program"
+                          options={programList}
+                          value={values.program}
+                          placeholder="Select Program"
+                          classNamePrefix="react-select"
+                          onChange={(opt) => {
+                            setFieldValue("program", opt);
+                            setFieldValue("semester", null);
+                            fetchSemesters(opt?.value);
+                          }}
+                        />
+                        <ErrorMessage name="program" component="div" className="text-danger" />
+                      </div>
+
+                      {/* Semester */}
+                      <div className="col-lg-6 mb-3">
+                        <label className="form-label text-secondary">Semester<span className='text-danger'>*</span></label>
+                        <Select
+                          name="semester"
+                          options={semesterList}
+                          value={values.semester}
+                          placeholder="Select Semester"
+                          classNamePrefix="react-select"
+                          onChange={(opt) => {
+                            setFieldValue("semester", opt);
+                            setFieldValue("course_id", null);
+                            fetchCourses(values.program.value, university_id, opt?.value)
+                          }}
+                        />
+                        <ErrorMessage name="semester" component="div" className="text-danger" />
+                      </div>
+
+                      {/* Course */}
+                      <div className="col-lg-6 mb-3">
+                        <label className="form-label text-secondary">Course<span className='text-danger'>*</span></label>
+                        <Select
+                          name="course_id"
+                          options={subjectsList}
+                          value={values.course_id}
+                          placeholder="Select Semester"
+                          classNamePrefix="react-select"
+                          onChange={(opt) => { setFieldValue("course_id", opt) }}
+                        />
+                        <ErrorMessage name="course_id" component="div" className="text-danger" />
+                      </div>
+                    </>)}
+                  {/* Submit Button */}
+                  <div className="col-12 text-center mt-3 gap-2 d-flex justify-content-end">
+                    <button type="submit" className="btn btn-primary">
+                      {loading ? 'Joining...' : 'Join'}
+                    </button>
+                    <button type="button" className="btn btn-danger" onClick={handleClose}>
+                      Cancel
                     </button>
                   </div>
+
                 </div>
               </Form>
             )}
           </Formik>
         </div>
-      </div>
 
-      {/* --------------------------------------------ADD COURSE--------------------------------------------------------- */}
-      <div className="modal fade" id="addcoursemodal" tabIndex="-1" aria-labelledby="addcoursemodalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-body px-2 px-lg-5 py-5 mb-4 mt-2">
-              <div className='d-flex flex-column align-items-center'>
-                <h3 className='pb-4'>{translate_value.signup_page.add_course}</h3>
-                <input type="text" name="" id="newcourseInput" className='form-control py-2' onChange={(e) => { setNewcourse(e.target.value) }} />
-              </div>
-              <div className='mt-4'>
-                <button className='btn text-white w-100' style={{ backgroundColor: '#5D5FE3' }} data-bs-dismiss="modal" onClick={() => {
-                  (newcourse.trim() === '') ? alert('Course name cannot be empty') : addcourse();
-                }}>{translate_value.login_page.submit}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        {loading && <Loading loading={true} loaderColor="#000" />}
+      </Modal.Body>
+    </Modal>
+  );
+};
 
-
-      {/* TOAST MESSAGE */}
-      <div className="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="liveToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div className="toast-body d-flex justify-content-between">
-            <span id='toastbody'></span>
-            <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-          </div>
-        </div>
-      </div>
-
-      <div className={`${state ? '' : 'd-none'}`} style={{ backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', width: '100%', top: 0, height: '100%' }}>
-        <div className="row m-0">
-          <div className="bg-white col-md-8 col-lg-6 p-3 pt-4 rounded mx-auto mt-3">
-            <p className='justify-content-center d-flex align-items-center m-0 fw-medium fs-5'><img src={require('../img/check__2_-removebg-preview.png')} width={30} alt="add-de" className='me-2' />Request successfully sent to the Admin</p>
-            <p className='m-0 mt-2 text-center'>Wait for Admin approval</p>
-            <div className='text-end'>
-              <button className='btn btn-sm text-white px-3' style={{ backgroundColor: '#5d5fe3' }}
-                onClick={() => { setstate(false); navigate('/loginpage') }}>Ok
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-export default Adddetails
+export default Adddetails;

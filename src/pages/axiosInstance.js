@@ -30,9 +30,10 @@ axiosInstance.interceptors.response.use(
         console.log(`${response.config.url}`, response.config.data || "");
         if (response.data) {
             try {
+                return response
                 // Decode Base64 data
-                const decodedData = atob(response.data);
-                response.data = JSON.parse(decodedData); // Replace with decoded data
+                //const decodedData = atob(response.data);
+                //response.data = JSON.parse(decodedData); // Replace with decoded data
                 console.log("Response => ", response.data);
             } catch (error) {
                 console.error("Error decoding Base64 response:", error.message);

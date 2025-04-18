@@ -87,9 +87,9 @@ const AddPrograms = ({ show, handleClose, submitForm, user_id, getUserPrograms, 
                 const payload = [];
                 selectedPrograms.forEach((item) => {
                     payload.push({
+                        "university_id":orgData?.role?.organization_id,
                         "program_id": item?.pid,
                         "option_id": orgData?.role?.option_id,
-                        "organization_id": item?.organization_id,
                         "user_id": user_id,
                         "semesters": item.selectedSemesters
                     })

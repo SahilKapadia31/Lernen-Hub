@@ -54,6 +54,62 @@ const validationForgotSchema = Yup.object().shape({
 const initialForgotValues = { email: "" }; // Initial form values
 const toastConfig = { autoClose: 3000, theme: 'colored', position: 'top-center' };// Centralized toast configuration
 
+const role = {
+    "role_id": 96,
+    "role_name": "Staff",
+    "option_id": 4,
+    "created_at": "2025-04-10T11:39:15+02:00",
+    "modified_at": "2025-04-10T11:39:15+02:00",
+    "permissions": [{
+        "permission_id": 1,
+        "permission_name": "Manage Staff",
+        "is_system": true,
+        "is_active": true
+    },
+    {
+        "permission_id": 2,
+        "permission_name": "Manage Student",
+        "is_system": true,
+        "is_active": true
+    },
+    {
+        "permission_id": 3,
+        "permission_name": "Manage Role",
+        "is_system": true,
+        "is_active": true
+    },
+    {
+        "permission_id": 4,
+        "permission_name": "Manage Programs",
+        "is_system": true,
+        "is_active": true
+    },
+    {
+        "permission_id": 5,
+        "permission_name": "Assign Staff Programs",
+        "is_system": true,
+        "is_active": true
+    },
+    {
+        "permission_id": 6,
+        "permission_name": "Assign Student Progrrams",
+        "is_system": true,
+        "is_active": true
+    },
+    {
+        "permission_id": 7,
+        "permission_name": "View Staff",
+        "is_system": true,
+        "is_active": true
+    },
+    {
+        "permission_id": 8,
+        "permission_name": "View Students",
+        "is_system": true,
+        "is_active": true
+    }]
+}
+
 const OrganizationAdminLogin = ({ setemailvalidation }) => {
     const dispatch = useDispatch();
     let navigate = useNavigate();
@@ -85,10 +141,13 @@ const OrganizationAdminLogin = ({ setemailvalidation }) => {
         const toastOptions = { autoClose: 3000 };
         try {
             const response = await axiosInstance.post(`/organization/login/`, payload);
-            console.log(response.data);
-            dispatch(loginSuccess({ user: response.data.user, role: response.data.roles }));
+            const newRole = {
+                ...response.data.roles,
+                permissions: response.data.permissions
+            };
+            dispatch(loginSuccess({ user: response.data.user, role: newRole || role }));
             setEncryptedData("orgUser", JSON.stringify(response.data.user), 180);
-            setEncryptedData("orgRole", JSON.stringify(response.data.roles), 180);
+            setEncryptedData("orgRole", JSON.stringify(newRole || role), 180);
             navigate('/organization/dashboard');
             setloading(false);
         } catch (error) {  // Handle login error
@@ -185,7 +244,8 @@ const OrganizationAdminLogin = ({ setemailvalidation }) => {
                                                         </div>
                                                         <ErrorMessage className="validation-error" name='password' component='div' />
                                                     </div>
-                                                    <div className='text-end mb-4'>
+                                                    <div className='d-flex justify-content-between mb-4'>
+                                                        {/* <Link to={'/organization/signup'}><button type="button" className='forgot-btn'>{`Create staff account`}</button></Link> */}
                                                         <button type="button" className='forgot-btn' onClick={() => setForget(true)} >{translate_value.login_page.forgot_password}</button>
                                                     </div>
                                                     <div className="text-center" style={{ pointerEvents: loading ? 'none' : 'inherit', opacity: loading ? '0.8' : 1 }}>

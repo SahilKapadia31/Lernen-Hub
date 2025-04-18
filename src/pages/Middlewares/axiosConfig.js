@@ -9,8 +9,9 @@ apiClient.interceptors.response.use(
     (response) => {
         if (response.data) {
             try {
-                const decodedData = atob(response.data);
-                response.data = JSON.parse(decodedData); // Replace with decoded data
+                return response;
+      //          const decodedData = atob(response.data);
+           //    response.data =response.data //JSON.parse(); // Replace with decoded data
             } catch (error) {
                 console.error("Error decoding Base64 response:", error.message);
             }

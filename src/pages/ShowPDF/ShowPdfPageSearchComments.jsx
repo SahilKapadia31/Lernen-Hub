@@ -188,7 +188,7 @@ const Showpdfpage_search_comments = ({ pinnedcomments_status, id, count, setCoun
   function handlereplies_replydislike(replies_reply_id, disc_replyid) {
     axiosInstance.patch(`${ipaddress}/adocumentpostrepliesreplieslikesanddislikes/${user.user_id}/${replies_reply_id}/`)
       .then((r) => { getreplies_for_reply(disc_replyid) })
-      .catch(() => { console.log("Organization replies reply dislike error") })
+      .catch(() => { console.log("University replies reply dislike error") })
   }
   //  ----------------------------------------Document reply dislike functionality---------------------------------------
   function handlereplydislike(reply_id, discussion_id, index) {

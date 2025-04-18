@@ -34,7 +34,7 @@ const SettingsModal = ({ show, handleClose, studentDetails, submitForm, programL
 
         setUserPrograms(updatedPrograms)
         setSelectedProgram(updatedPrograms[0]);
-        getSubjectAssociation(updatedPrograms[0])
+        getSubjectAssociation(updatedPrograms[0],true)
       } else {
         setIsLoading(false)
       }
@@ -45,19 +45,24 @@ const SettingsModal = ({ show, handleClose, studentDetails, submitForm, programL
   }
 
 
-  const getSubjectAssociation = async (program) => {
+  const getSubjectAssociation = async (program,init) => {
     try {
       setIsLoading(true)
 
       // Open default semester
-      if (program?.semester && program?.semester.length) {
-        setSelectedSemester(program?.semester[0])
+      let semester = null;
+      if (init) {
+        semester = program?.semester[0];
+        setSelectedSemester(program?.semester[0]);
+      } else {
+        semester = selectedSemester
       }
-
+      
       const response = await axiosInstance.get(`/userProgramCourseAssociation/${studentDetails?.user_id}/${program.program_id}/`);
+      const subjectAssociationData = response.data.data 
       if (response.data) {
-        setAssociatedSubjects(response.data)
-        getProgramSubjects(program.program_id, response.data, program?.semester[0]);
+        setAssociatedSubjects(response.data.data)
+        getProgramSubjects(program.program_id, subjectAssociationData, semester);
       }
     } catch (err) {
       setIsLoading(false)
@@ -68,6 +73,7 @@ const SettingsModal = ({ show, handleClose, studentDetails, submitForm, programL
   const getProgramSubjects = async (program_id, subjectAssociationData, selectedSemester) => {
     try {
       setIsLoading(true)
+    
       const response = await axiosInstance.get(`/courses/${program_id}/${orgData?.role?.organization_id}/`);
       if (response.data.status) {
         let subjectList = response.data.data || [];
@@ -75,11 +81,14 @@ const SettingsModal = ({ show, handleClose, studentDetails, submitForm, programL
         // Filter subject which are associated with program semester
         subjectList = subjectList.filter(subject => subject?.semester?.includes(selectedSemester?.start_sem_id))
 
-        subjectList = subjectList.map(item => ({
-          ...item,
-          is_selected: subjectAssociationData?.find(assItem => assItem.course_id === item.course_id) ? true : false,
-          association_id: subjectAssociationData?.find(assItem => assItem.course_id === item.course_id)?.id || null,
-        }));
+        if (subjectAssociationData && subjectAssociationData.length) {
+          subjectList = subjectList.map(item => ({
+            ...item,
+            is_selected: subjectAssociationData?.find(assItem => assItem.course_id === item.course_id && assItem.semester_id == selectedSemester?.start_sem_id) ? true : false,
+            association_id: subjectAssociationData?.find(assItem => assItem.course_id === item.course_id && assItem.semester_id == selectedSemester?.start_sem_id)?.id || null,
+          }));
+        }
+
         setSubjectsList(subjectList)
         setIsLoading(false)
       }
@@ -117,7 +126,7 @@ const SettingsModal = ({ show, handleClose, studentDetails, submitForm, programL
       const payload = {
         "program_id": program_id,
         "course_id": course_id,
-        "option_id": orgData?.role?.option_id,
+        "option_id": 3,
         "organization_id": orgData?.role?.organization_id,
         "user_id": studentDetails?.user_id,
         "semester_id": selectedSemester?.start_sem_id
@@ -149,19 +158,21 @@ const SettingsModal = ({ show, handleClose, studentDetails, submitForm, programL
       toast.error("Error!!! Please try again")
     }
   }
-
+  const clearFilter= async () => {
+    console.log("clearFilter")
+  }
   return (
     <>
-      <Modal show={show} onHide={handleClose} size="xl" centered>
+      <Modal show={show} onHide={handleClose} size="xl" centered className="assign-programs">
         <Modal.Header className="border-bottom" closeButton>
           <Modal.Title className="dialog-title">Settings</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
-          <div className="mt-4 row">
-            <div className="px-2 col-lg-3 main-tab-section">
+          <div className="row mt-4">
+            <div className="col-lg-3 px-2 main-tab-section">
               <div className="row">
                 <div className="col-md-12">
-                  <div className="border card" style={{ cursor: 'pointer', boxShadow: 'none' }} onClick={() => setOpenAddPrograms(true)}>
+                  <div className="card border" style={{ cursor: 'pointer', boxShadow: 'none' }} onClick={() => setOpenAddPrograms(true)}>
                     <div className={`card-body px-4 py-2 rounded`} style={{ backgroundColor: '#5d5fe3', color: '#fff', boxShadow: 'none' }}>
                       Add Programs
                     </div>
@@ -172,22 +183,22 @@ const SettingsModal = ({ show, handleClose, studentDetails, submitForm, programL
               <div className="row" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                 {(userPrograms && userPrograms.length > 0) ?
                   userPrograms.map((program) =>
-                    <div className="mb-1 col-md-12">
-                      <div className="card" style={{ boxShadow: 'none', cursor: 'pointer' }} onClick={() => { getSubjectAssociation(program); setSelectedProgram(program) }}>
+                    <div className="col-md-12 mb-1">
+                      <div className="card" style={{ boxShadow: 'none', cursor: 'pointer' }} onClick={() => { setSelectedSemester(null); getSubjectAssociation(program,true); setSelectedProgram(program) }}>
                         <div className={`card-body px-4 py-2 text-uppercase ${selectedProgram.program_id == program?.program_id ? "active-program" : "pending-program border"}`}>
                           {program.program_name}
                         </div>
                       </div>
                     </div>
                   ) :
-                  <div className="mb-1 col-md-12">
+                  <div className="col-md-12 mb-1">
                     <p className="mb-0">Please add program</p>
                   </div>
                 }
               </div>
             </div>
-            <div className="px-2 col-lg-9 main-table-section">
-              <div className="mb-2 row">
+            <div className="col-lg-9 px-2 main-table-section">
+              <div className="row mb-2">
                 {/* Search Bar */}
                 <div className="col-lg-11">
                   <div className="form-group has-search position-relative">
@@ -204,16 +215,13 @@ const SettingsModal = ({ show, handleClose, studentDetails, submitForm, programL
                 </div>
 
                 {/* Filter and Clear Buttons */}
-                <div className="gap-2 px-0 col-lg-1 d-flex">
-                  <button type="button" className="btn btn-sm btn-warning btn-filter-section" onClick={() => {
-                    setSearchTerm("");
-                    //  clearFilter();
-                  }} >
+                <div className="col-lg-1 px-0 d-flex gap-2">
+                  <button type="button" className="btn btn-sm btn-warning btn-filter-section" onClick={() => { setSearchTerm(""); clearFilter(); }} >
                     <span>Clear</span>
                   </button>
                 </div>
               </div>
-              <ol className="px-0 pt-0 pb-0 mb-2 bg-transparent breadcrumb align-items-center">
+              <ol className="breadcrumb bg-transparent px-0 pb-0 pt-0 align-items-center mb-2">
                 {(selectedProgram && selectedProgram.semester) && selectedProgram.semester.map((sem, i) => (
                   <li key={i}>
                     <span className={`badge-nav mx-1 my-1 ${selectedSemester?.start_sem_id === sem?.start_sem_id ? "active-group" : ""}`} onClick={() => { getProgramSubjects(selectedProgram?.program_id, associatedSubjects, sem); setSelectedSemester(sem); }}>
@@ -225,7 +233,7 @@ const SettingsModal = ({ show, handleClose, studentDetails, submitForm, programL
               {/* <hr></hr> */}
               <div className={`card card-config border`} style={{ height: '400px', overflowY: 'auto' }}>
                 <div className="vertical-divider">
-                  <div className="p-2 table-responsive">
+                  <div className="table-responsive p-2">
                     {/* Table for Visibility Settings */}
                     <table className="table mb-0 align-items-center table-flush table-striped h-100 ng-star-inserted">
                       <thead className="thead-light">

@@ -89,7 +89,7 @@ const NeedHelp = () => {
                                     <div className="d-flex flex-column align-items-center p-4" style={{ backgroundColor: '#F3F0FF' }}>
                                         <p className='contact-subhead m-0'>Talk to a member of</p>
                                         <p className='contact-subhead m-0'>our Sales team</p>
-                                        <p className='contact-para mt-3'>We will help you find the right products and pricing for your organization.</p>
+                                        <p className='contact-para mt-3'>We will help you find the right products and pricing for your university.</p>
                                         <button className='contact-btn btn text-white fw-medium mt-2'
                                             style={{ borderRadius: '5px', backgroundColor: '#5d5fe3' }} onClick={() => { setIsOpenSalesForm(!isOpenSalesForm) }}>Contact Sales</button>
                                     </div>
@@ -306,7 +306,7 @@ const NeedHelp = () => {
 
                             <div className='mt-5'>
                                 <p className='our-team-text1 m-0'>Hello and Welcome!</p>
-                                <p className='our-team-text2 m-0 mt-4'>We’re thrilled to have you here at LERNEN HUB.COM, where we're reshaping the academic experience for organization students everywhere. Born in the heart of RWTH Aachen amidst its historic charm and innovative spirit, our platform is here to revolutionize the way students learn and connect</p>
+                                <p className='our-team-text2 m-0 mt-4'>We’re thrilled to have you here at LERNEN HUB.COM, where we're reshaping the academic experience for university students everywhere. Born in the heart of RWTH Aachen amidst its historic charm and innovative spirit, our platform is here to revolutionize the way students learn and connect</p>
                             </div>
                             <div className='mt-5'>
                                 <p className='our-team-text3 m-0'>Our Story</p>

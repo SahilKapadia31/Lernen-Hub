@@ -32,7 +32,7 @@ const ManageProgram = () => {
     const getAllPrograms = async () => {
         try {
             setIsLoading(true)
-            const response = await axiosInstance.get(`/program/organization/${orgData?.role?.organization_id}/${program_type_id}`);
+            const response = await axiosInstance.get(`/program/organization/${orgData?.role?.organization_id}/${program_type_id}/`);
             if (response.data.status) {
                 console.log("------>>>>program>>>--", response.data)
                 setProgramList(response.data.data)
@@ -59,6 +59,12 @@ const ManageProgram = () => {
         // getAllRoles({ page: currentPage, sortConfig: { column, direction } });
     };
 
+    const getAllRoles = () => {
+        console.log('getAllRoles');
+        // setSortConfig({ column, direction })
+        // getAllRoles({ page: currentPage, sortConfig: { column, direction } });
+    };
+
     const submitProgramForm = async (value) => {
         try {
             setIsOpenAddForm(false)
@@ -69,7 +75,7 @@ const ManageProgram = () => {
             }
             const payload = {
                 "program_name": value.program_name,
-                "organization_id": orgData?.role?.organization_id,
+                "uni_name": orgData?.role?.organization_id,
                 "program_type_id": Number(program_type_id),
                 "program_description": value.description,
                 "semester": formattedSemesters,
@@ -135,11 +141,11 @@ const ManageProgram = () => {
         }
     };
 
+
+
     const [isOpenConfirmationModal, setIsOpenConfirmationModal] = useState(false)
     const deleteProgram = async () => {
         try {
-
-
             setIsOpenConfirmationModal(false)
             setIsLoading(true)
             const response = await axiosInstance.delete(`/program/${selectedProgram.pid}/`);
@@ -160,10 +166,10 @@ const ManageProgram = () => {
 
     return (
         <>
-            <div className="p-3 mb-3 bg-white border rounded d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center p-3 border rounded bg-white mb-3 programs-list">
                 <h5 className="m-0 main-title">Programs <span className="program-type text-uppercase">{programType}</span></h5>
-                <div className="gap-2 d-flex justify-content-end">
-                    <div className="gap-2 d-flex">
+                <div className="d-flex justify-content-end gap-2">
+                    <div className="d-flex gap-2">
                         <Form.Control
                             type="text"
                             placeholder="Search..."
@@ -172,13 +178,13 @@ const ManageProgram = () => {
                         />
                         <Button
                             variant="outline-primary add-organization"
-                        // onClick={(e) => getAllRoles()}
+                            // onClick={(e) => getAllRoles()}
                         >
                             Filter{" "}
                         </Button>
                         <Button
                             variant="outline-danger add-organization"
-                        // onClick={() => { getAllRoles({ search: "" }); setSearch("") }}
+                            // onClick={() => { getAllRoles({ search: "" }); setSearch("") }}
                         >
                             Clear
                         </Button>
@@ -193,12 +199,12 @@ const ManageProgram = () => {
                 </div>
             </div>
 
-            <div className="px-0 my-3 overflow-x-auto w-100 table-div hide-scrollbar">
-                <table className="table mb-0 fs-9">
+            <div className="my-3 w-100 table-div overflow-x-auto px-0 hide-scrollbar">
+                <table className="table fs-9 mb-0">
                     <thead>
                         <tr>
                             <th width="5%">
-                                <h5 className="mb-0 text-center sort">#</h5>
+                                <h5 className="sort mb-0 text-center">#</h5>
                             </th>
                             <th width="25%">
                                 <SortableHeader
@@ -209,19 +215,19 @@ const ManageProgram = () => {
                                 />
                             </th>
                             <th width="35%">
-                                <h5 className="mb-0 sort d-flex text-uppercase">Description</h5>
+                                <h5 className="sort mb-0 d-flex text-uppercase">Description</h5>
                             </th>
                             <th width="30%">
-                                <h5 className="mb-0 sort d-flex text-uppercase">Semesters</h5>
+                                <h5 className="sort mb-0 d-flex text-uppercase">Semesters</h5>
                             </th>
                             <th width="30%">
-                                <h5 className="mb-0 sort d-flex text-uppercase">Total Students</h5>
+                                <h5 className="sort mb-0 d-flex text-uppercase">Total Students</h5>
                             </th>
                             <th width="30%">
-                                <h5 className="mb-0 sort d-flex text-uppercase">Total Staff</h5>
+                                <h5 className="sort mb-0 d-flex text-uppercase">Total Staff</h5>
                             </th>
                             <th width="5%">
-                                <h5 className="mb-0 sort d-flex text-uppercase">Action</h5>
+                                <h5 className="sort mb-0 d-flex text-uppercase">Action</h5>
                             </th>
                         </tr>
                     </thead>
@@ -232,16 +238,16 @@ const ManageProgram = () => {
                                     key={index}
                                     className="hover-actions-trigger btn-reveal-trigger position-static active-row"
                                 >
-                                    <td className="align-middle total-orders white-space-nowrap">
+                                    <td className="total-orders align-middle white-space-nowrap">
                                         <p className="mb-0 text-center">{index + 1}</p>
                                     </td>
-                                    <td className="align-middle customer white-space-nowrap pe-5">
+                                    <td className="customer align-middle white-space-nowrap pe-5">
                                         <Link to={`/organization/subjects/${item?.pid}?program=${item.program_name}`}><p className="mb-0 text-uppercase">{item.program_name || "N/A"}</p></Link>
                                     </td>
-                                    <td className="align-middle customer white-space-nowrap pe-5">
+                                    <td className="customer align-middle white-space-nowrap pe-5">
                                         <p className="mb-0">{item.program_description || "N/A"}</p>
                                     </td>
-                                    <td className="align-middle customer white-space-nowrap pe-5" style={{ whiteSpace: 'nowrap', maxWidth: '100px', overflowX: 'auto' }}>
+                                    <td className="customer align-middle white-space-nowrap pe-5" style={{ whiteSpace: 'nowrap', maxWidth: '100px', overflowX: 'auto' }}>
                                         <p className="mb-0">
                                             {(item?.semester && item?.semester.length > 0) ? (
                                                 item.semester
@@ -252,16 +258,16 @@ const ManageProgram = () => {
                                             ) : "N/A"}
                                         </p>
                                     </td>
-                                    <td className="align-middle customer white-space-nowrap pe-5">
+                                    <td className="customer align-middle white-space-nowrap pe-5">
                                         <p className="mb-0">20</p>
                                     </td>
-                                    <td className="align-middle customer white-space-nowrap pe-5">
+                                    <td className="customer align-middle white-space-nowrap pe-5">
                                         <p className="mb-0">25</p>
                                     </td>
-                                    <td className="align-middle total-orders white-space-nowrap">
-                                        <div className="gap-2 d-flex">
+                                    <td className="total-orders align-middle white-space-nowrap">
+                                        <div className="d-flex gap-2">
                                             <button
-                                                className="mx-0 border-0 shadow-none"
+                                                className="shadow-none mx-0 border-0"
                                                 // onClick={() => editProgramType(item)}
                                                 style={{ background: "none" }}
                                             >
@@ -273,7 +279,7 @@ const ManageProgram = () => {
                                                 </Link>
                                             </button>
                                             <button
-                                                className="mx-0 border-0 shadow-none"
+                                                className="shadow-none mx-0 border-0"
                                                 onClick={() => editProgramType(item)}
                                                 style={{ background: "none" }}
                                             >
@@ -283,7 +289,7 @@ const ManageProgram = () => {
                                                 />
                                             </button>
                                             <button
-                                                className="mx-0 border-0 shadow-none"
+                                                className="shadow-none mx-0 border-0"
                                                 onClick={() => { setIsOpenConfirmationModal(true); setSelectedProgram(item) }}
                                                 style={{ background: "none" }}
                                             >
@@ -307,7 +313,7 @@ const ManageProgram = () => {
                 </table>
 
                 {currentItems.length ?
-                    <div className="px-2 mt-3 d-flex align-items-center justify-content-between">
+                    <div className="d-flex align-items-center justify-content-between mt-3 px-2">
                         <p className="px-2 py-2 mb-0 bg-white border rounded">Total Records : <span className="fw-bold">{programList.length}</span></p>
                         <Pagination className="mb-2">
                             <Pagination.Prev onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} />

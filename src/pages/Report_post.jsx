@@ -10,7 +10,7 @@ const Report_post = ({ report_status, setreport_status, count, setCount, discuss
   const [reportreason, setReportreason] = useState("");
 
   const reportPost = () => {
-    if (disc_type === "organization") {
+    if (disc_type === "university") {
       axiosInstance.post(`${ipaddress}/UniversityDiscussionReport/${user.user_id}/${discussion_id}/`, { 'reason': reportreason })
         .then((r) => {
           setReportreason("");

@@ -1,6 +1,6 @@
 import React,{useState,useEffect } from "react";
 import { Navbar, Nav, Container, Dropdown } from "react-bootstrap";
-import { NavLink, Navigate, Link, useNavigate } from "react-router-dom";
+import { NavLink, Navigate, Link, useNavigate,useLocation } from "react-router-dom";
 import { FaTachometerAlt, FaUserCircle } from "react-icons/fa";
 import logo from '../../../../img/landing_page/Group 385.png';
 import { logout } from "../../../../features/authSlice";
@@ -11,20 +11,20 @@ export const adminRoutes = [
   {
     displayName: "Dashboard",
     iconName: "person",
-    route: "superadmin/dashboard",
+    route: "/superadmin/dashboard",
     icon: 'assets/images/dashboard/dashboard-svg.svg',
   },
   {
     displayName: "Manage Organization",
     iconName: "person",
-    route: "superadmin/organization-list",
+    route: "/superadmin/organization-list",
     icon: 'assets/images/dashboard/chart-user-square.svg',
     color: '#11cdef'
   },
   {
     displayName: "Pending Request",
     iconName: "person",
-    route: "superadmin/organization-pending-request",
+    route: "/superadmin/pending-request",
     icon: 'assets/images/dashboard/chart-user-square.svg',
     color: '#11cdef'
   },
@@ -44,6 +44,7 @@ export const adminRoutes = [
   // }
 ];
 const SuperAdminHeader = () => {
+  const location = useLocation();
   const [selectedNavMenu, setSelectedNavMenu] = useState(null);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const navigate = useNavigate();
@@ -114,7 +115,7 @@ const SuperAdminHeader = () => {
               {adminRoutes.map((item, index) => (
                 <React.Fragment key={index}>
                   {item.route ? (
-                    <li className="main-nav-items">
+                    <li className={`main-nav-items ${location.pathname === item.route ? 'active' : ''}`}>
                       <Link to={item.route} className="d-flex align-items-center">
                         <div className="mx-2">
                           <img src={item.icon} alt="" className="my-0" width="17" />

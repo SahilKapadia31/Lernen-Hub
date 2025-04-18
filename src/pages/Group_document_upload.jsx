@@ -192,8 +192,8 @@ const Group_document_upload = () => {
   const [count, setCount] = useState(0);
   const [user, setUserdata] = useState({});
   useEffect(() => {
-    const organization = JSON.parse(getDecryptedData('user'))
-    axiosInstance.get(`${ipaddress}/CoursesView/${organization.user_id}/`)
+    const university = JSON.parse(getDecryptedData('user'))
+    axiosInstance.get(`${ipaddress}/CoursesView/${university.user_id}/`)
       .then((r) => {
         // console.log(r.data)
         setJoinedCourses(r.data.joined_courses)

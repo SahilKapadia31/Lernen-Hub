@@ -9,29 +9,32 @@ import { Position } from "@react-pdf-viewer/core";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import BackToTopButton from "./Backtotop";
 import Addsubjects from "./Addsubjects";
-import Organizationdiscussion_offcanvases from "./Organization_discussion_offcanvases";
+import University_discussion_offcanvases from "./University_discussion_offcanvases";
 import Preloader from "./Preloader";
 import { ipaddress } from "../App";
 import data from "./translate";
 import { Context } from "../context/Context_provider";
-import Organizationpinnedcomments from "./Organization_pinnedcomments";
+import University_pinnedcomments from "./University_pinnedcomments";
 import Slick_button_right from "./Slick_button_right";
 import Slick_button_left from "./Slick_button_left";
 import Slick2_button_right from "./Slick2_right_btn";
 import Slick2_button_left from "./Slick2_left_btn";
 import Report_post from "./Report_post";
-import Organizationsearch_comments from "./Organization_search_comments";
+import University_search_comments from "./University_search_comments";
 import { toast } from "react-toastify";
 import axiosInstance from './axiosInstance'
 import { getAccessToken } from "./authService";
 import Login_message from "./Login_message";
 import * as bootstrap from 'bootstrap';
 import './Dashboard.css';
-import { setEncryptedData } from "../utils/helperFunctions";
+import { setEncryptedData, getDecryptedData } from "../utils/helperFunctions";
 import deleteDoc_icon from '../../src/assets/svg/delete-trash-svgrepo-com.svg';
 import { useSelector } from "react-redux";
 
 const Dashboard = ({ language }) => {
+  const SELECTED_UNIVERSITY = getDecryptedData("SELECTED_UNIVERSITY");
+  console.log(SELECTED_UNIVERSITY);
+
   let { translate_value, count4, addsubjects_layout, setgroup_visible, setstudylist_visible, setcourse_visible, navbar_dropdown_visible, setnavbar_dropdown_visible } = useContext(Context)
   const renderTooltip = (value) => (<Tooltip id="button-tooltip">{value}</Tooltip>);
   const navigate = useNavigate();
@@ -49,6 +52,7 @@ const Dashboard = ({ language }) => {
   const [pincomment_status, setpincomment_status] = useState(false);
   const [usercomments_status, setusercomments_status] = useState(false);
   const user = useSelector((state) => state.auth.user)
+  console.log("userData", user);
 
 
   // -------------------------------------------------Functionality for Path direction flow--------------------------------
@@ -72,6 +76,8 @@ const Dashboard = ({ language }) => {
         if (courses.length > 0) {
           setVisibility(courses[0].course_id);
           getDocs(courses[0]);
+        } else {
+          navigate(`uploadpage/0/""`)
         }
       }).catch((err) => { console.log("Joined courses fetching error in Offcanvas", err) });
 
@@ -83,13 +89,16 @@ const Dashboard = ({ language }) => {
   }, [addsubjects_layout, count4])
 
   // ---------------------------------------------------GET DOCUMENTS----------------------------------------------------------
+  const [getDocsApiLoading, setGetDocsApiLoading] = useState(true);
   const getDocs = (course) => {
     axiosInstance.get(`${ipaddress}/courseDocuments/${course.course_id}/${user.user_id}/`)
       .then((r) => {
         setCourse(course)
         setRecentDocs(r.data); // console.log("Course Documents Fetched Successfully :",r.data)
+        setGetDocsApiLoading(false);
       }).catch((err) => {
         setloading(false);
+        setGetDocsApiLoading(false);
         console.log("Course Documents fetching Error", err)
       })
   }
@@ -245,13 +254,13 @@ const Dashboard = ({ language }) => {
     if (question.length > 0) {
       try {
         const token = getAccessToken()
-        const response = await fetch(`${ipaddress}/OrganizationDiscussionView/${user.user_id}/${user.organization_id}/""/?post=${encoded_question}`, {
+        const response = await fetch(`${ipaddress}/UniversityDiscussionView/${user.user_id}/${user.university_id}/""/?post=${encoded_question}`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: formData
         });
         if (response.ok) {
-          setCount(count + 1); // console.log('Organization discussion posted successfully',response);
+          setCount(count + 1); // console.log('University discussion posted successfully',response);
           toast.success('Comment posted successfully', { autoClose: 2000 });
           setSelectedImages([]);
           setQuestion("");
@@ -294,13 +303,13 @@ const Dashboard = ({ language }) => {
     if (replies.length > 0) {
       try {
         const token = getAccessToken()
-        const response = await fetch(`${ipaddress}/OrganizationDiscussionReplyView/${user.user_id}/${user.organization_id}/${dis_id}/""/?post=${encoded_reply}`, {
+        const response = await fetch(`${ipaddress}/UniversityDiscussionReplyView/${user.user_id}/${user.university_id}/${dis_id}/""/?post=${encoded_reply}`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: formData
         });
         if (response.ok) {
-          setCount(count + 1); // console.log('Organization Reply Sent successfully',formData);
+          setCount(count + 1); // console.log('University Reply Sent successfully',formData);
           clearInput(index);
           getreplies(dis_id);
           setReplies("");
@@ -310,7 +319,7 @@ const Dashboard = ({ language }) => {
         } else {
           setload2(false);
           setSelectedPostForComment(null)
-          console.error('Organization Reply sending error')
+          console.error('University Reply sending error')
         }
       } catch (error) {
         setload2(false);
@@ -355,40 +364,43 @@ const Dashboard = ({ language }) => {
     if (reply_for_reply.length > 0) {
       try {
         const token = getAccessToken();
-        const response = await fetch(`${ipaddress}/OrganizationDiscussionRepliesRepliesView/${user.user_id}/${user.organization_id}/${reply_id}/""/?post=${encoded_reply_reply}`, {
+        const response = await fetch(`${ipaddress}/UniversityDiscussionRepliesRepliesView/${user.user_id}/${user.university_id}/${reply_id}/""/?post=${encoded_reply_reply}`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: formData
         });
         if (response.ok) {
-          setReply_for_reply("");  // console.log('Organization Reply for reply Sent successfully',response.data);
+          setReply_for_reply("");  // console.log('University Reply for reply Sent successfully',response.data);
           getreplies(discuss_id);
           setreplies_for_reply_status(false);
           setReplies_reply_image([]);
         } else {
-          console.error('Organization Reply under reply sending error', reply_id);
+          console.error('University Reply under reply sending error', reply_id);
         }
       } catch (error) {
         console.error('Error reply uploading files:', error);
       }
     }
   }
-  // -----------------------------------Function to get all the organization discussions-------------------------------------------------
+  // -----------------------------------Function to get all the university discussions-------------------------------------------------
   const [discussions, setDiscussions] = useState([]);
+  const [discussionsApiLoading, setDiscussionsApiLoading] = useState(true);
   const getdiscussion = () => {
-    axiosInstance.get(`${ipaddress}/OrganizationDiscussionView/${user.organization_id}/${user.user_id}/`)
+    axiosInstance.get(`${ipaddress}/UniversityDiscussionDisplayView/${SELECTED_UNIVERSITY?.organization_id}/${user.user_id}/`)
       .then((r) => {
-        // console.log("Organization Discussion data successfully fetched :", r.data)
+        // console.log("University Discussion data successfully fetched :", r.data)
         setDiscussions(r.data.reverse());
+        setDiscussionsApiLoading(false);
       }).catch(() => {
         setloading(false);
-        console.log("Organization Discussion data fetching Error")
+        setDiscussionsApiLoading(false);
+        console.log("University Discussion data fetching Error")
       });
   }
   useEffect(() => { getdiscussion(); }, [count])
   // ------------------------------------------------To Unlike the discussion post-------------------------------------------------------
   function handleLike1(discussion_id) {
-    axiosInstance.delete(`${ipaddress}/OrganizationDiscussionLikesView/${discussion_id}/${user.user_id}/`)
+    axiosInstance.delete(`${ipaddress}/UniversityDiscussionLikesView/${discussion_id}/${user.user_id}/`)
       .then((r) => {
         getdiscussion(); // console.log("User Unliked the Post",r.data)
         setCount(count + 1);
@@ -396,66 +408,66 @@ const Dashboard = ({ language }) => {
   }
   // ------------------------------------------------To Like the discussion post-------------------------------------------------------
   function handleLike(discussion_id) {
-    axiosInstance.post(`${ipaddress}/OrganizationDiscussionLikesView/${discussion_id}/${user.user_id}/`)
+    axiosInstance.post(`${ipaddress}/UniversityDiscussionLikesView/${discussion_id}/${user.user_id}/`)
       .then((r) => {
         getdiscussion(); //  console.log("User liked the Post",r.data)
       }).catch(() => { console.log("User like error") })
   }
   // ---------------------------------------------To Dislike the discussion post-------------------------------------------------------
   function handledislike1(discussion_id) {
-    axiosInstance.delete(`${ipaddress}/OrganizationDiscussionDisLikesView/${discussion_id}/${user.user_id}/`)
+    axiosInstance.delete(`${ipaddress}/UniversityDiscussionDisLikesView/${discussion_id}/${user.user_id}/`)
       .then((r) => {
         getdiscussion(); //  console.log("User Removed the dislike",r.data)
       }).catch(() => { console.log("User Removed the dislike error") })
   }
   function handledislike(discussion_id) {
-    axiosInstance.post(`${ipaddress}/OrganizationDiscussionDisLikesView/${discussion_id}/${user.user_id}/`)
+    axiosInstance.post(`${ipaddress}/UniversityDiscussionDisLikesView/${discussion_id}/${user.user_id}/`)
       .then((r) => {
-        getdiscussion(); // console.log("Organization Disliked the Post",r.data)
-      }).catch(() => { console.log("Organization dislike error") })
+        getdiscussion(); // console.log("University Disliked the Post",r.data)
+      }).catch(() => { console.log("University dislike error") })
   }
   // ---------------------------------------------To Dislike the discussion replies-------------------------------------------------------
   function handlereplydislike1(discussion_id, discid, index) {
-    axiosInstance.delete(`${ipaddress}/OrganizationDiscussionReplyDisLikesView/${user.user_id}/${discussion_id}/`)
+    axiosInstance.delete(`${ipaddress}/UniversityDiscussionReplyDisLikesView/${user.user_id}/${discussion_id}/`)
       .then((r) => {
-        getreplies(discid); //  console.log("Organization reply Removed the dislike",r.data)
+        getreplies(discid); //  console.log("University reply Removed the dislike",r.data)
       }).catch(() => { console.log("User Removed the dislike error") })
   }
   function handlereplydislike(discussion_id, discid, index) {
-    axiosInstance.post(`${ipaddress}/OrganizationDiscussionReplyDisLikesView/${user.user_id}/${discussion_id}/`)
+    axiosInstance.post(`${ipaddress}/UniversityDiscussionReplyDisLikesView/${user.user_id}/${discussion_id}/`)
       .then((r) => {
-        getreplies(discid); // console.log("Organization Reply disliked",r.data)
-      }).catch(() => { console.log("Organization reply dislike error") })
+        getreplies(discid); // console.log("University Reply disliked",r.data)
+      }).catch(() => { console.log("University reply dislike error") })
   }
   //  ----------------------Functionality to like the reply under particular comment in the discussion---------------------------------------------------------
   function handleReplyLike1(discussion_id, discid, index) {
-    axiosInstance.delete(`${ipaddress}/OrganizationDiscussionReplyLikesView/${user.user_id}/${discussion_id}/`)
+    axiosInstance.delete(`${ipaddress}/UniversityDiscussionReplyLikesView/${user.user_id}/${discussion_id}/`)
       .then((r) => {
         getreplies(discid); //  console.log("User Unliked the Reply",r.data)
       }).catch(() => { console.log("User Reply Unlike error") })
   }
   //  ----------------------Functionality to like the reply under particular reply in the discussion---------------------------------------------------------
   function handleReplies_reply_like(replies_reply_id, disc_replyid) {
-    axiosInstance.post(`${ipaddress}/OrganizationDiscussionRepliesReplyLike/${user.user_id}/${replies_reply_id}/`)
+    axiosInstance.post(`${ipaddress}/UniversityDiscussionRepliesReplyLike/${user.user_id}/${replies_reply_id}/`)
       .then((r) => {
         getreplies_for_reply(disc_replyid); //  console.log("User liked the Replies reply",r.data)
       }).catch((err) => { console.log("User Replies reply like error", err) })
   }
   //  -----------------------------Functionality to dislike the reply uneder particular reply----------------------------------
   function handlereplies_replydislike(replies_reply_id, disc_replyid) {
-    axiosInstance.post(`${ipaddress}/OrganizationDiscussionRepliesReplyDisLike/${user.user_id}/${replies_reply_id}/`)
+    axiosInstance.post(`${ipaddress}/UniversityDiscussionRepliesReplyDisLike/${user.user_id}/${replies_reply_id}/`)
       .then((r) => {
-        getreplies_for_reply(disc_replyid); //  console.log("Organization Replies reply disliked",r.data)
-      }).catch(() => { console.log("Organization replies reply dislike error") })
+        getreplies_for_reply(disc_replyid); //  console.log("University Replies reply disliked",r.data)
+      }).catch(() => { console.log("University replies reply dislike error") })
   }
   //  ----------------------Functionality to like the reply under particular comment in the discussion---------------------------------------------------------
   function handleReplyLike(discussion_id, discid, index) {
-    axiosInstance.post(`${ipaddress}/OrganizationDiscussionReplyLikesView/${user.user_id}/${discussion_id}/`)
+    axiosInstance.post(`${ipaddress}/UniversityDiscussionReplyLikesView/${user.user_id}/${discussion_id}/`)
       .then((r) => {
         getreplies(discid);
       }).catch(() => { console.log("User Reply like error") })
   }
-  // -----------------------------This function is used to edit the post under organization discussion--------------------------------------------------------
+  // -----------------------------This function is used to edit the post under university discussion--------------------------------------------------------
   const [editedpost, setEditedpost] = useState("");
   const [discussionId, setdiscussionId] = useState(0);
   const editpostfunctionData = (value) => { setEditedpost(value) }
@@ -470,7 +482,7 @@ const Dashboard = ({ language }) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('discussion', editedpost);
-    axiosInstance.put(`${ipaddress}/OrganizationDiscussionDelete/${user.user_id}/${discussionId}/`, formData)
+    axiosInstance.put(`${ipaddress}/UniversityDiscussionDelete/${user.user_id}/${discussionId}/`, formData)
       .then((r) => {
         setCount(count + 1);
         toast.success('Post updated successfully', { autoClose: 2000 });
@@ -481,25 +493,25 @@ const Dashboard = ({ language }) => {
   const [fetchedreplies, setFetchedreplies] = useState([]);
   const [replies_status, setreply_status] = useState(false);
   const getreplies = (discussion_id) => {
-    axiosInstance.get(`${ipaddress}/OrganizationDiscussionReply/${user.user_id}/${user.organization_id}/${discussion_id}/`)
+    axiosInstance.get(`${ipaddress}/UniversityDiscussionReply/${user.user_id}/${user.university_id}/${discussion_id}/`)
       .then((r) => {
-        setFetchedreplies(r.data.reverse()); // console.log("Organization Replies fetched successfully",r.data)
+        setFetchedreplies(r.data.reverse()); // console.log("University Replies fetched successfully",r.data)
         setCount(count + 1);
-      }).catch(() => { console.log("OrganizationDiscussionReply Error") })
+      }).catch(() => { console.log("UniversityDiscussionReply Error") })
   }
   // ----------------------------------Function to get the replies for the particular reply----------------------------------------------------------------
   const [fetchedreplies_for_reply, setFetchedreplies_for_reply] = useState([]);
   const [replies_for_reply_status, setreplies_for_reply_status] = useState(false);
   const getreplies_for_reply = (particular_reply_id) => {
-    axiosInstance.get(`${ipaddress}/OrganizationDiscussionRepliesRepliesView/${user.user_id}/${user.organization_id}/${particular_reply_id}/`)
+    axiosInstance.get(`${ipaddress}/UniversityDiscussionRepliesRepliesView/${user.user_id}/${user.university_id}/${particular_reply_id}/`)
       .then((r) => {
-        setFetchedreplies_for_reply(r.data.reverse()); // console.log("Organization Replies under reply fetched successfully",r.data)
+        setFetchedreplies_for_reply(r.data.reverse()); // console.log("University Replies under reply fetched successfully",r.data)
         // setCount(count+1)
-      }).catch(() => { console.log("OrganizationDiscussionRepliesRepliesView Error") })
+      }).catch(() => { console.log("UniversityDiscussionRepliesRepliesView Error") })
   }
   // ----------------------------------------To Delete the post under discussion--------------------------------------------------------
   const deletePost = (discussion_id) => {
-    axiosInstance.delete(`${ipaddress}/OrganizationDiscussionDelete/${user.user_id}/${discussion_id}/`)
+    axiosInstance.delete(`${ipaddress}/UniversityDiscussionDelete/${user.user_id}/${discussion_id}/`)
       .then((r) => {
         setCount(count + 1); // console.log("Post Successfully Deleted")
         toast.success('Post successfully deleted', { autoClose: 2000 });
@@ -508,9 +520,9 @@ const Dashboard = ({ language }) => {
   }
   // -------------------------------To Delete the reply under specific post in the discussion--------------------------------------------------------
   const deleteReply = (disc_reply_id, discid) => {
-    axiosInstance.delete(`${ipaddress}/OrganizationDiscussionReply/${user.user_id}/${discid}/${disc_reply_id}/`)
+    axiosInstance.delete(`${ipaddress}/UniversityDiscussionReply/${user.user_id}/${discid}/${disc_reply_id}/`)
       .then((r) => {
-        setCount(count + 1); // console.log("Organization Reply Successfully Deleted",r.data)
+        setCount(count + 1); // console.log("University Reply Successfully Deleted",r.data)
         getdiscussion();
         toast.success('Reply successfully deleted', { autoClose: 2000 });
         getreplies(discid);
@@ -518,7 +530,7 @@ const Dashboard = ({ language }) => {
   }
   // -------------------------------To Delete the reply under specific reply in the discussion--------------------------------------------------------
   const deleteReply_for_reply = (reply_reply_id, disc_reply_id, discid) => {
-    axiosInstance.delete(`${ipaddress}/OrganizationDiscussionRepliesRepliesView/${user.user_id}/${user.organization_id}/${reply_reply_id}/`)
+    axiosInstance.delete(`${ipaddress}/UniversityDiscussionRepliesRepliesView/${user.user_id}/${user.university_id}/${reply_reply_id}/`)
       .then((r) => {
         toast.success('Reply successfully deleted', { autoClose: 2000 });
         getreplies(discid);
@@ -527,7 +539,7 @@ const Dashboard = ({ language }) => {
   }
   // -------------------------------------------PINNING COMMENTS------------------------------------------------------------
   const pincomment = (discId) => {
-    axiosInstance.post(`${ipaddress}/OrganizationPinnedCommentsView/${user.user_id}/${discId}/${user.organization_id}/`)
+    axiosInstance.post(`${ipaddress}/UniversityPinnedCommentsView/${user.user_id}/${discId}/${user.university_id}/`)
       .then((r) => {
         if (r.data.message === 'Message already pinned') {
           toast.success('Comment already followed', { autoClose: 2000 });
@@ -543,12 +555,12 @@ const Dashboard = ({ language }) => {
   // ----------------------------------------To report the discussion comment----------------------------------------------
   const [report_status, setreport_status] = useState(false);
   const [report_id, setreport_id] = useState();
-  // ----------------------------------------Search Discussion under organization-------------------------------------------------------
+  // ----------------------------------------Search Discussion under university-------------------------------------------------------
   const [searchedComments, setSearchedComments] = useState([]);
   const [searchcomment, setSearchcomment] = useState("");
   // ---------------------------------------------------UNPIN COMMENT-------------------------------------------------------
   const unpin = (discid) => {
-    axiosInstance.delete(`${ipaddress}/OrganizationPinnedCommentsView/${user.user_id}/${discid}/${user.organization_id}/`)
+    axiosInstance.delete(`${ipaddress}/UniversityPinnedCommentsView/${user.user_id}/${discid}/${user.university_id}/`)
       .then((r) => {
         toast.success('Comment unfollowed successfully', { autoClose: 2000 });
         getdiscussion();
@@ -567,7 +579,7 @@ const Dashboard = ({ language }) => {
   }
 
   useEffect(() => {
-    if (discussions.length && recentDocs.length) {
+    if ((getDocsApiLoading == false && discussionsApiLoading == false)) {
       setloading(false)
     }
   }, [discussions, recentDocs])
@@ -662,13 +674,18 @@ const Dashboard = ({ language }) => {
                       </Slider>
                     }
                     <div className={`slider-container w-100 m-0`}>
-                      <h6 className={`${recentDocs.length > 0 ? 'd-none' : ''} text-center`}>No Documents Available !!!</h6>
+                      {!recentDocs.length && (
+                        <div className="py-3 px-3 d-flex align-items-center justify-content-between">
+                          <h6 className={`text-center mb-0`}>No Documents Available !!!</h6>
+                          <button onClick={() => { navigate(`/uploadpage/0/""`) }} className="btn ms-3 text-white navbar-btn" style={{ backgroundColor: '#5D5FE3', width: 'fit-content', whiteSpace: 'nowrap', height: '45px' }}><i className="fa-solid fa-plus me-2"></i>{translate_value.navbar.add}</button>
+                        </div>
+                      )}
                       {recentDocs.length > 0 &&
                         <Slider {...settings} className={`${recentDocs.length > 0 ? 'd-block w-100 px-4' : 'd-none'}`}>
                           {recentDocs.map((x, i) => (
                             <div key={i}>
                               <Link to={`/showpdf/${x.document_id}`} state={{ course: selectedCourse }} className="text-decoration-none">
-                                <div className="card p-1 border-0 view_pdf" style={{ height: '300px' }}>
+                                <div className="card p-1 border-0 view_pdf" style={{ height: '300px',boxShadow:'none' }}>
                                   <div className="card-body p-0" key={i}>
                                     <div className="d-flex justify-content-center align-items-center" style={{ height: '250px', overflow: 'hidden', width: '100%', position: 'relative' }}>
                                       <Document file={x.file.document}>
@@ -814,7 +831,12 @@ const Dashboard = ({ language }) => {
 
                   {/* ----------------------------Posted Comments------------------------------- */}
                   <div className={`${tablist && searchcomment.length <= 0 ? '' : 'd-none '}`}>
-                    {!discussions.length && <h6 className={`text-center py-3`} style={{ color: '#5d5fe3', fontSize: '14px' }}> Post your comments ...💬</h6>}
+                    {!discussions.length &&
+                      <>
+                        <img src="https://starlight-b3f27.web.app/assets/images/nodataimg.svg" className='not-found-image' />
+                        <h6 className={`text-center py-3`} style={{ color: '#5d5fe3', fontSize: '14px' }}> Post your comments ...💬</h6>
+                      </>
+                    }
                     {discussions.slice(0, visibleDiscussions).map((x, index) => {
                       return (
                         <div key={index} style={{ zIndex: 4 }}>
@@ -1061,7 +1083,7 @@ const Dashboard = ({ language }) => {
                                         {y.images_attached.map((a) => {
                                           return (
                                             <div className='d-flex justify-content-center'>
-                                              <img src={a.organization_discussion_reply_images} width={300} alt="dashboard" className='mt-3' />
+                                              <img src={a.university_discussion_reply_images} width={300} alt="dashboard" className='mt-3' />
                                             </div>
                                           )
                                         })}
@@ -1134,7 +1156,7 @@ const Dashboard = ({ language }) => {
                                                       {z.images_attached.map((b) => {
                                                         return (
                                                           <div className='d-flex justify-content-center'>
-                                                            <img src={b.organization_discussion_reply_reply_images} width={300} alt="dashboard" className='mt-3' />
+                                                            <img src={b.university_discussion_reply_reply_images} width={300} alt="dashboard" className='mt-3' />
                                                           </div>
                                                         )
                                                       })}
@@ -1227,10 +1249,10 @@ const Dashboard = ({ language }) => {
                   </div>
                   {/* ----------------------------Pinned Comments------------------------------- */}
                   <div className={`${tablist ? 'd-none' : ''}`}>
-                    <Organizationpinnedcomments setCount={setCount} count={count} pincomment_status={pincomment_status} />
+                    <University_pinnedcomments setCount={setCount} count={count} pincomment_status={pincomment_status} />
                   </div>
                   {/* ----------------------------Searched Comments------------------------------- */}
-                  <Organizationsearch_comments setCount={setCount} searchvalue={searchcomment} />
+                  <University_search_comments setCount={setCount} searchvalue={searchcomment} />
                 </div>
 
                 {/* ----------------------------Post Comment Button------------------------------- */}
@@ -1253,8 +1275,8 @@ const Dashboard = ({ language }) => {
 
             {/* --------------------------------------------ADD SUBJECTS PAGE----------------------------------------------------- */}
 
-            <Addsubjects status={status} setCount1={setCount1} setStatus={setStatus} />
-            <Report_post disc_type={"organization"} setCount={setCount} setindex1={setindex1} report_status={report_status} setreport_status={setreport_status} discussion_id={report_id} />
+            {/* <Addsubjects status={status} setCount1={setCount1} setStatus={setStatus} /> */}
+            <Report_post disc_type={"university"} setCount={setCount} setindex1={setindex1} report_status={report_status} setreport_status={setreport_status} discussion_id={report_id} />
             {/* First login message */}
             <Login_message state={state} setstate={setstate} />
           </div>
@@ -1322,7 +1344,7 @@ const Dashboard = ({ language }) => {
           </div>
 
           {/* ----------------------------Comments List in Modal------------------------------- */}
-          <Organizationdiscussion_offcanvases usercomments_status={usercomments_status} count={count} setCount={setCount} />
+          <University_discussion_offcanvases usercomments_status={usercomments_status} count={count} setCount={setCount} />
         </div>
       )}
     </>

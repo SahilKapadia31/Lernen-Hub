@@ -180,7 +180,7 @@ const Navbar = ({ setLanguage, count2, count, setindex1, setCount }) => {
   const [pageLocation, setPageLocation] = useState()
   useEffect(() => {
     //console.log(location.pathname.split('/'));
-    if (location.pathname) {
+    if(location.pathname){
       setPageLocation(location.pathname.split('/')[1])
     }
   }, [location])
@@ -188,7 +188,6 @@ const Navbar = ({ setLanguage, count2, count, setindex1, setCount }) => {
     <div className="container px-2">
       <nav className="navbar navbar-expand-lg navbar-expand-md py-3 d-none d-lg-block">
         <div className="d-flex w-100 justify-content-between">
-
           <div className="d-flex navbardiv align-items-center">
             <div className="input-group navbar-input" style={{ cursor: 'pointer', height: '45px' }} type="button" data-bs-toggle="offcanvas" data-bs-target="#searchoffcanvas" aria-controls="searchoffcanvas">
               <span className="input-group-text bg-white border-end-0" style={{ color: '#AAB0B0' }} id="basic-addon1"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
@@ -306,7 +305,7 @@ const Navbar = ({ setLanguage, count2, count, setindex1, setCount }) => {
                   notification1.map((x) => {
                     return (
                       <li className="d-flex justify-content-between align-items-center px-2 mb-2" key="{x}">
-                        <a className="text-secondary" style={{ textDecoration: 'none', fontSize: '13px' }}>{x ? `${x.user_data.profile_pic.nickname} from ${x.organization_name} requested for group ${x.group_name}` : "No Notifications"}</a>
+                        <a className="text-secondary" style={{ textDecoration: 'none', fontSize: '13px' }}>{x ? `${x.user_data.profile_pic.nickname} from ${x.university_name} requested for group ${x.group_name}` : "No Notifications"}</a>
                         <div className="d-flex gap-2 align-items-center ms-2">
                           <button className="btn btn-success btn-sm text-white" onClick={() => {
                             acceptRequest(x.user_data?.user_id, x.group_id)
@@ -472,7 +471,7 @@ const Navbar = ({ setLanguage, count2, count, setindex1, setCount }) => {
                       <p style={{ fontSize: '13px', height: '30px', width: '30px' }} className={x.user_data.profile_pic.profile_pic == null ? 'd-flex justify-content-center align-items-center bg-primary text-white p-1 rounded-circle' : 'd-none'}><span>{x.user_data.profile_pic.nickname.slice(0, 1)}</span><span>{x.user_data.profile_pic.nickname.slice(-1)}</span></p>
                       <img src={x.user_data.profile_pic.profile_pic} width={28} height={28} className={x.user_data.profile_pic.profile_pic == null ? 'd-none' : 'd-inline rounded-circle'} alt="navbar" />
                       <div className="ms-2 d-flex">
-                        <a className="text-secondary" style={{ textDecoration: 'none', fontSize: '13px' }}>{x ? `${x.user_data.profile_pic.nickname} from ${x.organization_name} requested for group ${x.group_name}` : "No Notifications"}</a>
+                        <a className="text-secondary" style={{ textDecoration: 'none', fontSize: '13px' }}>{x ? `${x.user_data.profile_pic.nickname} from ${x.university_name} requested for group ${x.group_name}` : "No Notifications"}</a>
                         <div className="d-flex gap-2 align-items-center ms-3">
                           <button className="btn btn-success btn-sm text-white" onClick={() => {
                             acceptRequest(x.user_data?.user_id, x.group_id)

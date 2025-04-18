@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+.university-info {
+    font-family: "Inter", sans-serif !important;
+    background: white !important;
+
+    .main-image-card {
+        img {
+            height: 407px;
+            //object-fit: cover;
+            border-radius: 1rem;
+            object-fit: contain;
+        }
+    }
+
+    .small-image-card {
+        position: relative;
+
+        img {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.75rem;
+        }
+
+        .view-photos-btn {
+            background-color: #1f2937a1 !important;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.9rem;
+            padding: 0.4rem 0.7rem;
+        }
+    }
+
+    .university-details {
+        .uni-name {
+            font-size: 32px;
+            font-weight: 600;
+            font-family: "Inter", sans-serif;
+        }
+
+        .rating {
+            color: #ffc107;
+            font-size: 0.8rem;
+        }
+
+        .badge {
+            background: #F6F6F6;
+            border: 1px solid #E3E3E3;
+            padding-top: 0px;
+            padding-bottom: 3px;
+            padding-inline: 8px;
+            line-height: 0.7;
+
+        }
+
+        .rating-test {
+            color: black;
+            font-size: 0.8rem;
+        }
+
+        .details-icons {
+            font-size: 14px;
+            font-weight: 500;
+            font-family: "Inter", sans-serif;
+            color: #555;
+
+            span {
+                display: flex;
+                align-items: center;
+            }
+
+            svg {
+                color: #0d6efd;
+            }
+        }
+    }
+
+    .new-sub-nav {
+        .navbar-custom {
+            background-color: #F3F0FF; // Light background
+            border-bottom: 1px solid #e3e3e3;
+
+            .nav-item {
+                font-size: 14px;
+                margin-right: 20px;
+
+
+            }
+
+            .nav-link {
+                color: #000000; // Default color
+                text-decoration: none;
+
+
+            }
+        }
+    }
+
+    .custom-tabs {
+        .nav-tabs {
+            border-bottom: none; // Remove default border
+
+            .nav-item {
+                flex: 1;
+                text-align: center;
+                margin-bottom: 0;
+
+                .nav-link {
+                    background-color: none !important;
+                    border: none;
+                    color: #6c757d; // Default text color (grey)
+                    border-radius: 0;
+                    padding: 0.75rem 1rem;
+                    transition: background-color 0.3s ease, color 0.3s ease;
+                    padding: 0 !important;
+                    display: flex;
+                    justify-content: center;
+
+                    .tab-text {
+                        font-family: 16px;
+                        font-weight: 600;
+                        padding: 10px;
+                        width: fit-content !important;
+                        color: #000000;
+                    }
+
+                    &.active {
+                        color: #4547C9 !important; // Dark blue (approximate based on image)
+                        border: none;
+                        background-color: transparent !important;
+
+                        .tab-text {
+                            color: #4547C9 !important; // Dark blue (approximate based on image)
+                            width: fit-content !important;
+                            background: #F3F0FF;
+                        }
+                    }
+                }
+            }
+        }
+
+        .accordion.accordion-flush {
+            .accordion-item {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+                border-top: none;
+                border-left: none;
+                border-right: none;
+
+
+                &:first-child {
+                    border-top: none;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .accordion-header {
+                    button.accordion-button {
+                        padding: 1rem 1.25rem;
+                        font-weight: bold;
+                        color: #212529; // Default text color
+                        background-color: transparent;
+                        border: 0;
+                        border-radius: 0;
+                        box-shadow: none;
+                        display: flex;
+
+                        &:focus {
+                            border-color: transparent;
+                            box-shadow: none;
+                        }
+
+                        &:not(.collapsed) {
+                            color: #4547C9 !important; // Primary color for active header
+                            background-color: transparent;
+                            box-shadow: none;
+
+                            span {
+                                color: #4547C9 !important;
+                            }
+
+                            &::before {
+                                content: '-'; // Minus sign for expanded state
+                                font-size: 1.5em;
+                                margin-bottom: 9px;
+                                margin-right: 0.75rem; // Add some spacing between the icon and text
+                            }
+
+                            &::after {
+                                content: '';
+                                margin-left: 1px !important; // Remove the default arrow/plus icon
+                            }
+                        }
+
+                        &::before {
+                            flex-shrink: 0;
+                            width: 1.25rem;
+                            height: 1.25rem;
+                            margin-bottom: 9px;
+                            content: '+'; // Plus sign for collapsed state
+                            font-size: 1.5em;
+                            margin-right: 0.75rem; // Add some spacing between the icon and text
+                            transition: transform .2s ease-in-out; // Keep the transition (though transform won't be used now)
+                        }
+
+                        &::after {
+                            content: '';
+                            margin-left: 1px !important; // Remove the default arrow/plus icon
+                        }
+                    }
+                }
+
+                .accordion-collapse {
+                    .accordion-body {
+                        padding: 1rem 1.25rem;
+                        background-color: #f8f9fa; // Light grey background for body
+                        color: #212529;
+                    }
+                }
+            }
+        }
+
+        // Style for the eligibility span
+        .accordion-header .text-muted.small.ms-2 {
+            font-size: 0.875em;
+            font-weight: normal;
+        }
+
+        // Override default primary color for active header if needed
+        .accordion.accordion-flush .accordion-item .accordion-header button.accordion-button:not(.collapsed).text-primary {
+            color: #0d6efd !important;
+        }
+
+        .accordion-button:after {
+            background-image: none !important;
+        }
+    }
+
+    .rating-section {
+        .progress {
+            height: 4px;
+        }
+
+        .rating-progress {
+            background-color: #e9ecef; // Light grey background
+
+            .progress-bar {
+                background-color: #ffc107; // Light orange/yellow color (adjust as needed)
+            }
+        }
+    }
+
+    .rating-card-box {
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background-color: #F9F9FB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            border: 0.5px solid #E3E3E3;
+
+            img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        .rating-badge {
+            font-size: 0.85rem;
+            padding: 0.25rem 0.6rem;
+            background-color: #F9F9FB;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid #E3E3E3 !important;
+
+            img {
+                margin-right: 0.25rem;
+            }
+        }
+
+    }
+
+    .filter-buttons {
+        .btn {
+            font-size: 14px;
+            padding: 2px 14px;
+            box-shadow: none;
+            color: #4D5555;
+
+            &.active {
+                background-color: #F3F0FF; // Light blue background
+                border: 1px solid #4547C9; // Blue border
+                color: #4547C9 !important; // Blue text
+            }
+        }
+
+        .btn-outline-secondary:hover {
+            color: #4D5555;
+            background-color: #fff !important;
+        }
+    }
+
+    .review-list-section {
+        .review-item {
+            margin-bottom: 1rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 2px;
+            color: #22303E;
+            background-color: #CBE9DB;
+            // Light sky blue
+        }
+
+        .review-content {
+            margin-left: 1rem;
+            flex: 1;
+        }
+
+        .rating {
+            font-size: 14px;
+        }
+
+        .load-more-btn {
+            color: #4547C9;
+            padding: 0;
+            font-weight: 500;
+        }
+    }
+
+    .maps {
+        .card {
+            transition: box-shadow 0.3s ease-in-out;
+
+            &:hover {
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+    }
+
+    .news-section {
+        // src/styles/NewsEvents.scss
+
+        .news-events {
+
+            .section-title {
+                font-weight: 600;
+                font-size: 1.25rem;
+                margin-bottom: 1rem;
+            }
+
+            .news-card {
+                margin-bottom: 1rem;
+
+                .news-thumb {
+                    width: 100px;
+                    object-fit: cover;
+                    height: 100px;
+                    border-radius: 8px;
+                }
+
+                .news-title {
+                    width: 65%;
+                    font-weight: 400;
+                    color: #1C262C;
+                    text-decoration: underline;
+                    font-size: 18px;
+                }
+
+                .news-date {
+                    font-size: 0.85rem;
+                    color: #555;
+                }
+
+                .author-name {
+                    font-size: 0.875rem;
+                }
+            }
+
+
+        }
+
+    }
+}

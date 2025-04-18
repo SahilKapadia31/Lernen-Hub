@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom/dist';
+import LoginpageDialog from '../login/loginDialog';
+import { getDecryptedData, setEncryptedData } from '../../../utils/helperFunctions';
+import axiosInstance from '../../../pages/axiosInstance';
+import { ipaddress3 } from '../../../App';
+import logo_blue from "../../../assets/svg/logo-blue.svg";
+import logo_white from "../../../assets/svg/logo-white.svg"
+export const Navbar = ({ background, activeHeader }) => {
+    const user = JSON.parse(getDecryptedData('user'));
 
-export const Navbar = ({ activeHeader }) => {
+    const [showLogin, setShowLogin] = useState(false);
     const [active, setActive] = useState('home');
     const [scrolled, setScrolled] = useState(false);
 
@@ -39,6 +47,7 @@ export const Navbar = ({ activeHeader }) => {
         { label: 'Tutors', key: 'tutors', path: '/v2/home/tutors' },
     ];
 
+
     // Navbar style based on scroll position
     const navbarStyle = {
         position: 'fixed',
@@ -47,7 +56,7 @@ export const Navbar = ({ activeHeader }) => {
         right: 0,
         zIndex: 1000,
         transition: 'all 0.3s ease',
-        backgroundColor: scrolled || activeHeader ? '#fff' : '', // Change background color based on scroll
+        backgroundColor: scrolled || activeHeader ? '#fff' : '#282088', // Change background color based on scroll
         boxShadow: scrolled || activeHeader ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none',
     };
 
@@ -64,6 +73,31 @@ export const Navbar = ({ activeHeader }) => {
         transition: 'all 0.3s ease',
     };
 
+    const handleLogout = () => {
+        localStorage.clear()
+        window.location.href = "/"
+    }
+
+    const getUserProfile = async () => {
+        try {
+            const response = await axiosInstance.get(`${ipaddress3}/auth/getUserProfile/`);
+            console.log(response);
+
+        } catch (err) {
+            console.log('Error in getUserProfile', err);
+        }
+    }
+
+    useEffect(() => {
+        if (user) {
+            getUserProfile();
+        }
+    }, [user])
+
+    const handleSelectUniverisity = (selectedUniversity) => {
+        //navigate('/#/dashboard/page')
+    }
+
     return (
         <>
             {/* Desktop Navbar */}
@@ -71,15 +105,12 @@ export const Navbar = ({ activeHeader }) => {
                 <div className="container">
                     <div className="py-3 d-flex justify-content-between align-items-center" style={{ height: '5rem' }}>
                         <div className="d-flex align-items-center" onClick={() => navigate('/')}>
-                            {/* Logo changes based on scroll */}
-
-                            <img
-                                className="img-fluid"
-                                src={require(scrolled || activeHeader ? '../../../img/landing_page/Group 385.png' : '../../../img/landing_page/Group 377.png')}
-                                style={{ height: '30px' }}
-                                alt="Logo"
-                            />
-
+                            {
+                                (scrolled || activeHeader) ?
+                                    <img src={logo_blue} />
+                                    :
+                                    <img src={logo_white} />
+                            }
                         </div>
                         <ul className="d-flex justify-content-end align-items-center gap-5"
                             style={{ listStyleType: 'none', cursor: 'pointer', margin: 0, padding: 0 }}
@@ -97,16 +128,40 @@ export const Navbar = ({ activeHeader }) => {
                                     {item.label}
                                 </li>
                             ))}
+                            <li>
+                            </li>
                         </ul>
-                        <div className="d-flex gap-4 align-items-center">
-                            <i className={`bi bi-search fs-4`} style={textStyle}></i>
-                            <button
-                                onClick={() => navigate('/loginpage')}
-                                className="btn py-2 px-4"
-                                style={buttonStyle}
-                            >
-                                Log In
-                            </button>
+                        <div className="d d-flex gap-4 align-items-center">
+                            <i className="bi bi-search fs-4" style={{ ...textStyle, color: (scrolled || activeHeader ? '#4547C9' : '#fff') }}></i>
+                            {!user ?
+                                <button onClick={() => setShowLogin(true)} className={`btn py-2 px-4 border ${(scrolled || activeHeader ? '#4547C9' : 'border-white bg-transparent')}`}
+                                    style={{ ...textStyle, background: (scrolled || activeHeader ? '#4547C9' : '#fff'), color: (scrolled || activeHeader ? '#fff' : '#fff') }}>
+                                    Log In
+                                </button>
+                                :
+                                <div>
+                                    <a href="#" class="nav-link dropdown-toggle no-caret py-0 pe-0 " role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://mimity-admin904.netlify.app/assets/img/user/user1.svg" width="32" alt="User" class="rounded-circle" loading="lazy" />
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-start" >
+                                        <li className='text-capitalize px-3'>{user.first_name}</li>
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                        </li>
+                                        {user?.organizations && user.organizations.length > 0 && (<li className='text-capitalize px-3 fw-bold'>{'Joined University'}</li>)}
+                                        {user?.organizations && user.organizations.length > 0 &&
+                                            user?.organizations.map(item =>
+                                                <li><Link class="dropdown-item" to={'/dashboard/page'} onClick={() => {
+                                                    setEncryptedData('SELECTED_UNIVERSITY', item, 180);
+                                                }}>{item?.university_name}</Link></li>
+                                            )}
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                        </li>
+                                        <li><a class="dropdown-item" onClick={handleLogout}>Sign out</a></li>
+                                    </ul>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -140,6 +195,10 @@ export const Navbar = ({ activeHeader }) => {
                 </div>
             </nav>
 
+            <LoginpageDialog
+                show={showLogin}
+                handleClose={() => setShowLogin(false)}
+            />
             {/* Offcanvas Menu (No changes needed here) */}
             <div id="landingpage_offcanvas" className="offcanvas offcanvas-end d-sm-block d-lg-none d-xl-none overflow-hidden" tabIndex="-1" aria-labelledby="offcanvasExampleLabel" data-bs-scroll="false" data-bs-backdrop="false">
                 <div className="offcanvas-header d-flex align-items-center">

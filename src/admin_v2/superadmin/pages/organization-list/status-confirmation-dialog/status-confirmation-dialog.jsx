@@ -1,33 +1,34 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import './status-confirmation-dialog.scss'
-const StatusConfirmationDialog = ({ show, handleClose, handleConfirm,status,organization_id }) => {
+const StatusConfirmationDialog = ({ show, handleClose, handleConfirm,status }) => {
+    
     return (
         <>
             <Modal show={show} onHide={handleClose} centered>
-                <Modal.Header closeButton>
+                <Modal.Header closeButton className="border-bottom">
                     <Modal.Title className="dialog-title">
-                        {status === "active" ? "Confirm Activation" : "Confirm Deactivation"}
+                        {!status ? "Confirm Activation" : "Confirm Deactivation"}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="text-center">
-                    <p>
+                    <p className="mb-0">
                         Are you sure you want to{" "}
-                        <strong className={status === "active" ? "text-success" : "text-danger"}>
-                            {status === "active" ? "Activate" : "Deactivate"}
+                        <strong className={!status ? "text-success" : "text-danger"}>
+                            {!status ? "Activate" : "Deactivate"}
                         </strong>{" "}
                         this organization?
                     </p>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className="border-top">
                     <Button variant="secondary" onClick={handleClose}>
                         Cancel
                     </Button>
                     <Button
-                        variant={status === "active" ? "success" : "danger"}
+                        variant={!status ? "success" : "danger"}
                         onClick={handleConfirm}
                     >
-                        {status === "active" ? "Activate" : "Deactivate"}
+                        {!status ? "Activate" : "Deactivate"}
                     </Button>
                 </Modal.Footer>
             </Modal>

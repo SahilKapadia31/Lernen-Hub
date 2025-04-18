@@ -66,7 +66,7 @@ import Videos from './Landing_pages/Videos.jsx';
 //Adminpanel Components
 import Users_page from './Admin_panel/Users_page.jsx';
 
-import Organizationdetails from './Admin_panel/Organization_details.jsx';
+//import Organizationdetails from './Admin_panel/Organization_details.jsx';
 import Admin_course from './Admin_panel/Admin_course.jsx';
 import History from './Admin_panel/History.jsx';
 import Admin_documents from './Admin_panel/Admin_documents.jsx';
@@ -85,6 +85,7 @@ import OrganizationAdminLogin from './admin_v2/organizationadmin/pages/login/log
 import OrganizationDashboard from './admin_v2/organizationadmin/pages/dashboard/dashboard.jsx';
 import ManageStaffList from './admin_v2/organizationadmin/pages/managestaff/lists/staff-lists.jsx';
 import ManagestaffRoles from './admin_v2/organizationadmin/pages/manageroles/lists/role-lists.jsx';
+import ManagepromoCode from './admin_v2/organizationadmin/pages/managepromoCode/lists/promoCode-lists.jsx'
 import ManagestaffProgramTypes from './admin_v2/organizationadmin/pages/ProgramType/lists/programtype-lists.jsx';
 import SuperAdminLayout from './admin_v2/superadmin/components/superadmin-layout.jsx';
 import SuperAdminAuthRoute from './admin_v2/superadmin/components/superadmin-authroute.jsx';
@@ -92,12 +93,17 @@ import SuperAdminNonAuthRoute from './admin_v2/superadmin/components/superadmin-
 import SuperAdminLogin from './admin_v2/superadmin/pages/login/login.jsx';
 import SuperAdminDashboard from './admin_v2/superadmin/pages/dashboard/dashboard.jsx';
 import OrganizationList from './admin_v2/superadmin/pages/organization-list/organization-list.jsx';
-import OrganizationPendingRequestList from './admin_v2/superadmin/pages/organization-list-pending/organization-pending-list.jsx';
+import SuperAdminPendingRequest from './admin_v2/superadmin/pages/organization-list-pending/organization-pending-list.jsx';
 import ManageProgram from './admin_v2/organizationadmin/pages/program/program.jsx';
 import ManageSubjects from './admin_v2/organizationadmin/pages/subjects/subjects.jsx';
 import MyPrograms from './admin_v2/organizationadmin/pages/my-programs/my-programs.jsx';
 import ProgramDetails from './admin_v2/organizationadmin/pages/my-programs/program-details/program-details.jsx';
-import DocumentUpload from './admin_v2/organizationadmin/pages/my-programs/program-details/components/uplod  documents.jsx';
+import DocumentUpload from './admin_v2/organizationadmin/pages/my-programs/program-details/components/upload-documents.jsx';
+import ShowDocuments from './admin_v2/organizationadmin/pages/my-programs/show-documents/show-documents.jsx';
+import OrganizationSubjects from './admin_v2/organizationadmin/pages/my-programs/subjects/subjects.jsx';
+import ShowSubject from './admin_v2/organizationadmin/pages/my-programs/show-subject/show-subject.jsx';
+import OrganizationAdminPendingRequest from './admin_v2/organizationadmin/pages/pending-requests/pending-requests.jsx';
+import StaffSignup from './admin_v2/organizationadmin/pages/signup/signup.jsx';
 
 //Private and Protected layout
 import PublicLayouts from './Layouts/PublicLayout.jsx';
@@ -113,33 +119,36 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import ManageStudent from './admin_v2/organizationadmin/pages/managestudent/lists/student-lists.jsx';
 import { LeandingPage } from './v2/pages/LeandingPage.jsx';
+import UniversitiesInfo from './v2/components/UniversitiesInfo/UniversitiesInfo.jsx';
 import { UniversitySearch } from './v2/components/index.js';
-
-
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 const tagManagerArgs = { gtmId: 'GTM-NDD6WWG7' }
 TagManager.initialize(tagManagerArgs)
 
-// export const ipaddress = "https://api.lernen-hub.de";
-// export const ipaddress2 = "https://api.lernen-hub.de";
-// export const ipaddress3 = "http://learnhub.constantsys.com";
-// export const domain = "https://lernen-hub.de";
+export const ipaddress = "https://learnhub.constantsys.com";
+export const ipaddress2 = "https://learnhub.constantsys.com";
+export const ipaddress3 = "https://learnhub.constantsys.com";
+export const domain = "https://lernen-hub.de";
 
 // export const ipaddress = process.env.REACT_APP_API_URL;
 // export const ipaddress2 = process.env.REACT_APP_API_URL;
 // export const domain = process.env.REACT_APP_WEB_URL;
 
 
-export const ipaddress = "http://52.66.114.136";
-export const ipaddress2 = "http://52.66.114.136";
-export const ipaddress3 = "http://52.66.114.136";
-export const domain = "http://localhost:3000";
+// export const ipaddress = "http://52.66.114.136";
+// export const ipaddress2 = "http://52.66.114.136";
+// export const ipaddress3 = "http://52.66.114.136";
+// export const domain = "http://localhost:3000";
+
+// export const ipaddress = "http://127.0.0.1:8000";
+// export const ipaddress2 = "http://127.0.0.1:8000";
+// export const ipaddress3 = "http://127.0.0.1:8000";
+// export const domain = "http://localhost:3000";
 
 const App = () => {
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   const [translated_pdf_url, settranslated_pdf_url] = useState("");
   const [language, setLanguage] = useState("en");
-  console.log(window.location);
   const pathname = window.location.hash;
   const isSuperAdmin = pathname.includes('/superadmin/');
   const isOrganization = pathname.includes('/organization/');
@@ -154,6 +163,7 @@ const App = () => {
               <Route element={<OrganizationNonAuthRoute />}>
                 <Route path="/organization" element={<Navigate to="/organization/login" replace />} />
                 <Route path="/organization/login" element={<OrganizationAdminLogin />} />
+                <Route path="/organization/signup" element={<StaffSignup />} />
               </Route>
               <Route element={<OrganizationAuthRoute />}>
                 <Route path="/organization" element={<Navigate to="/organization/dashboard" replace />} />
@@ -161,12 +171,17 @@ const App = () => {
                 <Route path="/organization/staff" element={<ManageStaffList />} />
                 <Route path="/organization/student" element={<ManageStudent />} />
                 <Route path="/organization/roles" element={<ManagestaffRoles />} />
+                <Route path="/organization/promoCode" element={<ManagepromoCode />} />
                 <Route path="/organization/program-types" element={<ManagestaffProgramTypes />} />
                 <Route path="/organization/programs/:program_type_id" element={<ManageProgram />} />
                 <Route path="/organization/subjects/:program_id" element={<ManageSubjects />} />
                 <Route path="/organization/my-programs" element={<MyPrograms />} />
                 <Route path="/organization/program-details/:program-id" element={<ProgramDetails />} />
                 <Route path="/organization/upload-documents" element={<DocumentUpload />} />
+                <Route path="/organization/show-documents/:program_id" element={<ShowDocuments />} />
+                <Route path="/organization/subjects" element={<OrganizationSubjects />} />
+                <Route path="/organization/show-subjects" element={<ShowSubject />} />
+                <Route path="/organization/pending-requests" element={<OrganizationAdminPendingRequest />} />
               </Route>
             </Routes>
           </OrganizationLayout>
@@ -182,7 +197,7 @@ const App = () => {
                   <Route path="/superadmin" element={<Navigate to="/superadmin/dashboard" replace />} />
                   <Route path="/superadmin/dashboard" element={<SuperAdminDashboard />} />
                   <Route path="/superadmin/organization-list" element={<OrganizationList />} />
-                  <Route path="/superadmin/organization-pending-request" element={<OrganizationPendingRequestList />} />
+                  <Route path="/superadmin/pending-request" element={<SuperAdminPendingRequest />} />
 
                 </Route>
               </Routes>
@@ -192,7 +207,7 @@ const App = () => {
               <Routes>
                 {/* -------------------------------Use For Admin Panel Access Route--------------------------------- */}
                 <Route path="/user_page" element={<Users_page />} />
-                <Route path="/organization_details" element={<Organizationdetails />} />
+                {/* <Route path="/organization_details" element={<Organizationdetails />} /> */}
                 <Route path="/pending_details" element={<Pending_data />} />
                 <Route path="/help_request" element={<Help_request />} />
                 <Route path="/reported_comments" element={<Comment_report />} />
@@ -201,12 +216,14 @@ const App = () => {
                 <Route path="/admin_report" element={<Admin_report />} />
                 <Route path="/our_team" element={<Our_team />} />
                 <Route path="/admin_login" element={<Admin_Loginpage />} />
-
+                <Route path="/" element={<LeandingPage />} />
+                <Route path="/universities_info/:university_id" element={<UniversitiesInfo />} />
                 {/* -------------------------------Use For Web Public Access Route------------------------------- */}
                 <Route element={<PublicLayouts />}>
-                  <Route path="/" element={<Landing_page />} />
+
                   <Route path="/v2/home" element={<LeandingPage />} />
                   <Route path="/v2/home/university" element={<UniversitySearch />} />
+                  <Route path="/v2/home/school" element={<UniversitySearch />} />
                   <Route path="/loginpage" element={<Loginpage />} />
                   <Route path="/contact_us" element={<Contact_us />} />
                   <Route path="/stories" element={<Stories />} />

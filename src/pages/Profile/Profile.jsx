@@ -42,7 +42,7 @@ const Profile = () => {
   }, []);
 
   const [additionalDetails, setAdditionalDetails] = useState({});
-  const [formData, setFormData] = useState({ user_id: "", organization: "", program: "", semester: "" });
+  const [formData, setFormData] = useState({ user_id: "", university: "", program: "", semester: "" });
   const handleChange = (e) => {
     setFormData(prevData => {
       const updatedData = { ...prevData, [e.target.name]: e.target.value };
@@ -52,7 +52,7 @@ const Profile = () => {
 
   const [count, setCount] = useState(0);
   const [joinedUniversity, setJoinedUniversity] = useState([]);
-  const [organizationdata, setUniversitydata] = useState([]);
+  const [universitydata, setUniversitydata] = useState([]);
   const [semesterdata, setSemesterdata] = useState([]);
   const [favouriteDocs, setFavouriteDocs] = useState([]);
   const [joinedcourses, setjoinedcourses] = useState([]);
@@ -110,7 +110,7 @@ const Profile = () => {
   const resetForm = () => {
     setFormData({
       // user_id: user.user_id,
-      organization: "",
+      university: "",
       program: "",
       semester: ""
     });
@@ -155,33 +155,33 @@ const Profile = () => {
       }).catch(() => { console.log("Edit Details Sending Error") });
   }
 
-  // ----------------------------------------------------------ADD Organization NAMES----------------------------------------
+  // ----------------------------------------------------------ADD UNIVERSITY NAMES----------------------------------------
   const [selectedUniversityName, setSelectedUniversityName] = useState("");
   const [selectedUniversityId, setSelectedUniversityId] = useState(0);
   const [programs, setPrograms] = useState([])
-  const addorganizationname = (organizationName, event, organizationId) => {
+  const adduniversityname = (universityName, event, universityId) => {
     event.preventDefault()
-    setSelectedUniversityName(organizationName);
-    setSelectedUniversityId(organizationId);
+    setSelectedUniversityName(universityName);
+    setSelectedUniversityId(universityId);
     setFormData((prevData) => ({
       ...prevData,
       user_id: user.user_id,
-      organization: organizationId
+      university: universityId
     }));
 
-    axiosInstance.get(`${ipaddress}/Programs/${organizationId}`)
+    axiosInstance.get(`${ipaddress}/Programs/${universityId}`)
       .then((r) => {
         setPrograms(r.data);
       }).catch(() => { console.log("Catch Fetching Error") });
     setUniversityNamesVisible(false);
   }
-  // -----------------------------------------FETCH PROGRAMS BASED ON Organization--------------------------------------------
-  // --------------------------------------SEARCH Organization NAME-----------------------------------------------------------
+  // -----------------------------------------FETCH PROGRAMS BASED ON UNIVERSITY--------------------------------------------
+  // --------------------------------------SEARCH UNIVERSITY NAME-----------------------------------------------------------
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const handleSearch = (value) => {
     setSelectedUniversityName(value);
-    const results = organizationdata.filter(item => item.organization_name.toLowerCase().includes(value.toLowerCase()));
+    const results = universitydata.filter(item => item.university_name.toLowerCase().includes(value.toLowerCase()));
     setSearchResults(results);
   };
   // ------------------------------------------DELETE USER ACCOUNT-----------------------------------------------------------
@@ -268,7 +268,7 @@ const Profile = () => {
                         <div className="ms-2" style={{ height: '100%' }}>
                           <span className="fw-bold" style={{ fontSize: '18px' }}>{userdetails.nickname}</span><br />
                           {joinedUniversity.map((x, index) => {
-                            return (<div key={index}><span style={{ fontSize: '13px' }}>{x.organization_id.organization_name}</span></div>);
+                            return (<div key={index}><span style={{ fontSize: '13px' }}>{x.university_id.university_name}</span></div>);
                           })}
                           <span style={{ fontSize: '13px' }}>{user.program_name}</span>
                           <a className={`mt-2 ${user_id === user.user_id ? 'd-block ' : 'd-none'}`} style={{ fontSize: '14px', color: '#5D5FE3', cursor: 'pointer' }} data-bs-toggle="modal" data-bs-target="#editModal" onClick={fetchEditdata}>Edit Profile</a>
@@ -333,7 +333,7 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Organization MODAL FORM */}
+          {/* UNIVERSITY MODAL FORM */}
           <div className="modal fade" id="add_details" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div className="modal-dialog">
               <div className="modal-content">
@@ -349,33 +349,33 @@ const Profile = () => {
                       <input
                         type="text"
                         className='form-control py-3 mb-0'
-                        id='organizationnamefield'
-                        placeholder='Select the Organization'
+                        id='universitynamefield'
+                        placeholder='Select the University'
                         onClick={() => setUniversityNamesVisible(true)}
                         onChange={(e) => {
                           handleSearch(e.target.value);
                         }}
                         value={selectedUniversityName}
                       />
-                      <div id='organizationnames' className={`mt-0 border bg-light ${isUniversityNamesVisible ? 'd-block' : 'd-none'}`} style={{ overflowY: 'scroll' }}>
+                      <div id='universitynames' className={`mt-0 border bg-light ${isUniversityNamesVisible ? 'd-block' : 'd-none'}`} style={{ overflowY: 'scroll' }}>
                         <div className='px-2 m-0 bg-info-subtle' style={{ listStyleType: 'none' }}>
                           {searchResults && (
-                            searchResults.map((organization, index) => (
+                            searchResults.map((university, index) => (
                               <li key={index}><a href='' className='text-decoration-none text-dark ' style={{ fontSize: '14px' }} onClick={(event) => {
-                                addorganizationname(organization.organization_name, event, organization.organization_id);
-                              }}>{organization.organization_name}</a></li>
+                                adduniversityname(university.university_name, event, university.university_id);
+                              }}>{university.university_name}</a></li>
                             ))
                           )}
                         </div>
                         <ul className='px-2 m-0' style={{ listStyleType: 'none' }}>
-                          {organizationdata.map((x, index) => {
-                            const isMatch = searchResults.some(y => y.organization_name === x.organization_name);
+                          {universitydata.map((x, index) => {
+                            const isMatch = searchResults.some(y => y.university_name === x.university_name);
                             return (
                               !isMatch && (
                                 <li key={index}>
                                   <a href='' className='text-decoration-none text-dark ' style={{ fontSize: '14px' }} onClick={(event) => {
-                                    addorganizationname(x.organization_name, event, x.organization_id);
-                                  }}>{x.organization_name}</a>
+                                    adduniversityname(x.university_name, event, x.university_id);
+                                  }}>{x.university_name}</a>
                                 </li>
                               )
                             );

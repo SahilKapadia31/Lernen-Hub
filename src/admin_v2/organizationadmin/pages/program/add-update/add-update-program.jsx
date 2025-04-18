@@ -4,6 +4,7 @@ import { Formik, FieldArray, ErrorMessage } from "formik";
 import { Modal, Button } from "react-bootstrap";
 import * as Yup from "yup";
 import close_icon from '../../../../../img/close-icon.svg'
+import { FaRegPlusSquare } from "react-icons/fa";
 import "./add-update-program.scss";
 
 const AddUpdateProgram = ({ show, handleClose, submitProgramForm, selectedProgram, updateProgramForm }) => {
@@ -80,11 +81,18 @@ const AddUpdateProgram = ({ show, handleClose, submitProgramForm, selectedProgra
 
                             {/* Semesters */}
                             <Form.Group className="mb-2">
-                                <Form.Label className="form-label">
-                                    Semesters <span className="required">*</span>
-                                </Form.Label>
+
+
                                 <FieldArray name="semesters">
-                                    {({ push, remove }) => (
+                                    {({ push, remove }) => (<>
+                                        <Form.Label className="form-label d-flex justify-content-between">
+                                            <div>
+                                                Semesters <span className="required">*</span>
+                                            </div>
+                                            <span title="Add Semesters" onClick={() => push({ semester_id: "", sem_name: "", is_deleted: false })} style={{ fontSize: "1rem", color: "rgb(93, 95, 227)", cursor: "pointer" }}>
+                                                <FaRegPlusSquare />
+                                            </span>
+                                        </Form.Label>
                                         <div>
                                             {formik.values.semesters.map((sem, index) => (
                                                 !sem.is_deleted && ( // Hide deleted items from UI
@@ -95,16 +103,19 @@ const AddUpdateProgram = ({ show, handleClose, submitProgramForm, selectedProgra
                                                             name={`semesters[${index}].semester_id`}
                                                             value={formik.values.semesters[index].semester_id}
                                                         />
-
-                                                        {/* Semester Name Input */}
-                                                        <input
-                                                            name={`semesters[${index}].sem_name`}
-                                                            className={`form-control ${formik.touched.semesters?.[index]?.sem_name && formik.errors.semesters?.[index]?.sem_name ? "is-invalid" : ""}`}
-                                                            value={formik.values.semesters[index].sem_name}
-                                                            onChange={formik.handleChange}
-                                                            onBlur={formik.handleBlur}
-                                                        />
-                                                        <ErrorMessage name={`semesters[${index}].sem_name`} component="div" className="invalid-feedback" />
+                                                        <div className="w-100">
+                                                            {/* Semester Name Input */}
+                                                            <input
+                                                                name={`semesters[${index}].sem_name`}
+                                                                className={`form-control ${formik.touched.semesters?.[index]?.sem_name && formik.errors.semesters?.[index]?.sem_name ? "is-invalid" : ""}`}
+                                                                value={formik.values.semesters[index].sem_name}
+                                                                onChange={formik.handleChange}
+                                                                onBlur={formik.handleBlur}
+                                                            />
+                                                            <span>
+                                                                <ErrorMessage name={`semesters[${index}].sem_name`} component="div" className="invalid-feedback" />
+                                                            </span>
+                                                        </div>
 
                                                         {/* Remove Button */}
                                                         {formik.values.semesters.length > 1 && (
@@ -128,10 +139,11 @@ const AddUpdateProgram = ({ show, handleClose, submitProgramForm, selectedProgra
                                             ))}
 
                                             {/* Add Semester Button */}
-                                            <Button variant="success" size="sm" className="w-100" onClick={() => push({ semester_id: "", sem_name: "", is_deleted: false })}>
+                                            {/* <Button variant="success" size="sm" className="w-100" onClick={() => push({ semester_id: "", sem_name: "", is_deleted: false })}>
                                                 Add Semester
-                                            </Button>
+                                            </Button> */}
                                         </div>
+                                    </>
                                     )}
                                 </FieldArray>
                             </Form.Group>

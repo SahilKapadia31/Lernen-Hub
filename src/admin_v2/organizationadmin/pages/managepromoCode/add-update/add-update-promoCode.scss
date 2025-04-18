@@ -1,0 +1,5 @@
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: green;
+    border-color: darken(green, 10%);
+  }
+  // Add your custom styles here

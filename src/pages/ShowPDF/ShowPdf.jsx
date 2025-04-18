@@ -67,7 +67,7 @@ import {
 } from "body-scroll-lock";
 import pdfShowSample from "../../img/tour-image-sample/pdf-show-sample2.png";
 var initialValues = { document_title: "" };
-const screenWidth =  window.innerWidth
+const screenWidth = window.innerWidth
 const tourConfig = [
   {
     selector: "#Showpdf__DocumentEngagement",
@@ -250,15 +250,15 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
         setRating({ rating: response.data.rating });
         console.log("setPdfurldata", response.data.pdf_data[0]);
         setPdfurldata(response.data.pdf_data[0]);
-          console.log(location);
-          
-        if(location?.state?.backNavPath){
+        console.log(location);
+
+        if (location?.state?.backNavPath) {
           var backPathValues = location?.state?.backNavPath
-          setNavPaths([...backPathValues,{
+          setNavPaths([...backPathValues, {
             name: response?.data?.pdf_data[0]?.documnet_id?.title || "View Pdf",
             path: "",
           },])
-        }else{
+        } else {
           setNavPaths([
             { name: "Dashboard", path: "/dashboard/page" },
             {
@@ -269,9 +269,9 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
               name: response?.data?.pdf_data[0]?.documnet_id?.title || "View Pdf",
               path: "",
             },
-          ]);  
+          ]);
         }
-        
+
         //setLoading(false);
         try {
           const docOwner =
@@ -848,11 +848,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
         `${ipaddress}/adocumentpostrepliesreplieslikesanddislikes/${user.user_id}/${replies_reply_id}/`
       )
       .then((r) => {
-        //  console.log("Organization Replies reply disliked",r.data)
+        //  console.log("University Replies reply disliked",r.data)
         getreplies_for_reply(disc_replyid);
       })
       .catch(() => {
-        console.log("Organization replies reply dislike error");
+        console.log("University replies reply dislike error");
       });
   }
   //  ----------------------------------------Document reply dislike functionality---------------------------------------
@@ -1348,7 +1348,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
   const [report_status, setreport_status] = useState(false);
   const [report_id, setreport_id] = useState();
   // ---------------------------------------------Dummy function------------------------------------------------------
-  const increment = () => {};
+  const increment = () => { };
   // -----------------------------------------Unpin the comments which are pinned----------------------------------------------------
   const unpin = (discid) => {
     const formdata1 = new FormData();
@@ -1662,9 +1662,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
               setgroup_visible(false);
               setstudylist_visible(false);
             }}
-            className={`container-fluid bg-light ${
-              view_pdf_status ? "d-none" : "d-block"
-            }`}
+            className={`container-fluid bg-light ${view_pdf_status ? "d-none" : "d-block"
+              }`}
           >
             {isDocVisible && (
               <div
@@ -1729,19 +1728,17 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                         }}
                       >
                         {!loading &&
-                        !error &&
-                        pdfurldata?.documnet_id?.title ? (
+                          !error &&
+                          pdfurldata?.documnet_id?.title ? (
                           <>
-                            {pdfurldata.documnet_id.title.length > 140
-                              ? `${pdfurldata.documnet_id.title.slice(
-                                  0,
-                                  140
-                                )}...`
-                              : pdfurldata.documnet_id.title}
+                            {pdfurldata?.documnet_id?.title?.length > 140
+                              ? `${pdfurldata.documnet_id.title.slice(0, 140)}...`
+                              : pdfurldata?.documnet_id?.title || 'No Title Available'}
                           </>
                         ) : (
                           "Loading..."
                         )}
+                        {/* No Title Available */}
                       </p>
                     </OverlayTrigger>
                     {/* -----------------------------------------------Document Details------------------------------------------------------ */}
@@ -1811,18 +1808,19 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                         }}
                       >
                         {!loading &&
-                        !error &&
-                        pdfurldata?.documnet_id?.doc_description ? (
+                          !error &&
+                          pdfurldata?.documnet_id?.doc_description ? (
                           <>
                             <span className="me-2">
                               <img src={docDesc} alt="doc-desc" />
                             </span>
-                            {pdfurldata.documnet_id.doc_description.length > 280
-                              ? `${pdfurldata.documnet_id.doc_description.slice(
-                                  0,
-                                  280
-                                )}...`
-                              : pdfurldata.documnet_id.doc_description}
+                            {/* No Description Available */}
+                            {/* {pdfurldata.documnet_id.doc_description.length > 280 ? `${pdfurldata.documnet_id.doc_description.slice(0, 280)}...` : pdfurldata.documnet_id.doc_description} */}
+                            <>
+                              {pdfurldata?.documnet_id?.doc_description?.length > 140
+                                ? `${pdfurldata.documnet_id.doc_description.slice(0, 140)}...`
+                                : pdfurldata?.documnet_id?.doc_description || 'No Description Available'}
+                            </>
                           </>
                         ) : (
                           ""
@@ -1834,9 +1832,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                         Object.keys(pdfurldata).length > 0 &&
                         pdfurldata?.user_id && (
                           <Link
-                            to={`/profile/${
-                              pdfurldata?.user_id?.user_id || ""
-                            }`}
+                            to={`/profile/${pdfurldata?.user_id?.user_id || ""
+                              }`}
                           >
                             <span
                               className="d-flex align-items-center"
@@ -1951,9 +1948,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                       data-bs-title="Report the Document"
                     >
                       <span
-                        className={`${
-                          pdfurldata.reported_status ? "d-none" : ""
-                        }`}
+                        className={`${pdfurldata.reported_status ? "d-none" : ""
+                          }`}
                         data-bs-toggle="modal"
                         data-bs-target="#reportmodal"
                         style={{
@@ -1972,9 +1968,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                           autoClose: 2000,
                         });
                       }}
-                      className={`${
-                        pdfurldata.reported_status ? "" : "d-none"
-                      }`}
+                      className={`${pdfurldata.reported_status ? "" : "d-none"
+                        }`}
                       style={{
                         cursor: "pointer",
                         position: "relative",
@@ -2004,7 +1999,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                           style={{ cursor: "pointer" }}
                           className="text-white d-flex align-items-center border-0"
                         >
-                          <svg onClick={() =>setEditDocumentMenu(!editDocumentMenu)}
+                          <svg onClick={() => setEditDocumentMenu(!editDocumentMenu)}
                             xmlns="http://www.w3.org/2000/svg"
                             width="35"
                             height="35"
@@ -2102,11 +2097,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                     >
                       {/* -------------------------------------------------To save----------------------------------------------------------- */}
                       <button
-                        className={`btn btn-sm ${
-                          pdfurldata.studylist_status
-                            ? "d-none"
-                            : "d-flex align-items-center py-2 justify-content-center"
-                        }`}
+                        className={`btn btn-sm ${pdfurldata.studylist_status
+                          ? "d-none"
+                          : "d-flex align-items-center py-2 justify-content-center"
+                          }`}
                         style={{
                           border: "1px solid #5D5FE3",
                           height: "40px",
@@ -2137,11 +2131,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                         onClick={() => {
                           unsave();
                         }}
-                        className={`btn btn-sm ${
-                          pdfurldata.studylist_status
-                            ? "d-flex align-items-center py-2 justify-content-center"
-                            : "d-none"
-                        }`}
+                        className={`btn btn-sm ${pdfurldata.studylist_status
+                          ? "d-flex align-items-center py-2 justify-content-center"
+                          : "d-none"
+                          }`}
                         style={{
                           border: "1px solid #5D5FE3",
                           height: "40px",
@@ -2362,9 +2355,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
               <div className="col-12 mt-4 pdf-show">
                 <div className="row bg-light">
                   <div
-                    className={`mt-3 mt-lg-0 ${
-                      discussionpagelayout ? "col-lg-12 pb-4" : "col-lg-4"
-                    } ${documentpagelayout ? "d-none" : ""}`}
+                    className={`mt-3 mt-lg-0 ${discussionpagelayout ? "col-lg-12 pb-4" : "col-lg-4"
+                      } ${documentpagelayout ? "d-none" : ""}`}
                     id="disc-div"
                   >
                     <div style={{ position: "relative" }}>
@@ -2396,27 +2388,24 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                 height: "30px",
                                 width: "30px",
                                 position: "absolute",
-                                right: `${
-                                  !discussionpagelayout ? "-22px" : "-28px"
-                                }`,
+                                right: `${!discussionpagelayout ? "-22px" : "-28px"
+                                  }`,
                                 top: "10px",
                                 cursor: "pointer",
                               }}
                             >
                               <i
-                                className={`${
-                                  discussionpagelayout
-                                    ? "d-none fas fa-caret-right"
-                                    : "fas fa-caret-right"
-                                }`}
+                                className={`${discussionpagelayout
+                                  ? "d-none fas fa-caret-right"
+                                  : "fas fa-caret-right"
+                                  }`}
                                 style={{ color: "#5d5fe3", fontSize: "31px" }}
                               ></i>
                               <i
-                                className={`${
-                                  discussionpagelayout
-                                    ? "fas fa-caret-left"
-                                    : "d-none fas fa-caret-left"
-                                }`}
+                                className={`${discussionpagelayout
+                                  ? "fas fa-caret-left"
+                                  : "d-none fas fa-caret-left"
+                                  }`}
                                 style={{ color: "#5d5fe3", fontSize: "31px" }}
                               ></i>
                             </span>
@@ -2480,26 +2469,23 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                             <div>
                               {/* ---------------------------------------------Searched Comments------------------------------------------------------- */}
                               <div
-                                className={`${
-                                  searchcomment_status ? "" : "d-none"
-                                }`}
+                                className={`${searchcomment_status ? "" : "d-none"
+                                  }`}
                               >
                                 <h6
-                                  className={`${
-                                    searchedComments.length > 0
-                                      ? "d-none"
-                                      : "py-2 text-center"
-                                  }`}
+                                  className={`${searchedComments.length > 0
+                                    ? "d-none"
+                                    : "py-2 text-center"
+                                    }`}
                                   style={{ fontSize: "15px", color: "#5d5fe3" }}
                                 >
                                   Matching comments not available ...💬
                                 </h6>
                                 <h6
-                                  className={`${
-                                    searchedComments.length > 0
-                                      ? "py-2"
-                                      : "d-none"
-                                  }`}
+                                  className={`${searchedComments.length > 0
+                                    ? "py-2"
+                                    : "d-none"
+                                    }`}
                                   style={{ fontSize: "15px", color: "#5d5fe3" }}
                                 >
                                   💬 Searched Comments
@@ -2527,11 +2513,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 alt="shw-pdf"
                                               />
                                               {x.user_id.nickname !=
-                                              undefined ? (
+                                                undefined ? (
                                                 <p
                                                   className={
                                                     x.user_id.profile_pic ==
-                                                    null
+                                                      null
                                                       ? "bg-info text-white rounded-circle my-auto d-flex align-items-center justify-content-center"
                                                       : "d-none"
                                                   }
@@ -2542,15 +2528,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                   }}
                                                 >
                                                   <span>
-                                                    {x.user_id.nickname.slice(
-                                                      0,
-                                                      1
-                                                    )}
+                                                    {x?.user_id?.nickname ? x.user_id.nickname.slice(0, 1) : "user"}
                                                   </span>
                                                   <span>
-                                                    {x.user_id.nickname.slice(
-                                                      -1
-                                                    )}
+                                                    {x?.user_id?.nickname ? x.user_id.nickname.slice(0, 1) : "user"}
                                                   </span>
                                                 </p>
                                               ) : (
@@ -2578,9 +2559,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                               >
                                                 {x.created_on}{" "}
                                                 <span
-                                                  className={`ms-2 edit ${
-                                                    x.edited ? "" : "d-none"
-                                                  }`}
+                                                  className={`ms-2 edit ${x.edited ? "" : "d-none"
+                                                    }`}
                                                 >
                                                   Edited
                                                 </span>
@@ -2589,12 +2569,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                           </div>
 
                                           <div
-                                            className={`d-flex ${
-                                              discussionpagelayout &&
+                                            className={`d-flex ${discussionpagelayout &&
                                               x.pinned_status
-                                                ? "justify-content-between"
-                                                : "justify-content-end"
-                                            }`}
+                                              ? "justify-content-between"
+                                              : "justify-content-end"
+                                              }`}
                                           >
                                             <button
                                               data-bs-toggle="tooltip"
@@ -2604,12 +2583,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                               onClick={() => {
                                                 unpin(x.ddpid);
                                               }}
-                                              className={`p-1 btn btn-sm border px-2 ${
-                                                x.pinned_status &&
+                                              className={`p-1 btn btn-sm border px-2 ${x.pinned_status &&
                                                 discussionpagelayout
-                                                  ? ""
-                                                  : "d-none"
-                                              }`}
+                                                ? ""
+                                                : "d-none"
+                                                }`}
                                               style={{ cursor: "pointer" }}
                                             >
                                               <i className="fa-solid fa-link-slash d-md-none d-inline"></i>
@@ -2625,12 +2603,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                               onClick={() => {
                                                 unpin(x.ddpid);
                                               }}
-                                              className={`p-1 btn btn-sm p-0 border-0 ${
-                                                x.pinned_status &&
+                                              className={`p-1 btn btn-sm p-0 border-0 ${x.pinned_status &&
                                                 discussionpagelayout == false
-                                                  ? ""
-                                                  : "d-none"
-                                              }`}
+                                                ? ""
+                                                : "d-none"
+                                                }`}
                                               style={{ cursor: "pointer" }}
                                             >
                                               <svg
@@ -2671,12 +2648,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 </svg>
                                               </span>
                                               <ul
-                                                className={`bg-white border shadow-sm mt-0 p-0 ps-3 rounded ${
-                                                  index1 === index &&
+                                                className={`bg-white border shadow-sm mt-0 p-0 ps-3 rounded ${index1 === index &&
                                                   dropdownstate
-                                                    ? ""
-                                                    : "d-none"
-                                                }`}
+                                                  ? ""
+                                                  : "d-none"
+                                                  }`}
                                                 style={{
                                                   top: "0px",
                                                   width: "105px",
@@ -2688,15 +2664,15 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                   className={
                                                     x.user_id.user_id !==
                                                       user.user_id ||
-                                                    x.created_on.includes(
-                                                      "day"
-                                                    ) ||
-                                                    x.created_on.includes(
-                                                      "week"
-                                                    ) ||
-                                                    x.created_on.includes(
-                                                      "year"
-                                                    )
+                                                      x.created_on.includes(
+                                                        "day"
+                                                      ) ||
+                                                      x.created_on.includes(
+                                                        "week"
+                                                      ) ||
+                                                      x.created_on.includes(
+                                                        "year"
+                                                      )
                                                       ? "d-none"
                                                       : "d-flex align-items-center bg-transparent border-0 my-2"
                                                   }
@@ -2730,11 +2706,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 </Button>
 
                                                 <button
-                                                  className={`bg-transparent border-0 d-flex align-items-center my-2 ${
-                                                    x.pinned_status
-                                                      ? "d-none"
-                                                      : ""
-                                                  }`}
+                                                  className={`bg-transparent border-0 d-flex align-items-center my-2 ${x.pinned_status
+                                                    ? "d-none"
+                                                    : ""
+                                                    }`}
                                                   onClick={() => {
                                                     pincomment(x.ddpid);
                                                   }}
@@ -2760,76 +2735,73 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 {/* ----------------------------------------------------Report button--------------------------------------------------- */}
                                                 {user.user_id !==
                                                   x.user_id.user_id && (
-                                                  <>
-                                                    <button
-                                                      className={`bg-transparent border-0 my-2 ${
-                                                        x.report_status
+                                                    <>
+                                                      <button
+                                                        className={`bg-transparent border-0 my-2 ${x.report_status
                                                           ? "d-none"
                                                           : "d-flex align-items-center"
-                                                      }`}
-                                                      onClick={() => {
-                                                        setreport_id(x.ddpid);
-                                                        setreport_status(true);
-                                                      }}
-                                                      style={{ height: "20px" }}
-                                                    >
-                                                      <span className="dropdownmenu">
-                                                        <svg
-                                                          xmlns="http://www.w3.org/2000/svg"
-                                                          width="19"
-                                                          height="20"
-                                                          viewBox="0 0 35 35"
-                                                          fill="none"
-                                                        >
-                                                          <path
-                                                            d="M17.4997 23.9505C17.754 23.9505 17.9671 23.8645 18.1391 23.6925C18.3111 23.5205 18.3971 23.3073 18.3971 23.0531C18.3971 22.7988 18.3111 22.5856 18.1391 22.4136C17.9671 22.2416 17.754 22.1556 17.4997 22.1556C17.2454 22.1556 17.0322 22.2416 16.8602 22.4136C16.6882 22.5856 16.6023 22.7988 16.6023 23.0531C16.6023 23.3073 16.6882 23.5205 16.8602 23.6925C17.0322 23.8645 17.2454 23.9505 17.4997 23.9505ZM16.7705 19.6316H18.2288V10.7694H16.7705V19.6316ZM12.6479 29.1668L5.83301 22.3651V12.6484L12.6347 5.8335H22.3514L29.1663 12.6352V22.3519L22.3646 29.1668H12.6479ZM13.2705 27.7085H21.7288L27.708 21.7293V13.271L21.7288 7.29183H13.2705L7.29134 13.271V21.7293L13.2705 27.7085Z"
-                                                            fill="#2A3941"
-                                                          />
-                                                        </svg>
-                                                      </span>{" "}
-                                                      <span className="ms-2">
-                                                        Report
-                                                      </span>
-                                                    </button>
+                                                          }`}
+                                                        onClick={() => {
+                                                          setreport_id(x.ddpid);
+                                                          setreport_status(true);
+                                                        }}
+                                                        style={{ height: "20px" }}
+                                                      >
+                                                        <span className="dropdownmenu">
+                                                          <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="19"
+                                                            height="20"
+                                                            viewBox="0 0 35 35"
+                                                            fill="none"
+                                                          >
+                                                            <path
+                                                              d="M17.4997 23.9505C17.754 23.9505 17.9671 23.8645 18.1391 23.6925C18.3111 23.5205 18.3971 23.3073 18.3971 23.0531C18.3971 22.7988 18.3111 22.5856 18.1391 22.4136C17.9671 22.2416 17.754 22.1556 17.4997 22.1556C17.2454 22.1556 17.0322 22.2416 16.8602 22.4136C16.6882 22.5856 16.6023 22.7988 16.6023 23.0531C16.6023 23.3073 16.6882 23.5205 16.8602 23.6925C17.0322 23.8645 17.2454 23.9505 17.4997 23.9505ZM16.7705 19.6316H18.2288V10.7694H16.7705V19.6316ZM12.6479 29.1668L5.83301 22.3651V12.6484L12.6347 5.8335H22.3514L29.1663 12.6352V22.3519L22.3646 29.1668H12.6479ZM13.2705 27.7085H21.7288L27.708 21.7293V13.271L21.7288 7.29183H13.2705L7.29134 13.271V21.7293L13.2705 27.7085Z"
+                                                              fill="#2A3941"
+                                                            />
+                                                          </svg>
+                                                        </span>{" "}
+                                                        <span className="ms-2">
+                                                          Report
+                                                        </span>
+                                                      </button>
 
-                                                    <button
-                                                      className={`bg-transparent border-0 my-2 ${
-                                                        x.report_status
+                                                      <button
+                                                        className={`bg-transparent border-0 my-2 ${x.report_status
                                                           ? "d-flex align-items-center"
                                                           : "d-none"
-                                                      }`}
-                                                      style={{
-                                                        height: "20px",
-                                                        color: "#FF845D",
-                                                      }}
-                                                    >
-                                                      <span className="dropdownmenu">
-                                                        <svg
-                                                          xmlns="http://www.w3.org/2000/svg"
-                                                          width="19"
-                                                          height="20"
-                                                          viewBox="0 0 35 35"
-                                                          fill="none"
-                                                        >
-                                                          <path
-                                                            d="M17.4997 23.9505C17.754 23.9505 17.9671 23.8645 18.1391 23.6925C18.3111 23.5205 18.3971 23.3073 18.3971 23.0531C18.3971 22.7988 18.3111 22.5856 18.1391 22.4136C17.9671 22.2416 17.754 22.1556 17.4997 22.1556C17.2454 22.1556 17.0322 22.2416 16.8602 22.4136C16.6882 22.5856 16.6023 22.7988 16.6023 23.0531C16.6023 23.3073 16.6882 23.5205 16.8602 23.6925C17.0322 23.8645 17.2454 23.9505 17.4997 23.9505ZM16.7705 19.6316H18.2288V10.7694H16.7705V19.6316ZM12.6479 29.1668L5.83301 22.3651V12.6484L12.6347 5.8335H22.3514L29.1663 12.6352V22.3519L22.3646 29.1668H12.6479ZM13.2705 27.7085H21.7288L27.708 21.7293V13.271L21.7288 7.29183H13.2705L7.29134 13.271V21.7293L13.2705 27.7085Z"
-                                                            fill="#FF845D"
-                                                          />
-                                                        </svg>
-                                                      </span>{" "}
-                                                      <span className="ms-2">
-                                                        Reported
-                                                      </span>
-                                                    </button>
-                                                  </>
-                                                )}
+                                                          }`}
+                                                        style={{
+                                                          height: "20px",
+                                                          color: "#FF845D",
+                                                        }}
+                                                      >
+                                                        <span className="dropdownmenu">
+                                                          <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="19"
+                                                            height="20"
+                                                            viewBox="0 0 35 35"
+                                                            fill="none"
+                                                          >
+                                                            <path
+                                                              d="M17.4997 23.9505C17.754 23.9505 17.9671 23.8645 18.1391 23.6925C18.3111 23.5205 18.3971 23.3073 18.3971 23.0531C18.3971 22.7988 18.3111 22.5856 18.1391 22.4136C17.9671 22.2416 17.754 22.1556 17.4997 22.1556C17.2454 22.1556 17.0322 22.2416 16.8602 22.4136C16.6882 22.5856 16.6023 22.7988 16.6023 23.0531C16.6023 23.3073 16.6882 23.5205 16.8602 23.6925C17.0322 23.8645 17.2454 23.9505 17.4997 23.9505ZM16.7705 19.6316H18.2288V10.7694H16.7705V19.6316ZM12.6479 29.1668L5.83301 22.3651V12.6484L12.6347 5.8335H22.3514L29.1663 12.6352V22.3519L22.3646 29.1668H12.6479ZM13.2705 27.7085H21.7288L27.708 21.7293V13.271L21.7288 7.29183H13.2705L7.29134 13.271V21.7293L13.2705 27.7085Z"
+                                                              fill="#FF845D"
+                                                            />
+                                                          </svg>
+                                                        </span>{" "}
+                                                        <span className="ms-2">
+                                                          Reported
+                                                        </span>
+                                                      </button>
+                                                    </>
+                                                  )}
                                                 <button
-                                                  className={`bg-transparent border-0 my-2 ${
-                                                    user.user_id ===
+                                                  className={`bg-transparent border-0 my-2 ${user.user_id ===
                                                     x.user_id.user_id
-                                                      ? "d-flex align-items-center"
-                                                      : "d-none"
-                                                  }`}
+                                                    ? "d-flex align-items-center"
+                                                    : "d-none"
+                                                    }`}
                                                   onClick={() => {
                                                     deletePost(x.ddpid);
                                                   }}
@@ -3075,7 +3047,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                               className={
                                                                 y.user_details
                                                                   .profile_pic ==
-                                                                null
+                                                                  null
                                                                   ? "d-none"
                                                                   : "rounded-circle"
                                                               }
@@ -3087,7 +3059,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                               className={
                                                                 y.user_details
                                                                   .profile_pic ==
-                                                                null
+                                                                  null
                                                                   ? "bg-info text-white rounded-circle my-auto d-flex justify-content-center align-items-center"
                                                                   : "d-none"
                                                               }
@@ -3099,15 +3071,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                               }}
                                                             >
                                                               <span>
-                                                                {y.user_details.nickname.slice(
-                                                                  0,
-                                                                  1
-                                                                )}
+                                                                {y?.user_details?.nickname ? y.user_details.nickname.slice(0, 1) : "user"}
                                                               </span>
                                                               <span>
-                                                                {y.user_details.nickname.slice(
-                                                                  -1
-                                                                )}
+                                                                {y?.user_details?.nickname ? y.user_details.nickname.slice(0, 1) : "user"}
                                                               </span>
                                                             </p>
                                                           </div>
@@ -3215,8 +3182,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                           <button
                                                             className={
                                                               user.first_name ===
-                                                              y.user_details
-                                                                .first_name
+                                                                y.user_details
+                                                                  .first_name
                                                                 ? "bg-transparent border-0 d-flex align-items-center"
                                                                 : "d-none"
                                                             }
@@ -3315,12 +3282,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                             style={{
                                                               cursor: "pointer",
                                                             }}
-                                                            className={`view_reply_for_reply mt-2 mb-0 ${
-                                                              y.replies_count >
+                                                            className={`view_reply_for_reply mt-2 mb-0 ${y.replies_count >
                                                               0
-                                                                ? ""
-                                                                : "d-none"
-                                                            }`}
+                                                              ? ""
+                                                              : "d-none"
+                                                              }`}
                                                             onClick={() => {
                                                               setreplies_for_reply_status(
                                                                 !replies_for_reply_status
@@ -3343,12 +3309,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                             style={{
                                                               cursor: "pointer",
                                                             }}
-                                                            className={`view_reply_for_reply mt-2 mb-0 ${
-                                                              y.replies_count >
+                                                            className={`view_reply_for_reply mt-2 mb-0 ${y.replies_count >
                                                               0
-                                                                ? ""
-                                                                : "d-none"
-                                                            }`}
+                                                              ? ""
+                                                              : "d-none"
+                                                              }`}
                                                             onClick={() => {
                                                               setreplies_for_reply_status(
                                                                 !replies_for_reply_status
@@ -3368,12 +3333,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                             style={{
                                                               cursor: "pointer",
                                                             }}
-                                                            className={`view_reply_for_reply mt-2 mb-0 ${
-                                                              y.replies_count >
+                                                            className={`view_reply_for_reply mt-2 mb-0 ${y.replies_count >
                                                               0
-                                                                ? ""
-                                                                : "d-none"
-                                                            }`}
+                                                              ? ""
+                                                              : "d-none"
+                                                              }`}
                                                             onClick={() => {
                                                               setreplies_for_reply_status(
                                                                 !replies_for_reply_status
@@ -3393,13 +3357,13 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                         )}
                                                         {fetchedreplies_for_reply &&
                                                           fetchedreplies_for_reply.length >
-                                                            0 && (
+                                                          0 && (
                                                             <div
                                                               className={
                                                                 fetchedreplies_for_reply[0]
                                                                   .reply ==
                                                                   y.dprid &&
-                                                                replies_for_reply_status
+                                                                  replies_for_reply_status
                                                                   ? "d-block"
                                                                   : "d-none"
                                                               }
@@ -3428,7 +3392,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                                 z
                                                                                   .user_id
                                                                                   .profile_pic ==
-                                                                                null
+                                                                                  null
                                                                                   ? "d-none"
                                                                                   : "rounded-circle"
                                                                               }
@@ -3445,7 +3409,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                                 z
                                                                                   .user_id
                                                                                   .profile_pic ==
-                                                                                null
+                                                                                  null
                                                                                   ? "bg-info text-white rounded-circle my-auto d-flex justify-content-center align-items-center"
                                                                                   : "d-none"
                                                                               }
@@ -3459,15 +3423,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                               }}
                                                                             >
                                                                               <span>
-                                                                                {z.user_id.nickname.slice(
-                                                                                  0,
-                                                                                  1
-                                                                                )}
+                                                                                {z?.user_id?.nickname ? z.user_id.nickname.slice(0, 1) : "user"}
                                                                               </span>
                                                                               <span>
-                                                                                {z.user_id.nickname.slice(
-                                                                                  -1
-                                                                                )}
+                                                                                {z?.user_id?.nickname ? z.user_id.nickname.slice(0, 1) : "user"}
                                                                               </span>
                                                                             </p>
                                                                           </div>
@@ -3581,9 +3540,9 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                           <button
                                                                             className={
                                                                               user.first_name ===
-                                                                              z
-                                                                                .user_id
-                                                                                .first_name
+                                                                                z
+                                                                                  .user_id
+                                                                                  .first_name
                                                                                 ? "bg-transparent border-0 d-flex align-items-center"
                                                                                 : "d-none"
                                                                             }
@@ -3695,13 +3654,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                               }}
                                             >
                                               <span>
-                                                {userdetails.nickname.slice(
-                                                  0,
-                                                  1
-                                                )}
+                                                {userdetails?.nickname ? userdetails.nickname.slice(0, 1) : "user"}
                                               </span>
                                               <span>
-                                                {userdetails.nickname.slice(-1)}
+                                                {userdetails?.nickname ? userdetails.nickname.slice(0, 1) : "user"}
                                               </span>
                                             </p>
                                           ) : (
@@ -3770,13 +3726,12 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 >
                                                   <div
                                                     style={{ width: "25px" }}
-                                                    className={`${
-                                                      load &&
+                                                    className={`${load &&
                                                       selectedPostForComment ==
-                                                        x.ddpid
-                                                        ? ""
-                                                        : "d-none"
-                                                    }`}
+                                                      x.ddpid
+                                                      ? ""
+                                                      : "d-none"
+                                                      }`}
                                                   >
                                                     <div
                                                       className={`spinner-border spinner-border-sm`}
@@ -3793,13 +3748,12 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                     data-bs-custom-class="custom-tooltip"
                                                     data-bs-title="Post"
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    className={`${
-                                                      load &&
+                                                    className={`${load &&
                                                       selectedPostForComment ==
-                                                        x.ddpid
-                                                        ? "d-none"
-                                                        : ""
-                                                    }`}
+                                                      x.ddpid
+                                                      ? "d-none"
+                                                      : ""
+                                                      }`}
                                                     width="25"
                                                     height="25"
                                                     viewBox="0 0 25 25"
@@ -3828,9 +3782,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                     image
                                                   )}
                                                   width={50}
-                                                  alt={`Selected Image ${
-                                                    index + 1
-                                                  }`}
+                                                  alt={`Selected Image ${index + 1
+                                                    }`}
                                                 />
                                                 <button
                                                   style={{
@@ -3876,22 +3829,20 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                               {/* <Showpdfpage_user_comments usercomment_status={usercomments_status} id={id} discussionpagelayout={discussionpagelayout} count={count}/> */}
                               {/* ---------------------------------------------Document discussion layout section-------------------------------------- */}
                               <h6
-                                className={`py-2 ${
-                                  pinnedcommentsstate &&
+                                className={`py-2 ${pinnedcommentsstate &&
                                   searchcomment.length == 0
-                                    ? ""
-                                    : "d-none"
-                                }`}
+                                  ? ""
+                                  : "d-none"
+                                  }`}
                                 style={{ color: "#5d5fe3", fontSize: "15px" }}
                               >
                                 💬 Followed Comments
                               </h6>
                               <h6
-                                className={`py-2 ${
-                                  usercommentsstate && searchcomment.length == 0
-                                    ? ""
-                                    : "d-none"
-                                }`}
+                                className={`py-2 ${usercommentsstate && searchcomment.length == 0
+                                  ? ""
+                                  : "d-none"
+                                  }`}
                                 style={{ color: "#5d5fe3", fontSize: "15px" }}
                               >
                                 💬 Your Comments
@@ -3900,16 +3851,15 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                 className={`${original_status ? "" : "d-none"}`}
                               >
                                 {documentDetails &&
-                                documentDetails.length > 0 ? (
+                                  documentDetails.length > 0 ? (
                                   documentDetails.map((x, index) => {
                                     return (
                                       <div
                                         id={`comment-container-${x.comment.ddpid}`}
-                                        className={`mb-3 me-2 ${
-                                          view_mark_comment === x.comment.ddpid
-                                            ? "rounded purple-border"
-                                            : ""
-                                        }`}
+                                        className={`mb-3 me-2 ${view_mark_comment === x.comment.ddpid
+                                          ? "rounded purple-border"
+                                          : ""
+                                          }`}
                                         key={index}
                                       >
                                         <div className="bg-white rounded border">
@@ -3932,7 +3882,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                   alt="shw-pdf"
                                                 />
                                                 {x.user.nickname !=
-                                                undefined ? (
+                                                  undefined ? (
                                                   <p
                                                     className={
                                                       x.user.profile_pic == null
@@ -3946,15 +3896,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                     }}
                                                   >
                                                     <span>
-                                                      {x.user.nickname.slice(
-                                                        0,
-                                                        1
-                                                      )}
+                                                      {x?.user?.nickname ? x.user.nickname.slice(0, 1) : "user"}
                                                     </span>
                                                     <span>
-                                                      {x.user.nickname.slice(
-                                                        -1
-                                                      )}
+                                                      {x?.user?.nickname ? x.user.nickname.slice(0, 1) : "user"}
                                                     </span>
                                                   </p>
                                                 ) : (
@@ -3982,9 +3927,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 >
                                                   {x.comment.created_on}{" "}
                                                   <span
-                                                    className={`ms-2 edit ${
-                                                      x.edited ? "" : "d-none"
-                                                    }`}
+                                                    className={`ms-2 edit ${x.edited ? "" : "d-none"
+                                                      }`}
                                                   >
                                                     Edited
                                                   </span>
@@ -3992,16 +3936,14 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                               </div>
                                             </div>
                                             <div
-                                              className={`d-flex align-items-center ${
-                                                discussionpagelayout &&
+                                              className={`d-flex align-items-center ${discussionpagelayout &&
                                                 x.pinned_status
-                                                  ? "justify-content-between"
-                                                  : "justify-content-end"
-                                              } p-0 ${
-                                                x.pinned_status
+                                                ? "justify-content-between"
+                                                : "justify-content-end"
+                                                } p-0 ${x.pinned_status
                                                   ? "col-2"
                                                   : "col-2"
-                                              }`}
+                                                }`}
                                             >
                                               <button
                                                 data-bs-toggle="tooltip"
@@ -4011,12 +3953,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 onClick={() => {
                                                   unpin(x.comment.ddpid);
                                                 }}
-                                                className={`p-1 btn btn-sm border px-2 ${
-                                                  x.pinned_status &&
+                                                className={`p-1 btn btn-sm border px-2 ${x.pinned_status &&
                                                   discussionpagelayout
-                                                    ? ""
-                                                    : "d-none"
-                                                }`}
+                                                  ? ""
+                                                  : "d-none"
+                                                  }`}
                                                 style={{ cursor: "pointer" }}
                                               >
                                                 <i className="fa-solid fa-link-slash d-md-none d-inline"></i>
@@ -4032,12 +3973,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 onClick={() => {
                                                   unpin(x.comment.ddpid);
                                                 }}
-                                                className={`p-1 btn btn-sm p-0 border-0 ${
-                                                  x.pinned_status &&
+                                                className={`p-1 btn btn-sm p-0 border-0 ${x.pinned_status &&
                                                   discussionpagelayout == false
-                                                    ? ""
-                                                    : "d-none"
-                                                }`}
+                                                  ? ""
+                                                  : "d-none"
+                                                  }`}
                                                 style={{ cursor: "pointer" }}
                                               >
                                                 {" "}
@@ -4077,12 +4017,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                   </svg>
                                                 </span>
                                                 <ul
-                                                  className={`bg-white border shadow-sm mt-0 p-0 ps-3 rounded ${
-                                                    index1 === index &&
+                                                  className={`bg-white border shadow-sm mt-0 p-0 ps-3 rounded ${index1 === index &&
                                                     dropdownstate
-                                                      ? ""
-                                                      : "d-none"
-                                                  }`}
+                                                    ? ""
+                                                    : "d-none"
+                                                    }`}
                                                   style={{
                                                     top: "0px",
                                                     width: "105px",
@@ -4094,15 +4033,15 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                     className={
                                                       x.user.user_id !=
                                                         user.user_id ||
-                                                      x.comment.created_on.includes(
-                                                        "day"
-                                                      ) ||
-                                                      x.comment.created_on.includes(
-                                                        "week"
-                                                      ) ||
-                                                      x.comment.created_on.includes(
-                                                        "year"
-                                                      )
+                                                        x.comment.created_on.includes(
+                                                          "day"
+                                                        ) ||
+                                                        x.comment.created_on.includes(
+                                                          "week"
+                                                        ) ||
+                                                        x.comment.created_on.includes(
+                                                          "year"
+                                                        )
                                                         ? "d-none"
                                                         : "d-flex align-items-center bg-transparent border-0 my-2 d-flex align-items-center"
                                                     }
@@ -4138,11 +4077,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                     </span>
                                                   </button>
                                                   <button
-                                                    className={`bg-transparent border-0 d-flex align-items-center my-2 ${
-                                                      x.pinned_status
-                                                        ? "d-none"
-                                                        : ""
-                                                    }`}
+                                                    className={`bg-transparent border-0 d-flex align-items-center my-2 ${x.pinned_status
+                                                      ? "d-none"
+                                                      : ""
+                                                      }`}
                                                     onClick={() => {
                                                       pincomment(
                                                         x.comment.ddpid
@@ -4174,91 +4112,88 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                   {/* ----------------------------------------------------Report button--------------------------------------------------- */}
                                                   {user.user_id !==
                                                     x.user.user_id && (
-                                                    <>
-                                                      <button
-                                                        className={`bg-transparent border-0 my-2 ${
-                                                          x.reported_status
+                                                      <>
+                                                        <button
+                                                          className={`bg-transparent border-0 my-2 ${x.reported_status
                                                             ? "d-none"
                                                             : "d-flex align-items-center"
-                                                        }`}
-                                                        onClick={() => {
-                                                          setreport_id(
-                                                            x.comment.ddpid
-                                                          );
-                                                          setreport_status(
-                                                            true
-                                                          );
-                                                        }}
-                                                        style={{
-                                                          height: "20px",
-                                                        }}
-                                                      >
-                                                        <span className="dropdownmenu">
-                                                          <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="19"
-                                                            height="20"
-                                                            viewBox="0 0 35 35"
-                                                            fill="none"
-                                                          >
-                                                            <path
-                                                              d="M17.4997 23.9505C17.754 23.9505 17.9671 23.8645 18.1391 23.6925C18.3111 23.5205 18.3971 23.3073 18.3971 23.0531C18.3971 22.7988 18.3111 22.5856 18.1391 22.4136C17.9671 22.2416 17.754 22.1556 17.4997 22.1556C17.2454 22.1556 17.0322 22.2416 16.8602 22.4136C16.6882 22.5856 16.6023 22.7988 16.6023 23.0531C16.6023 23.3073 16.6882 23.5205 16.8602 23.6925C17.0322 23.8645 17.2454 23.9505 17.4997 23.9505ZM16.7705 19.6316H18.2288V10.7694H16.7705V19.6316ZM12.6479 29.1668L5.83301 22.3651V12.6484L12.6347 5.8335H22.3514L29.1663 12.6352V22.3519L22.3646 29.1668H12.6479ZM13.2705 27.7085H21.7288L27.708 21.7293V13.271L21.7288 7.29183H13.2705L7.29134 13.271V21.7293L13.2705 27.7085Z"
-                                                              fill="#2A3941"
-                                                            />
-                                                          </svg>
-                                                        </span>{" "}
-                                                        <span
-                                                          className="ms-2"
+                                                            }`}
+                                                          onClick={() => {
+                                                            setreport_id(
+                                                              x.comment.ddpid
+                                                            );
+                                                            setreport_status(
+                                                              true
+                                                            );
+                                                          }}
                                                           style={{
-                                                            fontSize: "14px",
+                                                            height: "20px",
                                                           }}
                                                         >
-                                                          Report
-                                                        </span>
-                                                      </button>
-                                                      <button
-                                                        className={`bg-transparent border-0 my-2 ${
-                                                          x.reported_status
+                                                          <span className="dropdownmenu">
+                                                            <svg
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                              width="19"
+                                                              height="20"
+                                                              viewBox="0 0 35 35"
+                                                              fill="none"
+                                                            >
+                                                              <path
+                                                                d="M17.4997 23.9505C17.754 23.9505 17.9671 23.8645 18.1391 23.6925C18.3111 23.5205 18.3971 23.3073 18.3971 23.0531C18.3971 22.7988 18.3111 22.5856 18.1391 22.4136C17.9671 22.2416 17.754 22.1556 17.4997 22.1556C17.2454 22.1556 17.0322 22.2416 16.8602 22.4136C16.6882 22.5856 16.6023 22.7988 16.6023 23.0531C16.6023 23.3073 16.6882 23.5205 16.8602 23.6925C17.0322 23.8645 17.2454 23.9505 17.4997 23.9505ZM16.7705 19.6316H18.2288V10.7694H16.7705V19.6316ZM12.6479 29.1668L5.83301 22.3651V12.6484L12.6347 5.8335H22.3514L29.1663 12.6352V22.3519L22.3646 29.1668H12.6479ZM13.2705 27.7085H21.7288L27.708 21.7293V13.271L21.7288 7.29183H13.2705L7.29134 13.271V21.7293L13.2705 27.7085Z"
+                                                                fill="#2A3941"
+                                                              />
+                                                            </svg>
+                                                          </span>{" "}
+                                                          <span
+                                                            className="ms-2"
+                                                            style={{
+                                                              fontSize: "14px",
+                                                            }}
+                                                          >
+                                                            Report
+                                                          </span>
+                                                        </button>
+                                                        <button
+                                                          className={`bg-transparent border-0 my-2 ${x.reported_status
                                                             ? "d-flex align-items-center"
                                                             : "d-none"
-                                                        }`}
-                                                        style={{
-                                                          height: "20px",
-                                                          color: "#FF845D",
-                                                        }}
-                                                      >
-                                                        <span className="dropdownmenu">
-                                                          <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="19"
-                                                            height="20"
-                                                            viewBox="0 0 35 35"
-                                                            fill="none"
-                                                          >
-                                                            <path
-                                                              d="M17.4997 23.9505C17.754 23.9505 17.9671 23.8645 18.1391 23.6925C18.3111 23.5205 18.3971 23.3073 18.3971 23.0531C18.3971 22.7988 18.3111 22.5856 18.1391 22.4136C17.9671 22.2416 17.754 22.1556 17.4997 22.1556C17.2454 22.1556 17.0322 22.2416 16.8602 22.4136C16.6882 22.5856 16.6023 22.7988 16.6023 23.0531C16.6023 23.3073 16.6882 23.5205 16.8602 23.6925C17.0322 23.8645 17.2454 23.9505 17.4997 23.9505ZM16.7705 19.6316H18.2288V10.7694H16.7705V19.6316ZM12.6479 29.1668L5.83301 22.3651V12.6484L12.6347 5.8335H22.3514L29.1663 12.6352V22.3519L22.3646 29.1668H12.6479ZM13.2705 27.7085H21.7288L27.708 21.7293V13.271L21.7288 7.29183H13.2705L7.29134 13.271V21.7293L13.2705 27.7085Z"
-                                                              fill="#FF845D"
-                                                            />
-                                                          </svg>
-                                                        </span>{" "}
-                                                        <span
-                                                          className="ms-2"
+                                                            }`}
                                                           style={{
-                                                            fontSize: "14px",
+                                                            height: "20px",
+                                                            color: "#FF845D",
                                                           }}
                                                         >
-                                                          Reported
-                                                        </span>
-                                                      </button>
-                                                    </>
-                                                  )}
+                                                          <span className="dropdownmenu">
+                                                            <svg
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                              width="19"
+                                                              height="20"
+                                                              viewBox="0 0 35 35"
+                                                              fill="none"
+                                                            >
+                                                              <path
+                                                                d="M17.4997 23.9505C17.754 23.9505 17.9671 23.8645 18.1391 23.6925C18.3111 23.5205 18.3971 23.3073 18.3971 23.0531C18.3971 22.7988 18.3111 22.5856 18.1391 22.4136C17.9671 22.2416 17.754 22.1556 17.4997 22.1556C17.2454 22.1556 17.0322 22.2416 16.8602 22.4136C16.6882 22.5856 16.6023 22.7988 16.6023 23.0531C16.6023 23.3073 16.6882 23.5205 16.8602 23.6925C17.0322 23.8645 17.2454 23.9505 17.4997 23.9505ZM16.7705 19.6316H18.2288V10.7694H16.7705V19.6316ZM12.6479 29.1668L5.83301 22.3651V12.6484L12.6347 5.8335H22.3514L29.1663 12.6352V22.3519L22.3646 29.1668H12.6479ZM13.2705 27.7085H21.7288L27.708 21.7293V13.271L21.7288 7.29183H13.2705L7.29134 13.271V21.7293L13.2705 27.7085Z"
+                                                                fill="#FF845D"
+                                                              />
+                                                            </svg>
+                                                          </span>{" "}
+                                                          <span
+                                                            className="ms-2"
+                                                            style={{
+                                                              fontSize: "14px",
+                                                            }}
+                                                          >
+                                                            Reported
+                                                          </span>
+                                                        </button>
+                                                      </>
+                                                    )}
                                                   <button
-                                                    className={`bg-transparent border-0 my-2 ${
-                                                      user.user_id ===
+                                                    className={`bg-transparent border-0 my-2 ${user.user_id ===
                                                       x.user.user_id
-                                                        ? "d-flex align-items-center"
-                                                        : "d-none"
-                                                    }`}
+                                                      ? "d-flex align-items-center"
+                                                      : "d-none"
+                                                      }`}
                                                     onClick={() => {
                                                       deletePost(
                                                         x.comment.ddpid
@@ -4496,7 +4431,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                       setdiscussionpagelayout(!discussionpagelayout);
                                                     }
 
-                                                    scrollToQue( x.comment.ddpid);
+                                                    scrollToQue(x.comment.ddpid);
 
                                                   }}
                                                   className="btn btn-sm w-100 py-2"
@@ -4522,7 +4457,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 className={
                                                   fetchedreplies[0].ddpid ==
                                                     x.comment.ddpid &&
-                                                  reply_layout_status
+                                                    reply_layout_status
                                                     ? "d-block"
                                                     : "d-none"
                                                 }
@@ -4547,7 +4482,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                 className={
                                                                   y.user_details
                                                                     .profile_pic ==
-                                                                  null
+                                                                    null
                                                                     ? "d-none"
                                                                     : "rounded-circle"
                                                                 }
@@ -4559,7 +4494,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                 className={
                                                                   y.user_details
                                                                     .profile_pic ==
-                                                                  null
+                                                                    null
                                                                     ? "bg-info text-white rounded-circle my-auto d-flex justify-content-center align-items-center"
                                                                     : "d-none"
                                                                 }
@@ -4572,24 +4507,18 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                 }}
                                                               >
                                                                 <span>
-                                                                  {y.user_details.nickname.slice(
-                                                                    0,
-                                                                    1
-                                                                  )}
+                                                                  {y?.user_details?.nickname ? y.user_details.nickname.slice(0, 1) : "user"}
                                                                 </span>
                                                                 <span>
-                                                                  {y.user_details.nickname.slice(
-                                                                    -1
-                                                                  )}
+                                                                  {y?.user_details?.nickname ? y.user_details.nickname.slice(0, 1) : "user"}
                                                                 </span>
                                                               </p>
                                                             </div>
                                                             <div
-                                                              className={`ps-2 p-0 ${
-                                                                discussionpagelayout
-                                                                  ? "col-lg-9"
-                                                                  : "col-lg-7"
-                                                              }`}
+                                                              className={`ps-2 p-0 ${discussionpagelayout
+                                                                ? "col-lg-9"
+                                                                : "col-lg-7"
+                                                                }`}
                                                             >
                                                               <h6
                                                                 className="ms-3 ms-sm-0 my-0"
@@ -4699,8 +4628,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                             <button
                                                               className={
                                                                 user.first_name ===
-                                                                y.user_details
-                                                                  .first_name
+                                                                  y.user_details
+                                                                    .first_name
                                                                   ? "bg-transparent border-0 d-flex align-items-center"
                                                                   : "d-none"
                                                               }
@@ -4801,12 +4730,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                 cursor:
                                                                   "pointer",
                                                               }}
-                                                              className={`view_reply_for_reply mt-2 mb-0 ${
-                                                                y.replies_count >
+                                                              className={`view_reply_for_reply mt-2 mb-0 ${y.replies_count >
                                                                 0
-                                                                  ? ""
-                                                                  : "d-none"
-                                                              }`}
+                                                                ? ""
+                                                                : "d-none"
+                                                                }`}
                                                               onClick={() => {
                                                                 setreplies_for_reply_status(
                                                                   !replies_for_reply_status
@@ -4830,12 +4758,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                 cursor:
                                                                   "pointer",
                                                               }}
-                                                              className={`view_reply_for_reply mt-2 mb-0 ${
-                                                                y.replies_count >
+                                                              className={`view_reply_for_reply mt-2 mb-0 ${y.replies_count >
                                                                 0
-                                                                  ? ""
-                                                                  : "d-none"
-                                                              }`}
+                                                                ? ""
+                                                                : "d-none"
+                                                                }`}
                                                               onClick={() => {
                                                                 setreplies_for_reply_status(
                                                                   !replies_for_reply_status
@@ -4856,12 +4783,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                 cursor:
                                                                   "pointer",
                                                               }}
-                                                              className={`view_reply_for_reply mt-2 mb-0 ${
-                                                                y.replies_count >
+                                                              className={`view_reply_for_reply mt-2 mb-0 ${y.replies_count >
                                                                 0
-                                                                  ? ""
-                                                                  : "d-none"
-                                                              }`}
+                                                                ? ""
+                                                                : "d-none"
+                                                                }`}
                                                               onClick={() => {
                                                                 setreplies_for_reply_status(
                                                                   !replies_for_reply_status
@@ -4881,13 +4807,13 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                           )}
                                                           {fetchedreplies_for_reply &&
                                                             fetchedreplies_for_reply.length >
-                                                              0 && (
+                                                            0 && (
                                                               <div
                                                                 className={
                                                                   fetchedreplies_for_reply[0]
                                                                     .reply ==
                                                                     y.dprid &&
-                                                                  replies_for_reply_status
+                                                                    replies_for_reply_status
                                                                     ? "d-block"
                                                                     : "d-none"
                                                                 }
@@ -4916,7 +4842,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                                   z
                                                                                     .user_id
                                                                                     .profile_pic ==
-                                                                                  null
+                                                                                    null
                                                                                     ? "d-none"
                                                                                     : "rounded-circle"
                                                                                 }
@@ -4933,7 +4859,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                                   z
                                                                                     .user_id
                                                                                     .profile_pic ==
-                                                                                  null
+                                                                                    null
                                                                                     ? "bg-info text-white rounded-circle my-auto d-flex justify-content-center align-items-center"
                                                                                     : "d-none"
                                                                                 }
@@ -4947,15 +4873,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                                 }}
                                                                               >
                                                                                 <span>
-                                                                                  {z.user_id.nickname.slice(
-                                                                                    0,
-                                                                                    1
-                                                                                  )}
+                                                                                  {z?.user_id?.nickname ? z.user_id.nickname.slice(0, 1) : "user"}
                                                                                 </span>
                                                                                 <span>
-                                                                                  {z.user_id.nickname.slice(
-                                                                                    -1
-                                                                                  )}
+                                                                                  {z?.user_id?.nickname ? z.user_id.nickname.slice(0, 1) : "user"}
                                                                                 </span>
                                                                               </p>
                                                                             </div>
@@ -5070,9 +4991,9 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                                             <button
                                                                               className={
                                                                                 user.first_name ===
-                                                                                z
-                                                                                  .user_id
-                                                                                  .first_name
+                                                                                  z
+                                                                                    .user_id
+                                                                                    .first_name
                                                                                   ? "bg-transparent border-0 d-flex align-items-center"
                                                                                   : "d-none"
                                                                               }
@@ -5173,11 +5094,11 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                               alt="shw-pdf"
                                             />
                                             {userdetails.nickname !=
-                                            undefined ? (
+                                              undefined ? (
                                               <p
                                                 className={
                                                   userdetails.profile_pic ==
-                                                  null
+                                                    null
                                                     ? "d-flex justify-content-center align-items-center bg-warning text-white rounded-circle my-auto"
                                                     : "d-none"
                                                 }
@@ -5188,15 +5109,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                 }}
                                               >
                                                 <span>
-                                                  {userdetails.nickname.slice(
-                                                    0,
-                                                    1
-                                                  )}
+                                                  {userdetails?.nickname ? userdetails.nickname.slice(0, 1) : "user"}
                                                 </span>
                                                 <span>
-                                                  {userdetails.nickname.slice(
-                                                    -1
-                                                  )}
+                                                  {userdetails?.nickname ? userdetails.nickname.slice(0, 1) : "user"}
                                                 </span>
                                               </p>
                                             ) : (
@@ -5271,13 +5187,12 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                   >
                                                     <div
                                                       style={{ width: "25px" }}
-                                                      className={`${
-                                                        load &&
+                                                      className={`${load &&
                                                         selectedPostForComment ==
-                                                          x.comment.ddpid
-                                                          ? ""
-                                                          : "d-none"
-                                                      }`}
+                                                        x.comment.ddpid
+                                                        ? ""
+                                                        : "d-none"
+                                                        }`}
                                                     >
                                                       <div
                                                         className={`spinner-border spinner-border-sm`}
@@ -5294,13 +5209,12 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                       data-bs-custom-class="custom-tooltip"
                                                       data-bs-title="Post"
                                                       xmlns="http://www.w3.org/2000/svg"
-                                                      className={`${
-                                                        load &&
+                                                      className={`${load &&
                                                         selectedPostForComment ==
-                                                          x.comment.ddpid
-                                                          ? "d-none"
-                                                          : ""
-                                                      }`}
+                                                        x.comment.ddpid
+                                                        ? "d-none"
+                                                        : ""
+                                                        }`}
                                                       width="25"
                                                       height="25"
                                                       viewBox="0 0 25 25"
@@ -5331,9 +5245,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                       image
                                                     )}
                                                     width={50}
-                                                    alt={`Selected Image ${
-                                                      index + 1
-                                                    }`}
+                                                    alt={`Selected Image ${index + 1
+                                                      }`}
                                                   />
                                                   <button
                                                     style={{
@@ -5383,9 +5296,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                   {/* ---------------------------------------------Display PDF layout Section----------------------------------------------- */}
                   {
                     <div
-                      className={`col-lg-8 mx-auto ${
-                        discussionpagelayout ? "d-none" : ""
-                      }`}
+                      className={`col-lg-8 mx-auto ${discussionpagelayout ? "d-none" : ""
+                        }`}
                       id="btn"
                       style={{
                         position: "relative",
@@ -5421,17 +5333,15 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                               }}
                             >
                               <i
-                                className={`fas ${
-                                  documentpagelayout
-                                    ? "fa-caret-right"
-                                    : "fa-caret-left"
-                                }`}
+                                className={`fas ${documentpagelayout
+                                  ? "fa-caret-right"
+                                  : "fa-caret-left"
+                                  }`}
                                 style={{
                                   color: "#5d5fe3",
                                   fontSize: "31px",
-                                  marginLeft: `${
-                                    !documentpagelayout ? "4px" : "-1px"
-                                  }`,
+                                  marginLeft: `${!documentpagelayout ? "4px" : "-1px"
+                                    }`,
                                   marginTop: "14px",
                                 }}
                               ></i>
@@ -5442,9 +5352,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                         {/* ------------------------------------------------Buttons for document------------------------------------------------ */}
                         <div>
                           <div
-                            className={`button-for-document button-container rounded d-flex justify-content-center align-items-center border border-bottom-0 py-1 mb-2  ${
-                              isSticky ? "sticky2" : ""
-                            }`}
+                            className={`button-for-document button-container rounded d-flex justify-content-center align-items-center border border-bottom-0 py-1 mb-2  ${isSticky ? "sticky2" : ""
+                              }`}
                             style={{ backgroundColor: "#5d5fe3" }}
                           >
                             <button
@@ -5504,8 +5413,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                             </button>
 
                             {pdfurldata &&
-                            pdfurldata.documnet_id &&
-                            pdfurldata.documnet_id.document_url != undefined ? (
+                              pdfurldata.documnet_id &&
+                              pdfurldata.documnet_id.document_url != undefined ? (
                               <button
                                 className="btn text-white btn-sm ms-4 border-0"
                                 data-bs-toggle="tooltip"
@@ -5616,7 +5525,7 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                         >
                                           <Page
                                             pageNumber={index + 1}
-                                            width={800} 
+                                            width={800}
                                             scale={pageScale}
                                             style={{
                                               display:
@@ -5642,11 +5551,10 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                               return (
                                                 <div
                                                   key={idx}
-                                                  className={`highlight-box ${
-                                                    view_mark_id === highlight
-                                                      ? "markup-color1"
-                                                      : "markup-color2"
-                                                  }`}
+                                                  className={`highlight-box ${view_mark_id === highlight
+                                                    ? "markup-color1"
+                                                    : "markup-color2"
+                                                    }`}
                                                   style={{
                                                     position: "absolute",
                                                     top: adjustedStyle.top,
@@ -5659,17 +5567,17 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                                                     e.stopPropagation();
                                                     if (isMobile) {
                                                       setpreviewbtnstate((prev) => !prev);
-                                                         setTimeout(()=>{
-                                                          scrollToPOST(highlight);
-                                                          setview_mark_id(highlight);
-                                                         },300)
-                                                    }else if (!discussionpagelayout){
-                                                         setdocumentpagelayout(false)
-                                                         setTimeout(()=>{
-                                                          scrollToPOST(highlight);
-                                                          setview_mark_id(highlight);
-                                                         },300)
-                                                    }else{
+                                                      setTimeout(() => {
+                                                        scrollToPOST(highlight);
+                                                        setview_mark_id(highlight);
+                                                      }, 300)
+                                                    } else if (!discussionpagelayout) {
+                                                      setdocumentpagelayout(false)
+                                                      setTimeout(() => {
+                                                        scrollToPOST(highlight);
+                                                        setview_mark_id(highlight);
+                                                      }, 300)
+                                                    } else {
                                                       scrollToPOST(highlight);
                                                       setview_mark_id(highlight);
                                                     }
@@ -5785,8 +5693,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                             width: "40px",
                           }}
                         >
-                          <span>{userdetails.nickname.slice(0, 1)}</span>
-                          <span>{userdetails.nickname.slice(-1)}</span>
+                          <span>{userdetails?.nickname ? userdetails.nickname.slice(0, 1) : "user"}</span>
+                          <span>{userdetails?.nickname ? userdetails.nickname.slice(-1) : "user"}</span>
                         </p>
                       ) : null}
                       <form className="w-100" onSubmit={(e) => postQuestion(e)}>
@@ -5929,8 +5837,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                             width: "40px",
                           }}
                         >
-                          <span>{userdetails.nickname.slice(0, 1)}</span>
-                          <span>{userdetails.nickname.slice(-1)}</span>
+                          <span>{userdetails?.nickname ? userdetails.nickname.slice(0, 1) : "user"}</span>
+                          <span>{userdetails?.nickname ? userdetails.nickname.slice(-1) : "user"}</span>
                         </p>
                       )}
                       <div className="input-group bg-light rounded border pe-3">
@@ -6247,8 +6155,8 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
                           }
                           style={{ height: "40px", width: "40px" }}
                         >
-                          <span>{userdetails.nickname.slice(0, 1)}</span>
-                          <span>{userdetails.nickname.slice(-1)}</span>
+                          <span>{userdetails?.nickname ? userdetails.nickname.slice(0, 1) : "user"}</span>
+                          <span>{userdetails?.nickname ? userdetails.nickname.slice(-1) : "user"}</span>
                         </p>
                       ) : (
                         <></>
@@ -6482,30 +6390,30 @@ const ShowPDF = ({ settranslated_pdf_url }) => {
           />
           <Backtotop />
           {view_pdf_status !== true &&
-          <Tour
-            onRequestClose={closeTourGuide}
-            key={tourKey}
-            steps={tourConfig}
-            //isOpen={view_pdf_status === true ? false : isTourOpen}
-            isOpen={isTourOpen}
-            className="helper"
-            rounded={5}
-            accentColor={accentColor}
-            showArrow={true}
-            disableInteraction={true} // Prevent interaction with the background
-            closeWithMask={false} // Prevent closing when clicking outside
-            styles={{
-              maskArea: (base) => ({
-                ...base,
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-              }),
-              maskWrapper: (base) => ({
-                ...base,
-                backgroundColor: "transparent",
-              }),
-            }}
-            highlightDelay={300}
-          />}
+            <Tour
+              onRequestClose={closeTourGuide}
+              key={tourKey}
+              steps={tourConfig}
+              //isOpen={view_pdf_status === true ? false : isTourOpen}
+              isOpen={isTourOpen}
+              className="helper"
+              rounded={5}
+              accentColor={accentColor}
+              showArrow={true}
+              disableInteraction={true} // Prevent interaction with the background
+              closeWithMask={false} // Prevent closing when clicking outside
+              styles={{
+                maskArea: (base) => ({
+                  ...base,
+                  backgroundColor: "rgba(0, 0, 0, 0.1)",
+                }),
+                maskWrapper: (base) => ({
+                  ...base,
+                  backgroundColor: "transparent",
+                }),
+              }}
+              highlightDelay={300}
+            />}
         </div>
       )}
     </div>

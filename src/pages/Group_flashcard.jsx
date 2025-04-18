@@ -96,7 +96,7 @@ const Group_flashcard = () => {
   const [semesterdata, setSemesterdata] = useState([])
 
   useEffect(() => {
-    const organization = JSON.parse(getDecryptedData('user'))
+    const university = JSON.parse(getDecryptedData('user'))
 
     axiosInstance.get(`${ipaddress2}/Semesters/`)
       .then((p) => {

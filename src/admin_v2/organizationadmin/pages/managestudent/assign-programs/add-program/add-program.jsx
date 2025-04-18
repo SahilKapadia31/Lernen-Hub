@@ -13,10 +13,10 @@ const AddPrograms = ({ show, handleClose, submitForm, user_id, getUserPrograms, 
     const [updatedProgramList, setUpdatedProgramList] = useState([]);
 
     const getAllPrograms = async () => {
-        try { 
-            console.log("userPrograms",userPrograms);
-            console.log("programList",programList);
-            
+        try {
+            console.log("userPrograms", userPrograms);
+            console.log("programList", programList);
+
             let updatedProgramList = programList.map(program => {
                 const updatedSemesters = program.semester.map(semester => ({
                     label: semester.sem_name,
@@ -24,39 +24,39 @@ const AddPrograms = ({ show, handleClose, submitForm, user_id, getUserPrograms, 
                     program_id: semester.program_id,
                     is_deleted: semester.is_deleted
                 }));
-    
+
                 // Get selected semesters based on userPrograms
-                const selectedSemesters = (userPrograms && userPrograms.length > 0) 
+                const selectedSemesters = (userPrograms && userPrograms.length > 0)
                     ? userPrograms
                         .filter(userProgram => userProgram.program_id === program.pid)
                         .map(userProgram => userProgram.semester)
                         .flat()
                         .map(semester => semester.start_sem_id)
                     : [];
-    
+
                 return {
                     ...program,
                     semester: updatedSemesters,
                     selectedSemesters
                 };
             });
-    
+
             console.log("updatedProgramList", updatedProgramList);
-    
+
             // Add `is_selected` and `is_added` properties
             updatedProgramList = updatedProgramList.map(item => ({
                 ...item,
                 is_selected: userPrograms?.find(userItem => userItem.program_id === item.pid) ? true : false,
                 is_added: userPrograms?.find(userItem => userItem.program_id === item.pid) ? true : false
             }));
-    
+
             setUpdatedProgramList(updatedProgramList);
         } catch (err) {
             setIsLoading(false);
             console.log("Error in getAllPrograms", err);
         }
     };
-    
+
 
     useEffect(() => {
         if (show) {
@@ -89,7 +89,7 @@ const AddPrograms = ({ show, handleClose, submitForm, user_id, getUserPrograms, 
                     payload.push({
                         "program_id": item?.pid,
                         "option_id": orgData?.role?.option_id,
-                        "organization_id": item?.organization_id,
+                        "university_id": orgData?.role?.organization_id,
                         "user_id": user_id,
                         "semesters": item.selectedSemesters
                     })
@@ -117,7 +117,7 @@ const AddPrograms = ({ show, handleClose, submitForm, user_id, getUserPrograms, 
     };
 
     return (<>
-        <Modal show={show} onHide={handleClose}  size="lg" backdropClassName="nested-backdrop-modal" centered >
+        <Modal show={show} onHide={handleClose} size="lg" backdropClassName="nested-backdrop-modal" centered >
             <Modal.Header className="border-bottom">
                 <div className="d-flex justify-content-between align-items-center w-100">
                     <Modal.Title className="dialog-title w-100">Add Program</Modal.Title>
@@ -139,9 +139,9 @@ const AddPrograms = ({ show, handleClose, submitForm, user_id, getUserPrograms, 
                             {(filteredPrograms && filteredPrograms.length > 0) ?
                                 filteredPrograms.map((item, index) =>
                                     <tr key={item.pid} className={`${item.is_added ? 'disabled' : ''}`}>
-                                        <td style={{verticalAlign:'middle'}}><p>{index + 1}</p></td>
-                                        <td style={{verticalAlign:'middle'}}><p>{item.program_name}</p></td>
-                                        <td style={{verticalAlign:'middle'}}>
+                                        <td style={{ verticalAlign: 'middle' }}><p>{index + 1}</p></td>
+                                        <td style={{ verticalAlign: 'middle' }}><p>{item.program_name}</p></td>
+                                        <td style={{ verticalAlign: 'middle' }}>
                                             <Select
                                                 options={item.semester}
                                                 isMulti
@@ -161,7 +161,7 @@ const AddPrograms = ({ show, handleClose, submitForm, user_id, getUserPrograms, 
                                                     menu: (provided) => ({
                                                         ...provided,
                                                         maxHeight: '200px',
-                                                        overflowY: 'auto', 
+                                                        overflowY: 'auto',
                                                     }),
                                                     option: (provided) => ({
                                                         ...provided,
@@ -170,7 +170,7 @@ const AddPrograms = ({ show, handleClose, submitForm, user_id, getUserPrograms, 
                                                 }}
                                             />
                                         </td>
-                                        <td className="text-center" style={{verticalAlign:'middle'}}>
+                                        <td className="text-center" style={{ verticalAlign: 'middle' }}>
                                             <input
                                                 type="checkbox"
                                                 checked={item.is_selected}

@@ -700,11 +700,11 @@ const Showpdfpage = ({ settranslated_pdf_url }) => {
   function handlereplies_replydislike(replies_reply_id, disc_replyid) {
     axiosInstance.patch(`${ipaddress}/adocumentpostrepliesreplieslikesanddislikes/${user.user_id}/${replies_reply_id}/`)
       .then((r) => {
-        //  console.log("Organization Replies reply disliked",r.data)
+        //  console.log("University Replies reply disliked",r.data)
         getreplies_for_reply(disc_replyid)
       })
       .catch(() => {
-        console.log("Organization replies reply dislike error")
+        console.log("University replies reply dislike error")
       })
   }
 

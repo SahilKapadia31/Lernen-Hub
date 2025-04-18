@@ -15,27 +15,65 @@ import {
     InputGroupText,
     Collapse,
 } from "reactstrap"
-
+import { useLocation } from "react-router-dom";
 import { Navbar } from "../Navbar/Navbar" // Import your Navbar component
-
+import listIcon from '../../../img/v2/listIcon.svg'
+import GridIcon from '../../../img/v2/GridIcon.svg'
+import SortIcon from '../../../img/v2/SortIcon.svg'
+import YellowStar from '../../../img/v2/star-yellow.svg'
 import "./UniversitySearch.scss" // Import your CSS file for custom styles
+const universities = [
+    { id: 1, name: "Guru Nanak Dev University", location: "Amritsar", year: "1969", approval: "UGC, AICTE", programs: "Bachelors, Masters, Doctorals", color: "bg-light-purple" },
+    { id: 2, name: "Andhra University", location: "Visakhapatnam", year: "1926", approval: "AICTE, NAAC", programs: "Bachelors, Masters", color: "bg-light-pink" },
+    { id: 3, name: "Mumbai University", location: "Mumbai", year: "1857", approval: "UGC, AIU", programs: "Bachelors, Masters, Doctorals", color: "bg-light-green" },
+    { id: 4, name: "Jawaharlal Nehru Technological University", location: "Hyderabad", year: "1972", approval: "AICTE, UGC", programs: "Engineering, Pharmacy, Management", color: "bg-light-yellow" },
+    { id: 5, name: "Savitribai Phule Pune University", location: "Pune", year: "1949", approval: "AICTE, NAAC", programs: "Science, Arts, Commerce, Law", color: "bg-light-blue" },
+    { id: 6, name: "Delhi Technological University", location: "Delhi", year: "1941", approval: "UGC, AICTE", programs: "Engineering, Management, Doctorals", color: "bg-light-orange" },
+    { id: 7, name: "Banaras Hindu University", location: "Varanasi", year: "1916", approval: "UGC, AICTE, NAAC", programs: "Arts, Science, Technology, Medical", color: "bg-light-teal" }
+];
 
 export const UniversitySearch = () => {
+    const [viewMode, setViewMode] = useState("list"); // 'list' or 'grid'
+    const [sortMode, setSortMode] = useState("normal"); // 'asc', 'desc', or 'normal'
+    const [sortedUniversities, setSortedUniversities] = useState(universities);
+
     const [isEngineeringOpen, setIsEngineeringOpen] = useState(true)
     const [isOtherCategoriesOpen, setIsOtherCategoriesOpen] = useState(false)
-
+    const location = useLocation();
+    const pathSegments = location.pathname.split("/");
+    const currentTab =
+        pathSegments[pathSegments.length - 1] === 'school'
+            ? 'Schools'
+            : pathSegments[pathSegments.length - 1] === 'university'
+                ? 'Universities'
+                : 'Education Centers';
     const toggleEngineering = () => setIsEngineeringOpen(!isEngineeringOpen)
     const toggleOtherCategories = () => setIsOtherCategoriesOpen(!isOtherCategoriesOpen)
 
-    const universities = [
-        { id: 1, name: "Guru Nanak Dev University", location: "Visakhapatnam", color: "bg-light-purple" },
-        { id: 2, name: "Guru Nanak Dev University", location: "Amritsar", color: "bg-light-pink" },
-        { id: 3, name: "Guru Nanak Dev University", location: "Kalyan-Dombivali", color: "bg-light-green" },
-        { id: 4, name: "Guru Nanak Dev University", location: "Vijayawada", color: "bg-light-yellow" },
-        { id: 5, name: "Guru Nanak Dev University", location: "Pimpri-Chinchwad", color: "bg-light-blue" },
-        { id: 6, name: "Guru Nanak Dev University", location: "Navi Mumbai", color: "bg-light-orange" },
-        { id: 7, name: "Guru Nanak Dev University", location: "Amritsar", color: "bg-light-purple" },
-    ]
+
+    const toggleView = (mode) => {
+        setViewMode(mode);
+    };
+
+    const handleSort = () => {
+        let nextSort;
+        if (sortMode === "normal") nextSort = "asc";
+        else if (sortMode === "asc") nextSort = "desc";
+        else nextSort = "normal";
+
+        setSortMode(nextSort);
+
+        let sorted = [...universities];
+        if (nextSort === "asc") {
+            sorted.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (nextSort === "desc") {
+            sorted.sort((a, b) => b.name.localeCompare(a.name));
+        } else {
+            sorted = universities; // reset to original
+        }
+        setSortedUniversities(sorted);
+    };
+
 
     return (
         <div className="university-search">
@@ -234,46 +272,49 @@ export const UniversitySearch = () => {
                     {/* Main Content */}
                     <Col md={9} lg={10} className="main-content">
                         <div className="p-3 p-md-4">
-                            <h2 className="mb-3 fw-bold">Universities (1929)</h2>
 
-                            <div className="d-flex flex-wrap align-items-center gap-2 mb-4">
-                                <Badge pill className="bg-light text-dark d-flex align-items-center p-2">
-                                    <span className="badge-dot bg-warning me-1"></span>
-                                    Bachelors
-                                </Badge>
-                                <Badge pill className="bg-light text-dark d-flex align-items-center p-2">
-                                    <span className="badge-dot bg-warning me-1"></span>
-                                    Instrumentation
-                                </Badge>
-                                <Badge pill className="bg-light text-dark d-flex align-items-center p-2">
-                                    <span className="badge-dot bg-warning me-1"></span>
-                                    Top Ranked
-                                </Badge>
+                            <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
 
-                                <div className="ms-auto d-flex flex-wrap gap-2 mt-2 mt-md-0">
+                                <h2 className="mb-0 fw-bold">{currentTab} (1929)</h2>
+
+
+                                <div className="ms-auto d-flex gap-4 mt-2 mt-md-0">
                                     <InputGroup size="sm">
-                                        <Input value="Punjab" />
+                                        <Input value="Punjab" className="custom-input" />
                                         <InputGroupText className="bg-white text-danger">
-                                            <i className="bi bi-x"></i>
+                                            <span className=" text-danger me-1"><i class="bi bi-x-circle"></i></span>
                                         </InputGroupText>
                                     </InputGroup>
 
-                                    <div className="btn-group">
-                                        <Button color="light" className="active">
-                                            <i className="bi bi-list"></i>
-                                        </Button>
-                                        <Button color="light">
-                                            <i className="bi bi-grid"></i>
-                                        </Button>
-                                    </div>
+                                    <span className="new-btn" onClick={() => toggleView("list")}>
+                                        <img src={listIcon} alt="List View" />
+                                    </span>
+                                    <span className="new-btn" onClick={() => toggleView("grid")}>
+                                        <img src={GridIcon} alt="Grid View" />
+                                    </span>
+                                    <span className="new-btn" onClick={handleSort}>
+                                        <img src={SortIcon} alt="Sort" />
+                                    </span>
 
-                                    <Button color="light">
-                                        <i className="bi bi-arrow-down-up"></i>
-                                    </Button>
+
                                 </div>
                             </div>
+                            <div className="d-flex flex-wrap align-items-center gap-2 mb-4">
+                                <Badge pill className="text-dark d-flex align-items-center p-2 fw-normal bg-white border">
+                                    <span className=" text-danger me-1"><i class="bi bi-x-circle"></i></span>
+                                    Bachelors
+                                </Badge>
+                                <Badge pill className="text-dark d-flex align-items-center p-2 fw-normal bg-white border">
+                                    <span className=" text-danger me-1"><i class="bi bi-x-circle"></i></span>
+                                    Instrumentation
+                                </Badge>
+                                <Badge pill className="text-dark d-flex align-items-center p-2 fw-normal bg-white border">
+                                    <span className=" text-danger me-1"><i class="bi bi-x-circle"></i></span>
+                                    Top Ranked
+                                </Badge>
+                            </div>
 
-                            <div className="university-cards">
+                            {/* <div className="university-cards">
                                 {universities.map((university) => (
                                     <Card key={university.id} className="mb-3 border">
                                         <CardBody>
@@ -326,7 +367,65 @@ export const UniversitySearch = () => {
                                         </CardBody>
                                     </Card>
                                 ))}
+                            </div> */}
+                            <div className={`university-cards ${viewMode === "grid" ? "grid-view" : "list-view"}`}>
+                                {sortedUniversities.map((university) => {
+                                    const initials = university.name
+                                        .split(" ")
+                                        .map((word) => word[0])
+                                        .join("")
+                                        .substring(0, 3)
+                                        .toUpperCase();
+
+                                    return (
+                                        <Card key={university.id} className={`university-card ${viewMode}`}>
+                                            <CardBody className="p-3">
+                                                <div className={`card-content ${viewMode}`}>
+                                                    <div className="logo-badge">
+                                                        <div className="circle-logo">{initials}</div>
+                                                        <div className="rating-badge mt-2 mx-auto text-black fw-bolder">
+                                                            <img src={YellowStar} width={12} height={12} alt="Star" />
+                                                            4.5
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="card-details">
+                                                        <h5 className="university-name fw-bold" title={university.name}>
+                                                            <i className="bi bi-building text-warning me-2"></i>
+                                                            {university.name}
+                                                        </h5>
+
+                                                        <div className="info-line">
+                                                            <i className="bi bi-geo-alt me-2"></i>
+                                                            {university.location}
+                                                        </div>
+                                                        <div className="info-line">
+                                                            <i className="bi bi-calendar me-2"></i>
+                                                            {university.year}
+                                                        </div>
+                                                        <div className="info-line">
+                                                            <i className="bi bi-mortarboard me-2"></i>
+                                                            {university.approval}
+                                                        </div>
+                                                        <div className="info-line">
+                                                            <i className="bi bi-people me-2"></i>
+                                                            {university.programs}
+                                                        </div>
+
+                                                        <div className="view-details-btn text-end mt-2">
+                                                            <Button color="light" className="text-primary fw-medium px-3 py-1">
+                                                                View Details
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </CardBody>
+                                        </Card>
+                                    );
+                                })}
                             </div>
+
+
                         </div>
                     </Col>
                 </Row>

@@ -185,7 +185,7 @@ const Subject_user_comments = ({ course_id, usercomment_status, course_name, set
           setreplies_for_reply_status(false)
           setReplies_reply_image1([])
         } else {
-          console.error('Organization Reply under reply sending error');
+          console.error('University Reply under reply sending error');
         }
       } catch (error) {
         console.error('Error reply uploading files:', error);
@@ -288,11 +288,11 @@ const Subject_user_comments = ({ course_id, usercomment_status, course_name, set
   function handlereplies_replydislike(replies_reply_id, disc_replyid) {
     axiosInstance.post(`${ipaddress}/CourseDiscussionRepliesReplyDislike/${user.user_id}/${replies_reply_id}/`)
       .then((r) => {
-        console.log("Organization Replies reply disliked", r.data)
+        console.log("University Replies reply disliked", r.data)
         getreplies_for_reply(disc_replyid)
       })
       .catch(() => {
-        console.log("Organization replies reply dislike error")
+        console.log("University replies reply dislike error")
       })
   }
 
