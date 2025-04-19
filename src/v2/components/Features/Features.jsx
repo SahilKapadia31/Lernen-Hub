@@ -206,7 +206,7 @@ export const Features = () => {
         { name: 'Dokuz Eylul University', logo: dokuzLogo, alt: 'Dokuz Eylul University Logo' }
     ];
 
-    
+
     const org_types = {
         "universities": 1,
         "school": 2,
@@ -214,25 +214,25 @@ export const Features = () => {
         "tutors": 4
     }
     const [programList, setProgramList] = useState([]);
-    const [universityProgram,setUniversityProgram] = useState([])
-    const [schoolProgram,setSchoolProgram] = useState([])
-    const [tutorProgram,setTutorProgram] = useState([])
+    const [universityProgram, setUniversityProgram] = useState([])
+    const [schoolProgram, setSchoolProgram] = useState([])
+    const [tutorProgram, setTutorProgram] = useState([])
     const getProgramList = async () => {
         try {
             const response = await axiosInstance.get(`${ipaddress3}/public/organizationSubType/`);
             if (response?.data?.status) {
                 const programList = response.data.data;
                 setProgramList(programList);
-                let universityProgram = programList.filter(item=>item.organization_type_id == org_types.universities)
-                let schoolProgram = programList.filter(item=>item.organization_type_id == org_types.school)
-                let tutorProgram = programList.filter(item=>(item.organization_type_id == org_types.study_centers || item.organization_type_id == org_types.tutors))
+                let universityProgram = programList.filter(item => item.organization_type_id == org_types.universities)
+                let schoolProgram = programList.filter(item => item.organization_type_id == org_types.school)
+                let tutorProgram = programList.filter(item => (item.organization_type_id == org_types.study_centers || item.organization_type_id == org_types.tutors))
                 let all = {
                     "id": 0,
                     "name": "All",
                 }
-                setUniversityProgram([all,...universityProgram]);
-                setSchoolProgram([all,...schoolProgram]);
-                setTutorProgram([all,...tutorProgram]);
+                setUniversityProgram([all, ...universityProgram]);
+                setSchoolProgram([all, ...schoolProgram]);
+                setTutorProgram([all, ...tutorProgram]);
             }
         } catch (err) {
             console.error('Error in getAllOrganizationCount:', err);
@@ -299,32 +299,32 @@ export const Features = () => {
         return '';
     };
 
-    const getFilteredList = async (program_id,org_type) => {
+    const getFilteredList = async (program_id, org_type) => {
         try {
-            if(org_type == 'universities'){
-                if(program_id == 0){
+            if (org_type == 'universities') {
+                if (program_id == 0) {
                     getOrganizations();
-                }else{
+                } else {
                     const response = await axiosInstance.get(`${ipaddress3}/public/homepage/organization/?organization_type=${org_type}&sub_type=${program_id}`);
                     if (response?.data?.status) {
                         const organizationList = response.data.data;
                         setOrganizationList(organizationList);
                     }
                 }
-            }else if(org_type == 'school'){
-                if(program_id == 0){
+            } else if (org_type == 'school') {
+                if (program_id == 0) {
                     getSchoolsList();
-                }else{
+                } else {
                     const response = await axiosInstance.get(`${ipaddress3}/public/homepage/organization/?organization_type=${org_type}&sub_type=${program_id}`);
                     if (response?.data?.status) {
                         const schoolList = response.data.data;
                         setSchoolList(schoolList);
                     }
                 }
-            }else if(org_type == 'tutor'){
-                if(program_id == 0){
+            } else if (org_type == 'tutor') {
+                if (program_id == 0) {
                     getTutorList();
-                }else{
+                } else {
                     const response = await axiosInstance.get(`${ipaddress3}/public/homepage/organization/?organization_type=${org_type}&sub_type=${program_id}`);
                     if (response?.data?.status) {
                         const tutorList = response.data.data;
@@ -357,7 +357,7 @@ export const Features = () => {
                                 key={filter.id}
                                 variant={universityActiveFilter === filter?.name ? "active-filter" : "outline-secondary"}
                                 className="rounded-pill px-4 py-2 mb-2"
-                                onClick={() => {setUniversityActiveFilter(filter?.name); getFilteredList(filter?.id,'universities')}}
+                                onClick={() => { setUniversityActiveFilter(filter?.name); getFilteredList(filter?.id, 'universities') }}
                             >
                                 {filter?.name}
                             </Button>
@@ -411,7 +411,7 @@ export const Features = () => {
                                                 <span className='fw-bold'>{university.rating}</span>
                                             </div>
 
-                                            <Button onClick={()=>navigate(`/universities_info/${university?.university_id}`)} className="view-details mt-auto w-100 py-2">
+                                            <Button onClick={() => navigate(`/universities_info/${university?.university_id}`)} className="view-details mt-auto w-100 py-2">
                                                 View Details
                                             </Button>
                                         </Card.Body>
@@ -443,7 +443,7 @@ export const Features = () => {
                                 key={filter?.id}
                                 variant={schoolActiveFilter === filter?.name ? "active-filter" : "outline-secondary"}
                                 className="rounded-pill px-4 py-2 mb-2"
-                                onClick={() => {setSchoolActiveFilter(filter?.name);getFilteredList(filter?.id,'school')}}
+                                onClick={() => { setSchoolActiveFilter(filter?.name); getFilteredList(filter?.id, 'school') }}
                             >
                                 {filter?.name}
                             </Button>
@@ -497,7 +497,7 @@ export const Features = () => {
                                                 <span className='fw-bold'>{university.rating}</span>
                                             </div>
 
-                                            <Button onClick={()=>navigate(`/universities_info/${university?.university_id}`)} className="view-details mt-auto w-100 py-2">
+                                            <Button onClick={() => navigate(`/universities_info/${university?.university_id}`)} className="view-details mt-auto w-100 py-2">
                                                 View Details
                                             </Button>
                                         </Card.Body>
@@ -544,9 +544,9 @@ export const Features = () => {
                         {tutorProgram.map((filter) => (
                             <Button
                                 key={filter?.id}
-                                variant={ tutorActiveFilter === filter?.name ? "active-filter" : "outline-secondary"}
+                                variant={tutorActiveFilter === filter?.name ? "active-filter" : "outline-secondary"}
                                 className="rounded-pill px-4 py-2 mb-2"
-                                onClick={() => {setTutorActiveFilter(filter?.name);getFilteredList(filter?.id,'tutor')}}
+                                onClick={() => { setTutorActiveFilter(filter?.name); getFilteredList(filter?.id, 'tutor') }}
                             >
                                 {filter?.name}
                             </Button>
@@ -600,7 +600,7 @@ export const Features = () => {
                                                 <span className='fw-bold'>{university.rating}</span>
                                             </div>
 
-                                            <Button onClick={()=>navigate(`/universities_info/${university?.university_id}`)} className="view-details mt-auto w-100 py-2">
+                                            <Button onClick={() => navigate(`/universities_info/${university?.university_id}`)} className="view-details mt-auto w-100 py-2">
                                                 View Details
                                             </Button>
                                         </Card.Body>

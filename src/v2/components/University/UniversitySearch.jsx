@@ -36,6 +36,7 @@ export const UniversitySearch = () => {
     const [viewMode, setViewMode] = useState("list"); // 'list' or 'grid'
     const [sortMode, setSortMode] = useState("normal"); // 'asc', 'desc', or 'normal'
     const [sortedUniversities, setSortedUniversities] = useState(universities);
+    console.log("🚀 ~ UniversitySearch ~ sortedUniversities:", sortedUniversities)
 
     const [isEngineeringOpen, setIsEngineeringOpen] = useState(true)
     const [isOtherCategoriesOpen, setIsOtherCategoriesOpen] = useState(false)
@@ -54,6 +55,45 @@ export const UniversitySearch = () => {
     const toggleView = (mode) => {
         setViewMode(mode);
     };
+
+    const colors = [
+        {
+            logoColor: "#E9E7FF",
+            textColor: "#A29BEB",
+        },
+        {
+            logoColor: "#FAE4F2",
+            textColor: "#C89EBA",
+        },
+        {
+            logoColor: "#E3F4E3",
+            textColor: "#14C265",
+        },
+        {
+            logoColor: "#FFF8DE",
+            textColor: "#F2BD65",
+        },
+        {
+            logoColor: "#E9E7FF",
+            textColor: "#A29BEB",
+        },
+        {
+            logoColor: "#FAE4F2",
+            textColor: "#C89EBA",
+        },
+        {
+            logoColor: "#E3F4E3",
+            textColor: "#14C265",
+        },
+        {
+            logoColor: "#FFF8DE",
+            textColor: "#F2BD65",
+        },
+    ]
+
+    const getRandomColor = () => {
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
 
     const handleSort = () => {
         let nextSort;
@@ -79,199 +119,200 @@ export const UniversitySearch = () => {
         <div className="university-search">
             {/* Header */}
             <Navbar activeHeader={true} />
-            <Container className="p-0">
-                <Row className="g-0">
-                    {/* Sidebar */}
-                    <Col md={3} lg={2} className="border-end sidebar d-none d-md-block">
-                        <div className="p-3">
-                            <Button color="link" className="text-danger p-0 mb-4">
-                                <i className="bi bi-x me-1"></i> Reset Filters
-                            </Button>
 
-                            <div className="mb-4">
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <h6 className="mb-0 fw-medium">Select Degree</h6>
-                                    <i className="bi bi-chevron-down small"></i>
-                                </div>
-                                <Form>
-                                    <FormGroup check className="mb-2">
-                                        <Input type="checkbox" id="bachelor" defaultChecked />
-                                        <Label check for="bachelor">
-                                            Bachelor's
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check className="mb-2">
-                                        <Input type="checkbox" id="masters" />
-                                        <Label check for="masters">
-                                            Masters
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Input type="checkbox" id="doctoral" />
-                                        <Label check for="doctoral">
-                                            Doctoral
-                                        </Label>
-                                    </FormGroup>
-                                </Form>
+            <Row className="g-0">
+                {/* Sidebar */}
+                <Col md={3} lg={2} className="border-end sidebar bg-white d-none d-md-block">
+                    <div className="p-5">
+                        <Button color="link" className="text-danger p-0 mb-4">
+                            <i className="bi bi-x me-1"></i> Reset Filters
+                        </Button>
+
+                        <div className="mb-4">
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                                <h6 className="mb-0 fw-medium">Select Degree</h6>
+                                <i className="bi bi-chevron-down small"></i>
                             </div>
+                            <Form>
+                                <FormGroup check className="mb-2">
+                                    <Input type="checkbox" id="bachelor" defaultChecked />
+                                    <Label check for="bachelor">
+                                        Bachelor's
+                                    </Label>
+                                </FormGroup>
+                                <FormGroup check className="mb-2">
+                                    <Input type="checkbox" id="masters" />
+                                    <Label check for="masters">
+                                        Masters
+                                    </Label>
+                                </FormGroup>
+                                <FormGroup check>
+                                    <Input type="checkbox" id="doctoral" />
+                                    <Label check for="doctoral">
+                                        Doctoral
+                                    </Label>
+                                </FormGroup>
+                            </Form>
+                        </div>
 
-                            <div className="mb-4">
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <h6 className="mb-0 fw-medium">Select Discipline</h6>
-                                    <i className="bi bi-chevron-down small"></i>
-                                </div>
-                                <div className="discipline-list">
-                                    <div className="d-flex justify-content-between align-items-center py-1">
-                                        <span>All</span>
-                                        <i className="bi bi-chevron-right small"></i>
-                                    </div>
-                                    <div className="d-flex justify-content-between align-items-center py-1">
-                                        <span>Medical</span>
-                                        <i className="bi bi-chevron-right small"></i>
-                                    </div>
-                                    <div
-                                        className="d-flex justify-content-between align-items-center py-1 text-primary fw-medium"
-                                        onClick={toggleEngineering}
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        <span>Engineering & Technology</span>
-                                        <i className={`bi bi-chevron-${isEngineeringOpen ? "down" : "right"} small`}></i>
-                                    </div>
-
-                                    <Collapse isOpen={isEngineeringOpen}>
-                                        <div className="ps-3 mt-2">
-                                            <FormGroup check className="mb-2">
-                                                <Input type="checkbox" id="cs" />
-                                                <Label check for="cs">
-                                                    Computer Science
-                                                </Label>
-                                            </FormGroup>
-                                            <FormGroup check className="mb-2">
-                                                <Input type="checkbox" id="it" />
-                                                <Label check for="it">
-                                                    Information Technology
-                                                </Label>
-                                            </FormGroup>
-                                            <FormGroup check className="mb-2">
-                                                <Input type="checkbox" id="telecom" />
-                                                <Label check for="telecom">
-                                                    Telecommunication
-                                                </Label>
-                                            </FormGroup>
-                                            <FormGroup check className="mb-2">
-                                                <Input type="checkbox" id="instrument" defaultChecked />
-                                                <Label check for="instrument">
-                                                    Instrumentation
-                                                </Label>
-                                            </FormGroup>
-                                            <FormGroup check className="mb-2">
-                                                <Input type="checkbox" id="civil" />
-                                                <Label check for="civil">
-                                                    Civil
-                                                </Label>
-                                            </FormGroup>
-                                            <FormGroup check className="mb-2">
-                                                <Input type="checkbox" id="mechanical" />
-                                                <Label check for="mechanical">
-                                                    Mechanical
-                                                </Label>
-                                            </FormGroup>
-                                        </div>
-                                    </Collapse>
-
-                                    <div className="d-flex justify-content-between align-items-center py-1">
-                                        <span>Design</span>
-                                        <i className="bi bi-chevron-right small"></i>
-                                    </div>
-                                    <div className="d-flex justify-content-between align-items-center py-1">
-                                        <span>Music</span>
-                                        <i className="bi bi-chevron-right small"></i>
-                                    </div>
-                                    <div className="d-flex justify-content-between align-items-center py-1">
-                                        <span>Travel & Tourism</span>
-                                        <i className="bi bi-chevron-right small"></i>
-                                    </div>
-                                </div>
+                        <div className="mb-4">
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                                <h6 className="mb-0 fw-medium">Select Discipline</h6>
+                                <i className="bi bi-chevron-down small"></i>
                             </div>
-
-                            <div className="mb-4">
-                                <h6 className="mb-2 fw-medium">Reviews</h6>
-                                <Form>
-                                    <FormGroup check className="mb-2">
-                                        <Input type="checkbox" id="topRanked" defaultChecked />
-                                        <Label check for="topRanked">
-                                            <i className="bi bi-star-fill text-warning me-1"></i> Top Ranked
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check className="mb-2">
-                                        <Input type="checkbox" id="4.5up" />
-                                        <Label check for="4.5up">
-                                            <i className="bi bi-star-fill text-warning me-1"></i> 4.5 up
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check className="mb-2">
-                                        <Input type="checkbox" id="4up" />
-                                        <Label check for="4up">
-                                            <i className="bi bi-star-fill text-warning me-1"></i> 4 up
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Input type="checkbox" id="3.5up" />
-                                        <Label check for="3.5up">
-                                            <i className="bi bi-star-fill text-warning me-1"></i> 3.5 up
-                                        </Label>
-                                    </FormGroup>
-                                </Form>
-                            </div>
-
-                            <div className="mb-4">
-                                <h6 className="mb-2 fw-medium">University Fees Range</h6>
-                                <div className="position-relative pt-4 pb-2">
-                                    <div className="range-slider">
-                                        <div className="range-track"></div>
-                                        <div className="range-selection"></div>
-                                        <div className="range-handle range-handle-min"></div>
-                                        <div className="range-handle range-handle-max"></div>
-                                    </div>
+                            <div className="discipline-list">
+                                <div className="d-flex justify-content-between align-items-center py-1">
+                                    <span>All</span>
+                                    <i className="bi bi-chevron-right small"></i>
                                 </div>
-                                <div className="small text-secondary">₹9,235 - ₹4,00,235</div>
-                            </div>
+                                <div className="d-flex justify-content-between align-items-center py-1">
+                                    <span>Medical</span>
+                                    <i className="bi bi-chevron-right small"></i>
+                                </div>
+                                <div
+                                    className="d-flex justify-content-between align-items-center py-1 text-primary fw-medium"
+                                    onClick={toggleEngineering}
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    <span>Engineering & Technology</span>
+                                    <i className={`bi bi-chevron-${isEngineeringOpen ? "down" : "right"} small`}></i>
+                                </div>
 
-                            <div>
-                                <h6 className="mb-2 fw-medium">Format</h6>
-                                <Form>
-                                    <FormGroup check className="mb-2">
-                                        <Input type="checkbox" id="fullTime" />
-                                        <Label check for="fullTime">
-                                            Full Time
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check className="mb-2">
-                                        <Input type="checkbox" id="partTime" />
-                                        <Label check for="partTime">
-                                            Part Time
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check className="mb-2">
-                                        <Input type="checkbox" id="onCampus" />
-                                        <Label check for="onCampus">
-                                            On Campus
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Input type="checkbox" id="online" />
-                                        <Label check for="online">
-                                            Online
-                                        </Label>
-                                    </FormGroup>
-                                </Form>
+                                <Collapse isOpen={isEngineeringOpen}>
+                                    <div className="ps-3 mt-2">
+                                        <FormGroup check className="mb-2">
+                                            <Input type="checkbox" id="cs" />
+                                            <Label check for="cs">
+                                                Computer Science
+                                            </Label>
+                                        </FormGroup>
+                                        <FormGroup check className="mb-2">
+                                            <Input type="checkbox" id="it" />
+                                            <Label check for="it">
+                                                Information Technology
+                                            </Label>
+                                        </FormGroup>
+                                        <FormGroup check className="mb-2">
+                                            <Input type="checkbox" id="telecom" />
+                                            <Label check for="telecom">
+                                                Telecommunication
+                                            </Label>
+                                        </FormGroup>
+                                        <FormGroup check className="mb-2">
+                                            <Input type="checkbox" id="instrument" defaultChecked />
+                                            <Label check for="instrument">
+                                                Instrumentation
+                                            </Label>
+                                        </FormGroup>
+                                        <FormGroup check className="mb-2">
+                                            <Input type="checkbox" id="civil" />
+                                            <Label check for="civil">
+                                                Civil
+                                            </Label>
+                                        </FormGroup>
+                                        <FormGroup check className="mb-2">
+                                            <Input type="checkbox" id="mechanical" />
+                                            <Label check for="mechanical">
+                                                Mechanical
+                                            </Label>
+                                        </FormGroup>
+                                    </div>
+                                </Collapse>
+
+                                <div className="d-flex justify-content-between align-items-center py-1">
+                                    <span>Design</span>
+                                    <i className="bi bi-chevron-right small"></i>
+                                </div>
+                                <div className="d-flex justify-content-between align-items-center py-1">
+                                    <span>Music</span>
+                                    <i className="bi bi-chevron-right small"></i>
+                                </div>
+                                <div className="d-flex justify-content-between align-items-center py-1">
+                                    <span>Travel & Tourism</span>
+                                    <i className="bi bi-chevron-right small"></i>
+                                </div>
                             </div>
                         </div>
-                    </Col>
 
-                    {/* Main Content */}
-                    <Col md={9} lg={10} className="main-content">
-                        <div className="p-3 p-md-4">
+                        <div className="mb-4">
+                            <h6 className="mb-2 fw-medium">Reviews</h6>
+                            <Form>
+                                <FormGroup check className="mb-2">
+                                    <Input type="checkbox" id="topRanked" defaultChecked />
+                                    <Label check for="topRanked">
+                                        <i className="bi bi-star-fill text-warning me-1"></i> Top Ranked
+                                    </Label>
+                                </FormGroup>
+                                <FormGroup check className="mb-2">
+                                    <Input type="checkbox" id="4.5up" />
+                                    <Label check for="4.5up">
+                                        <i className="bi bi-star-fill text-warning me-1"></i> 4.5 up
+                                    </Label>
+                                </FormGroup>
+                                <FormGroup check className="mb-2">
+                                    <Input type="checkbox" id="4up" />
+                                    <Label check for="4up">
+                                        <i className="bi bi-star-fill text-warning me-1"></i> 4 up
+                                    </Label>
+                                </FormGroup>
+                                <FormGroup check>
+                                    <Input type="checkbox" id="3.5up" />
+                                    <Label check for="3.5up">
+                                        <i className="bi bi-star-fill text-warning me-1"></i> 3.5 up
+                                    </Label>
+                                </FormGroup>
+                            </Form>
+                        </div>
+
+                        <div className="mb-4">
+                            <h6 className="mb-2 fw-medium">University Fees Range</h6>
+                            <div className="position-relative pt-4 pb-2">
+                                <div className="range-slider">
+                                    <div className="range-track"></div>
+                                    <div className="range-selection"></div>
+                                    <div className="range-handle range-handle-min"></div>
+                                    <div className="range-handle range-handle-max"></div>
+                                </div>
+                            </div>
+                            <div className="small text-secondary">₹9,235 - ₹4,00,235</div>
+                        </div>
+
+                        <div>
+                            <h6 className="mb-2 fw-medium">Format</h6>
+                            <Form>
+                                <FormGroup check className="mb-2">
+                                    <Input type="checkbox" id="fullTime" />
+                                    <Label check for="fullTime">
+                                        Full Time
+                                    </Label>
+                                </FormGroup>
+                                <FormGroup check className="mb-2">
+                                    <Input type="checkbox" id="partTime" />
+                                    <Label check for="partTime">
+                                        Part Time
+                                    </Label>
+                                </FormGroup>
+                                <FormGroup check className="mb-2">
+                                    <Input type="checkbox" id="onCampus" />
+                                    <Label check for="onCampus">
+                                        On Campus
+                                    </Label>
+                                </FormGroup>
+                                <FormGroup check>
+                                    <Input type="checkbox" id="online" />
+                                    <Label check for="online">
+                                        Online
+                                    </Label>
+                                </FormGroup>
+                            </Form>
+                        </div>
+                    </div>
+                </Col>
+
+                {/* Main Content */}
+                <Col md={9} lg={10} className="main-content">
+                    <Container className="">
+                        <div className="p-4 pt-5">
 
                             <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
 
@@ -378,58 +419,113 @@ export const UniversitySearch = () => {
                                         .toUpperCase();
 
                                     return (
-                                        <Card key={university.id} className={`university-card ${viewMode}`}>
-                                            <CardBody className="p-3">
-                                                <div className={`card-content ${viewMode}`}>
-                                                    <div className="logo-badge">
-                                                        <div className="circle-logo">{initials}</div>
-                                                        <div className="rating-badge mt-2 mx-auto text-black fw-bolder">
-                                                            <img src={YellowStar} width={12} height={12} alt="Star" />
-                                                            4.5
+                                        <>
+                                            <Card key={university.id} className={`slider-card border shadow-sm hover-shadow transition univ   l  ersity-card ${viewMode}`}>
+                                                <CardBody className="d-flex flex-column position-relative">
+                                                    <div className="text-center mb-2">
+                                                        <div
+                                                            className={`university-logo rounded-circle d-inline-flex align-items-center justify-content-center mb-3`}
+                                                            style={{
+                                                                backgroundColor: getRandomColor()?.logoColor,
+                                                            }}
+                                                        >
+                                                            <span className="university-logo-text h3 mb-0 fw-bold" style={{ color: getRandomColor()?.textColor }}>{university?.logo || initials}</span>
                                                         </div>
                                                     </div>
 
-                                                    <div className="card-details">
-                                                        <h5 className="university-name fw-bold" title={university.name}>
-                                                            <i className="bi bi-building text-warning me-2"></i>
-                                                            {university.name}
-                                                        </h5>
-
-                                                        <div className="info-line">
-                                                            <i className="bi bi-geo-alt me-2"></i>
-                                                            {university.location}
+                                                    <div className="university-info small text-muted mb-3">
+                                                        <div className="d-flex align-items-center mb-2">
+                                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M4.79164 14.1666V7.91664H6.04164V14.1666H4.79164ZM9.37497 14.1666V7.91664H10.625V14.1666H9.37497ZM2.30768 17.0833V15.8333H17.6923V17.0833H2.30768ZM13.9583 14.1666V7.91664H15.2083V14.1666H13.9583ZM2.30768 6.24997V5.06414L9.99997 1.2981L17.6923 5.06414V6.24997H2.30768ZM5.26268 4.99997H14.7373L9.99997 2.7083L5.26268 4.99997Z" fill="#1C262C" />
+                                                            </svg>
+                                                            <span className="ms-2 text-truncate fw-semibold text-black text-capitalize">{university?.name}</span>
                                                         </div>
-                                                        <div className="info-line">
-                                                            <i className="bi bi-calendar me-2"></i>
-                                                            {university.year}
+                                                        <div className="d-flex align-items-center mb-2">
+                                                            <i className="bi bi-geo-alt me-2 university-icon"></i>
+                                                            <span>{university?.location}</span>
                                                         </div>
-                                                        <div className="info-line">
-                                                            <i className="bi bi-mortarboard me-2"></i>
-                                                            {university.approval}
+                                                        <div className="d-flex align-items-center mb-2">
+                                                            <i className="bi bi-calendar me-2 university-icon"></i>
+                                                            <span>{"founded=>pending"}</span>
                                                         </div>
-                                                        <div className="info-line">
-                                                            <i className="bi bi-people me-2"></i>
-                                                            {university.programs}
+                                                        <div className="d-flex align-items-center mb-2">
+                                                            <i className="bi bi-award me-2 university-icon"></i>
+                                                            <span>{"affilation=>pending"}</span>
                                                         </div>
-
-                                                        <div className="view-details-btn text-end mt-2">
-                                                            <Button color="light" className="text-primary fw-medium px-3 py-1">
-                                                                View Details
-                                                            </Button>
+                                                        <div className="d-flex align-items-center">
+                                                            <i className="bi bi-mortarboard me-2 university-icon"></i>
+                                                            {/* <span>{university?.programs?.map(item => item.name).join(', ') || 'Pending    '}</span> */}
+                                                            <span> {university?.programs}</span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </CardBody>
-                                        </Card>
+
+                                                    <div className="university-rating px-2 gap-1 fs-12px mt-3 me-3">
+                                                        <i className="bi bi-star-fill text-warning rating-star"></i>
+                                                        <span className='fw-bold'>{university.rating}</span>
+                                                    </div>
+
+                                                    <Button onClick={() => navigate(`/universities_info/${university?.university_id}`)} className="view-details mt-auto w-100 py-2">
+                                                        View Details
+                                                    </Button>
+                                                </CardBody>
+                                            </Card>
+
+                                            {/* <Card key={university.id} className={`university-card ${viewMode}`}>
+                                                <CardBody className="p-3">
+                                                    <div className={`card-content ${viewMode}`}>
+                                                        <div className="logo-badge">
+                                                            <div className="circle-logo" style={{
+                                                                backgroundColor: getRandomColor()?.logoColor,
+                                                            }}>{initials}</div>
+                                                            <div className="rating-badge mt-2 mx-auto text-black fw-bolder">
+                                                                <img src={YellowStar} width={12} height={12} alt="Star" />
+                                                                4.5
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="card-details">
+                                                            <h5 className="university-name fw-bold" title={university.name}>
+                                                                <i className="bi bi-building text-warning me-2"></i>
+                                                                {university.name}
+                                                            </h5>
+
+                                                            <div className="info-line">
+                                                                <i className="bi bi-geo-alt me-2"></i>
+                                                                {university.location}
+                                                            </div>
+                                                            <div className="info-line">
+                                                                <i className="bi bi-calendar me-2"></i>
+                                                                {university.year}
+                                                            </div>
+                                                            <div className="info-line">
+                                                                <i className="bi bi-mortarboard me-2"></i>
+                                                                {university.approval}
+                                                            </div>
+                                                            <div className="info-line">
+                                                                <i className="bi bi-people me-2"></i>
+                                                                {university.programs}
+                                                            </div>
+
+                                                            <div className="view-details-btn text-end mt-2">
+                                                                <Button color="light" className="text-primary fw-medium px-3 py-1">
+                                                                    View Details
+                                                                </Button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </CardBody>
+                                            </Card> */}
+                                        </>
+
                                     );
                                 })}
                             </div>
 
 
                         </div>
-                    </Col>
-                </Row>
-            </Container>
+                    </Container>
+                </Col>
+            </Row>
         </div>
     )
 }

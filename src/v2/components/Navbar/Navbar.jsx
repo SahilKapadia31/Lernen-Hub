@@ -57,7 +57,8 @@ export const Navbar = ({ background, activeHeader }) => {
         zIndex: 1000,
         transition: 'all 0.3s ease',
         backgroundColor: scrolled || activeHeader ? '#fff' : '#282088', // Change background color based on scroll
-        boxShadow: scrolled || activeHeader ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none',
+        borderBottom: scrolled || activeHeader ? '1px solid #ccc' : 'none',
+        // boxShadow: scrolled || activeHeader ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none',
     };
 
     // Text and button styles based on scroll position
